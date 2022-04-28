@@ -1,0 +1,52 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+plugins {
+    id 'com.android.application' version '7.1.2' apply false
+    id 'com.android.library' version '7.1.2' apply false
+    id 'maven-publish'
+
+}
+group = 'com.github.amjadrad'
+version = '1.0'
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = 'tilda_chat_app'
+            pom {
+                name = 'Tilda Chat App'
+                description = 'Android Chat platform (socket.io)'
+                url = 'https://github.com/amjadrad/TildaChatApp'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'amjadrad'
+                        name = 'Amjad Qasemie Rad'
+                        email = 'amjadrad@gmail.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git://github.com:amjadrad/TildaChatApp.git'
+                    developerConnection = 'scm:git:ssh://github.com:amjadrad/TildaChatApp.git'
+                    url = 'https://github.com/amjadrad/TildaChatApp'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            // change URLs to point to your repos, e.g. http://my.org/repo
+            def releasesRepoUrl = layout.buildDirectory.dir('repos/releases')
+            def snapshotsRepoUrl = layout.buildDirectory.dir('repos/snapshots')
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

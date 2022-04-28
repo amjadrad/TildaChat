@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">nazmenovin.ir</domain>
+        <domain includeSubdomains="true">http://nazmenovin.ir</domain>
+        <domain includeSubdomains="true">https://nazmenovin.ir</domain>
+        <domain includeSubdomains="true">chat.nazmenovin.ir</domain>
+        <domain includeSubdomains="true">http://chat.nazmenovin.ir</domain>
+        <domain includeSubdomains="true">https://chat.nazmenovin.ir</domain>
+        <domain includeSubdomains="true">chat.nazmenovin.ir:1755</domain>
+        <domain includeSubdomains="true">http://chat.nazmenovin.ir:1755</domain>
+        <domain includeSubdomains="true">https://chat.nazmenovin.ir:1755</domain>
+    </domain-config>
+</network-security-config>
