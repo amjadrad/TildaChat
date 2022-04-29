@@ -1,53 +1,21 @@
 plugins {
     id 'com.android.library'
     id 'maven-publish'
+//    id 'java'
 }
-
-group = 'com.github.amjadrad'
-version = '0.0.2'
-
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifactId = 'tilda_chat_app'
-            pom {
-                name = 'Tilda Chat App'
-                description = 'Android Chat platform (socket.io)'
-                url = 'https://github.com/amjadrad/TildaChatApp'
-                licenses {
-                    license {
-                        name = 'The Apache License, Version 2.0'
-                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id = 'amjadrad'
-                        name = 'Amjad Qasemie Rad'
-                        email = 'amjadrad@gmail.com'
-                    }
-                }
-                scm {
-                    connection = 'scm:git:git://github.com:amjadrad/TildaChatApp.git'
-                    developerConnection = 'scm:git:ssh://github.com:amjadrad/TildaChatApp.git'
-                    url = 'https://github.com/amjadrad/TildaChatApp'
-                }
-            }
-        }
-    }
-    repositories {
-        maven {
-            // change URLs to point to your repos, e.g. http://my.org/repo
-            def releasesRepoUrl = layout.buildDirectory.dir('repos/releases')
-            def snapshotsRepoUrl = layout.buildDirectory.dir('repos/snapshots')
-            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            groupId = 'com.github.amjdrad'
+            artifactId = 'tildachatapp'
+            version = '0.0.2'
+
+//            from components.java
         }
     }
 }
-
-
 android {
-    namespace = 'ir.tildaweb.tildachat'
+//    namespace = 'ir.tildaweb.tildachat'
     compileSdk 32
 
     defaultConfig {
@@ -74,12 +42,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
-    publishing {
-        singleVariant('release') {
-            withSourcesJar()
-        }
-    }
 }
 
 dependencies {
@@ -103,3 +65,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }
+//java {
+//    sourceCompatibility = JavaVersion.VERSION_1_8
+//    targetCompatibility = JavaVersion.VERSION_1_8
+//}
