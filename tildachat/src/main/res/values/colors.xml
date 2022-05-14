@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#6AACFA</color>
+    <color name="purple_500">#3090ff</color>
+    <color name="purple_700">#2b85ff</color>
+    <color name="teal_200">#f84a91</color>
+    <color name="teal_700">#d82a71</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="colorPrimary">#3090ff</color>
+    <color name="colorPrimaryDark">#1b75ef</color>
+    <color name="colorPrimarySoft">#DDECFD</color>
+    <color name="colorAccent">#f84a91</color>
+    <color name="colorAccentSoft">#FADFEA</color>
+    <color name="colorBgLight">#f5f7ff</color>
+    <color name="colorBg">#f2f5ff</color>
+    <color name="colorBgCard">#f2f5ff</color>
+    <color name="colorRed">#f84a91</color>
+    <color name="colorText">#1a2850</color>
+    <color name="colorMutedText">#7884aa</color>
+    <color name="colorSecondary">#4c5a85</color>
+    <color name="colorSecondaryLight">#dfe5f5</color>
+    <color name="colorTransparent">#00ffffff</color>
+    <color name="colorWhite">#ffffff</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorDark">#000000</color>
+    <color name="colorDark1">#444444</color>
+    <color name="colorDark2">#777777</color>
+    <color name="colorDark3">#999999</color>
+    <color name="colorLight">#ffffff</color>
+    <color name="colorLight1">#f3f3f3</color>
+    <color name="colorLight2">#eeeeee</color>
+    <color name="colorLight3">#dddddd</color>
+    <color name="colorInformation">#d9dbe2</color>
+    <color name="colorInformationSoft">#eaecf3</color>
+    <color name="colorSuccess">#3cb690</color>
+    <color name="colorSuccessSoft">#BBEDDD</color>
+    <color name="colorDanger">#ee283c</color>
+    <color name="colorDangerSoft">#FAD2D6</color>
+    <color name="colorWarning">#ffad0a</color>
+    <color name="colorWarningSoft">#F8E9CC</color>
+    <color name="colorBgLoading">#cceceefd</color>
+</resources>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ds">
+        <attr name="colorBackground" format="color" />
+        <attr name="colorButton" format="color" />
+        <attr name="colorPrimarySoft" format="color" />
+        <attr name="colorAccent" format="color" />
+        <attr name="colorAccentSoft" format="color" />
+        <attr name="colorBgLight" format="color" />
+        <attr name="colorBg" format="color" />
+        <attr name="colorBgCard" format="color" />
+        <attr name="colorText" format="color" />
+        <attr name="colorMutedText" format="color" />
+        <attr name="colorDark" format="color" />
+        <attr name="colorDarkSoft" format="color" />
+        <attr name="colorDark1" format="color" />
+        <attr name="colorDark2" format="color" />
+        <attr name="colorDark3" format="color" />
+        <attr name="colorLight" format="color" />
+        <attr name="colorLightSoft" format="color" />
+        <attr name="colorLight1" format="color" />
+        <attr name="colorLight2" format="color" />
+        <attr name="colorLight3" format="color" />
+        <attr name="colorDanger" format="color" />
+        <attr name="colorDangerSoft" format="color" />
+        <attr name="colorSuccess" format="color" />
+        <attr name="colorSuccessSoft" format="color" />
+        <attr name="colorWarning" format="color" />
+        <attr name="colorWarningSoft" format="color" />
+        <attr name="colorInformation" format="color" />
+        <attr name="colorInformationSoft" format="color" />
+        <attr name="colorTransparent" format="color" />
+        <attr name="colorBgLoading" format="color" />
+        <attr name="colorWhite" format="color" />
+    </declare-styleable>
+</resources>

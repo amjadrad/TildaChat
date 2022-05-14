@@ -1,0 +1,63 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+
+        <item name="fontFamily">@font/kalameh</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/colorBg</item>
+        <item name="colorAccentSoft">@color/colorAccentSoft</item>
+        <item name="colorBackground">@color/colorBg</item>
+        <item name="colorText">@color/colorText</item>
+        <item name="colorButton">@color/colorAccent</item>
+        <item name="colorPrimarySoft">@color/colorPrimarySoft</item>
+        <item name="colorBgLight">@color/colorBgLight</item>
+        <item name="colorBg">@color/colorBg</item>
+        <item name="colorBgCard">@color/colorBgCard</item>
+        <item name="colorMutedText">@color/colorMutedText</item>
+        <item name="colorDark">@color/colorDark</item>
+        <item name="colorDark1">@color/colorDark1</item>
+        <item name="colorDark2">@color/colorDark2</item>
+        <item name="colorDark3">@color/colorDark3</item>
+        <item name="colorLight">@color/colorLight</item>
+        <item name="colorLight1">@color/colorLight1</item>
+        <item name="colorLight2">@color/colorLight2</item>
+        <item name="colorLight3">@color/colorLight3</item>
+        <item name="colorDanger">@color/colorDanger</item>
+        <item name="colorDangerSoft">@color/colorDangerSoft</item>
+        <item name="colorSuccess">@color/colorSuccess</item>
+        <item name="colorSuccessSoft">@color/colorSuccessSoft</item>
+        <item name="colorWarning">@color/colorWarning</item>
+        <item name="colorWarningSoft">@color/colorWarningSoft</item>
+        <item name="colorInformation">@color/colorInformation</item>
+        <item name="colorInformationSoft">@color/colorInformationSoft</item>
+        <item name="colorTransparent">@color/colorTransparent</item>
+        <item name="colorBgLoading">@color/colorBgLoading</item>
+        <item name="colorWhite">@color/colorWhite</item>
+        <item name="android:layoutDirection">rtl</item>
+    </style>
+
+    <!--    Bottom Sheet-->
+    <style name="ThemeOverlay.App.BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/ModalBottomSheetDialog</item>
+    </style>
+
+    <style name="ModalBottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:colorBackground">#00000000</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
+    <style name="ShapeAppearance.App.LargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/_24sdp</item>
+    </style>
+
+</resources>
