@@ -16,6 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TildaChat"
         android:usesCleartextTraffic="true"
+        tools:replace="android:theme,android:label"
         tools:targetApi="n">
         <activity
             android:name="ir.tildaweb.tildachatapp.MainActivity"

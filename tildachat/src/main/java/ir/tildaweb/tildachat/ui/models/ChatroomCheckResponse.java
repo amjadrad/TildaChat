@@ -1,6 +1,5 @@
 package ir.tildaweb.tildachat.ui.models;
 
-
 import com.google.gson.annotations.SerializedName;
 
 import ir.tildaweb.tildachat.models.base_models.Chatroom;

@@ -1,6 +1,7 @@
 package ir.tildaweb.tildachat.app.request;
 
 import android.app.Activity;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -11,6 +12,8 @@ import ir.tildaweb.tildachat.app.request.interfaces.SocketReceiverInterface;
 import ir.tildaweb.tildachat.app.TildaChatApp;
 
 public class Receiver implements SocketReceiverInterface {
+
+    public String TAG = this.getClass().getName();
 
     @Override
     public <T> void receiveCustomString(@Nullable Activity activityForRunOnUI, String endpoint, Class<T> receiveModel, OnReceiveListener<T> onReceiveListener) {
@@ -85,6 +88,7 @@ public class Receiver implements SocketReceiverInterface {
     @Override
     public <T> void receiveUserChatrooms(@Nullable Activity activityForRunOnUI, Class<T> receiveModel, OnReceiveListener<T> onReceiveListener) {
         TildaChatApp.getSocket().on(SocketEndpoints.TAG_RECEIVE_USER_CHATROOMS, args -> {
+            Log.d(TAG, "receiveUserChatrooms: " + args[0]);
             T t = (T) DataParser.fromJson(String.valueOf(args[0]), receiveModel);
             if (activityForRunOnUI != null) {
                 activityForRunOnUI.runOnUiThread(() -> onReceiveListener.onReceive(t));

@@ -2,7 +2,7 @@ package ir.tildaweb.tildachat.ui.values;
 
 
 import ir.tildaweb.tildachat.enums.ChatroomType;
-import ir.tildaweb.tildachat.ui.models.ChatMessage;
+import ir.tildaweb.tildachat.models.base_models.Message;
 
 public class MessageTypeUtil {
 
@@ -13,7 +13,7 @@ public class MessageTypeUtil {
     private static int otherFactor = 1;
 
 
-    public static int getType(ChatMessage chatMessage, int userId, ChatroomType roomType) {
+    public static int getType(Message chatMessage, int userId, ChatroomType roomType) {
         int type = 0;
         //Message Type
         switch (chatMessage.getMessageType()) {

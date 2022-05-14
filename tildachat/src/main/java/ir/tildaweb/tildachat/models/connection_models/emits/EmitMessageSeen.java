@@ -8,6 +8,16 @@ public class EmitMessageSeen {
     private Integer messageId;
     @SerializedName("user_id")
     private Integer userId;
+    @SerializedName("room_id")
+    private String roomId;
+
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
+    }
 
     public Integer getUserId() {
         return userId;

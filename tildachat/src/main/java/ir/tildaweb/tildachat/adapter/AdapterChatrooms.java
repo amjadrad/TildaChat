@@ -57,7 +57,7 @@
 //        if (chatroom.getPicture() != null) {
 //            Glide.with(context).load(BuildConfig.FILE_URL + chatroom.getPicture()).into(holder.imageViewPicture);
 //        } else {
-//            holder.imageViewPicture.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_logo));
+//            holder.imageViewPicture.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_logo));
 //        }
 //        if (chatroom.getLastMessage() != null) {
 //            holder.tvLastMessage.setVisibility(View.VISIBLE);
