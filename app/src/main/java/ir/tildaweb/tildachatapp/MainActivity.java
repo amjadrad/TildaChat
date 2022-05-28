@@ -28,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
 
         socketRequestController = new SocketRequestController();
         EmitUserChatrooms emitUserChatrooms = new EmitUserChatrooms();
-        emitUserChatrooms.setUserId(2);
+        emitUserChatrooms.setUserId(1);
+        emitUserChatrooms.setPage(1);
 
         binding.button.setOnClickListener(view -> {
             binding.tv.setText("Reuqest...");

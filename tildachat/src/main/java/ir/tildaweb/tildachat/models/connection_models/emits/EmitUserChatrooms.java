@@ -6,6 +6,16 @@ public class EmitUserChatrooms {
 
     @SerializedName("user_id")
     private Integer userId;
+    @SerializedName("page")
+    private Integer page;
+
+    public Integer getPage() {
+        return page;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
 
     public Integer getUserId() {
         return userId;

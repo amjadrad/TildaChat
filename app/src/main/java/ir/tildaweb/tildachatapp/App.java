@@ -10,6 +10,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        TildaChatApp.setUp("http://chat.nazmenovin.ir", "user_id=" + 1);
 //        TildaChatApp.setUp(BuildConfig.CHAT_URL, "user_id=2");
     }
 }
