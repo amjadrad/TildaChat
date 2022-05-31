@@ -91,7 +91,6 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         if (getIntent().hasExtra("room_id"))
             roomId = getIntent().getExtras().getString("room_id");
 
-
         activityChatroomMessagingBinding.imageViewBack.setOnClickListener(this);
         activityChatroomMessagingBinding.imageViewReplyClose.setOnClickListener(this);
         activityChatroomMessagingBinding.imageViewUpdateClose.setOnClickListener(this);
@@ -104,7 +103,6 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         activityChatroomMessagingBinding.recyclerViewMessages.setLayoutManager(new LinearLayoutManager(this));
         adapterPrivateChatMessages = new AdapterPrivateChatMessages(this, ChatroomMessagingActivity.this, userId, FILE_URL, activityChatroomMessagingBinding.recyclerViewMessages, new ArrayList<>(), this, this);
         activityChatroomMessagingBinding.recyclerViewMessages.setAdapter(adapterPrivateChatMessages);
-
 
         activityChatroomMessagingBinding.etMessage.addTextChangedListener(new TextWatcher() {
             @Override
@@ -136,6 +134,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         setSocketListeners();
         EmitChatroomCheck emitChatroomCheck = new EmitChatroomCheck();
         emitChatroomCheck.setRoomId(roomId);
+        emitChatroomCheck.setType(EmitChatroomCheck.ChatroomCheckType.ROOM_ID);
         socketRequestController.emitter().emitChatroomCheck(emitChatroomCheck);
     }
 
@@ -150,8 +149,6 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             activityChatroomMessagingBinding.recyclerViewMessages.setLayoutParams(layoutParams);
         }
-
-
     }
 
     private void join() {
@@ -164,6 +161,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     private void setSocketListeners() {
 
         socketRequestController.receiver().receiveChatroomCheck(ChatroomMessagingActivity.this, ReceiveChatroomCheck.class, response -> {
+            Log.d(TAG, "setSocketListeners: CheckChatroom");
             if (response.getChatroom() != null) {
                 if (response.getChatroom().getType().equals("channel")) {
                     adapterPrivateChatMessages.setRoomType(ChatroomType.CHANNEL);
@@ -257,6 +255,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             nextPage = 0;
             EmitChatroomMessages emitChatroomMessages = new EmitChatroomMessages();
             emitChatroomMessages.setRoomId(roomId);
+            emitChatroomMessages.setUserId(1);
             emitChatroomMessages.setPage(++nextPage);
             socketRequestController.emitter().emitChatroomMessages(emitChatroomMessages);
         });

@@ -42,8 +42,12 @@ public class MainActivity extends AppCompatActivity {
             for (Chatroom chatroom : response.getChatrooms()) {
                 Log.d(TAG, "onCreate: " + chatroom.getRoomTitle());
                 Log.d(TAG, "onCreate: " + chatroom.getRoomId());
-//                Intent intent = new Intent(MainActivity.this, ChatroomMessagingActivity.class);
-//                startActivity(intent);
+                Intent intent = new Intent(MainActivity.this, ChatroomMessagingActivity.class);
+                intent.putExtra("user_id" , 1);
+                intent.putExtra("file_url" , "");
+                intent.putExtra("room_id" , chatroom.getRoomId());
+                startActivity(intent);
+                break;
             }
         });
         socketRequestController.receiver().receiveCustomString(this, "error", String.class, response -> {

@@ -8,6 +8,16 @@ public class EmitChatroomMessages {
     private String roomId;
     @SerializedName("page")
     private Integer page;
+    @SerializedName("user_id")
+    private Integer userId;
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
     public String getRoomId() {
         return roomId;
