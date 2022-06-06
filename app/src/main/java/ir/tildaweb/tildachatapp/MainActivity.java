@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        socketRequestController = new SocketRequestController();
+        socketRequestController = SocketRequestController.getInstance();
         EmitUserChatrooms emitUserChatrooms = new EmitUserChatrooms();
         emitUserChatrooms.setUserId(1);
         emitUserChatrooms.setPage(1);
@@ -36,9 +36,8 @@ public class MainActivity extends AppCompatActivity {
             socketRequestController.emitter().emitUserChatrooms(emitUserChatrooms);
         });
 
-        socketRequestController.receiver().receiveUserChatrooms(this, ReceiveUserChatrooms.class, response -> {
+        socketRequestController.receiver().receiveUserChatrooms(this , ReceiveUserChatrooms.class , response -> {
             binding.tv.setText("Response :)))))");
-            Log.d(TAG, "onCreate:uch -----------------------");
             for (Chatroom chatroom : response.getChatrooms()) {
                 Log.d(TAG, "onCreate: " + chatroom.getRoomTitle());
                 Log.d(TAG, "onCreate: " + chatroom.getRoomId());
@@ -50,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
         });
+
         socketRequestController.receiver().receiveCustomString(this, "error", String.class, response -> {
             binding.tv.setText("Error!");
             Log.d(TAG, "onCreate:e " + response);

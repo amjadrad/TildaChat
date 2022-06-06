@@ -8,5 +8,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ui.chatroom_messaging.ChatroomMessagingActivity" />
+        <service android:name=".services.TildaChatCommunicationService" />
     </application>
 </manifest>

@@ -24,6 +24,8 @@ import io.socket.emitter.Emitter;
 import ir.tildaweb.tildachat.R;
 //import ir.tildaweb.tildachat.adapter.AdapterPrivateChatMessages;
 import ir.tildaweb.tildachat.adapter.AdapterPrivateChatMessages;
+import ir.tildaweb.tildachat.app.SocketEndpoints;
+import ir.tildaweb.tildachat.app.TildaChatApp;
 import ir.tildaweb.tildachat.app.request.SocketRequestController;
 import ir.tildaweb.tildachat.databinding.ActivityChatroomMessagingBinding;
 import ir.tildaweb.tildachat.enums.ChatroomType;
@@ -54,7 +56,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 
     private String TAG = this.getClass().getName();
     private ActivityChatroomMessagingBinding activityChatroomMessagingBinding;
-    private SocketRequestController socketRequestController;
+//    private SocketRequestController socketRequestController;
     private Integer userId;
     private String roomId;
     private static String FILE_URL;
@@ -84,7 +86,6 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         super.onCreate(savedInstanceState);
         activityChatroomMessagingBinding = ActivityChatroomMessagingBinding.inflate(getLayoutInflater());
         setContentView(activityChatroomMessagingBinding.getRoot());
-        socketRequestController = new SocketRequestController();
         //Get intent info
         userId = getIntent().getIntExtra("user_id", -1);
         FILE_URL = getIntent().getStringExtra("file_url");
@@ -135,9 +136,8 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         EmitChatroomCheck emitChatroomCheck = new EmitChatroomCheck();
         emitChatroomCheck.setRoomId(roomId);
         emitChatroomCheck.setType(EmitChatroomCheck.ChatroomCheckType.ROOM_ID);
-        socketRequestController.emitter().emitChatroomCheck(emitChatroomCheck);
+        TildaChatApp.getSocketRequestController().emitter().emitChatroomCheck(emitChatroomCheck);
     }
-
 
     private void setChatroomInfo() {
         activityChatroomMessagingBinding.tvUserName.setText(String.valueOf(roomTitle));
@@ -154,13 +154,11 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     private void join() {
         EmitChatroomJoin emitChatroomJoin = new EmitChatroomJoin();
         emitChatroomJoin.setRoomId(roomId);
-        socketRequestController.emitter().emitChatroomJoin(emitChatroomJoin);
+        TildaChatApp.getSocketRequestController().emitter().emitChatroomJoin(emitChatroomJoin);
     }
 
-
     private void setSocketListeners() {
-
-        socketRequestController.receiver().receiveChatroomCheck(ChatroomMessagingActivity.this, ReceiveChatroomCheck.class, response -> {
+        TildaChatApp.getSocketRequestController().receiver().receiveChatroomCheck(ChatroomMessagingActivity.this, ReceiveChatroomCheck.class, response -> {
             Log.d(TAG, "setSocketListeners: CheckChatroom");
             if (response.getChatroom() != null) {
                 if (response.getChatroom().getType().equals("channel")) {
@@ -169,7 +167,6 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                     adapterPrivateChatMessages.setRoomType(ChatroomType.GROUP);
                 }
             }
-
             switch (response.getCode()) {
                 case 111:
                 case 112: {
@@ -248,19 +245,19 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                     break;
                 }
             }
-
         });
 
-        socketRequestController.receiver().receiveChatroomJoin(this, ReceiveChatroomJoin.class, response -> {
+        TildaChatApp.getSocketRequestController().receiver().receiveChatroomJoin(this, ReceiveChatroomJoin.class, response -> {
             nextPage = 0;
             EmitChatroomMessages emitChatroomMessages = new EmitChatroomMessages();
             emitChatroomMessages.setRoomId(roomId);
             emitChatroomMessages.setUserId(1);
             emitChatroomMessages.setPage(++nextPage);
-            socketRequestController.emitter().emitChatroomMessages(emitChatroomMessages);
+            adapterPrivateChatMessages.clearAll();
+            TildaChatApp.getSocketRequestController().emitter().emitChatroomMessages(emitChatroomMessages);
         });
 
-        socketRequestController.receiver().receiveChatroomMessages(this, ReceiveChatroomMessages.class, response -> {
+        TildaChatApp.getSocketRequestController().receiver().receiveChatroomMessages(this, ReceiveChatroomMessages.class, response -> {
             if (response.getRoomId().equals(roomId)) {
                 if (response.getStatus() == 200) {
                     activityChatroomMessagingBinding.noItem.setVisibility(View.GONE);
@@ -278,7 +275,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             }
         });
 
-        socketRequestController.receiver().receiveMessageStore(this, ReceiveMessageStore.class, response -> {
+        TildaChatApp.getSocketRequestController().receiver().receiveMessageStore(this, ReceiveMessageStore.class, response -> {
             if (roomId.equals(response.getRoomId())) {
                 if (response.getStatus() == 200) {
                     adapterPrivateChatMessages.addItem(response.getMessage());
@@ -289,7 +286,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             }
         });
 
-        socketRequestController.receiver().receiveMessageSeen(this, ReceiveMessageSeen.class, response -> {
+        TildaChatApp.getSocketRequestController().receiver().receiveMessageSeen(this, ReceiveMessageSeen.class, response -> {
             if (response.getRoomId().equals(roomId)) {
                 if (response.getStatus() == 200) {
                     adapterPrivateChatMessages.seenItem(response.getMessageId());
@@ -297,7 +294,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             }
         });
 
-        socketRequestController.receiver().receiveMessageUpdate(this, ReceiveMessageUpdate.class, response -> {
+        TildaChatApp.getSocketRequestController().receiver().receiveMessageUpdate(this, ReceiveMessageUpdate.class, response -> {
             if (response.getRoomId().equals(roomId)) {
                 if (response.getStatus() == 200) {
                     adapterPrivateChatMessages.updateItem(response.getMessage());
@@ -305,7 +302,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             }
         });
 
-        socketRequestController.receiver().receiveMessageDelete(this, ReceiveMessageDelete.class, response -> {
+        TildaChatApp.getSocketRequestController().receiver().receiveMessageDelete(this, ReceiveMessageDelete.class, response -> {
             if (response.getRoomId().equals(roomId)) {
                 if (response.getStatus() == 200) {
                     adapterPrivateChatMessages.deleteItem(response.getMessageId());
@@ -333,6 +330,13 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 //        }));
     }
 
+    @Override
+    public void onBackPressed() {
+        TildaChatApp.getSocket().off(SocketEndpoints.TAG_RECEIVE_CHATROOM_CHECK);
+        TildaChatApp.getSocket().off(SocketEndpoints.TAG_RECEIVE_CHATROOM_JOIN);
+        TildaChatApp.getSocket().off(SocketEndpoints.TAG_RECEIVE_CHATROOM_MESSAGES);
+        super.onBackPressed();
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -360,7 +364,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 //                                    } else {
 //                                        emitMessageStore.setSecondUserId(secondUserId);
 //                                    }
-//                                    socketRequestController.emitter().emitMessageStore(emitMessageStore);
+//                                    TildaChatApp.getSocketRequestController().emitter().emitMessageStore(emitMessageStore);
 ////                            //Reset state
 //                                    activityChatroomMessagingBinding.etMessage.setText("");
 //                                    resetReply();
@@ -443,7 +447,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         EmitChatroomMessages emitChatroomMessages = new EmitChatroomMessages();
         emitChatroomMessages.setRoomId(roomId);
         emitChatroomMessages.setPage(++nextPage);
-        socketRequestController.emitter().emitChatroomMessages(emitChatroomMessages);
+        TildaChatApp.getSocketRequestController().emitter().emitChatroomMessages(emitChatroomMessages);
     }
 
     @Override
@@ -507,9 +511,8 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         emitMessageSeen.setMessageId(messageId);
         emitMessageSeen.setUserId(userId);
         emitMessageSeen.setRoomId(roomId);
-        socketRequestController.emitter().emitMessageSeen(emitMessageSeen);
+        TildaChatApp.getSocketRequestController().emitter().emitMessageSeen(emitMessageSeen);
     }
-
 
     @Override
     public void onClick(View view) {
@@ -525,7 +528,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                     emitMessageUpdate.setUpdate(isUpdate);
                     emitMessageUpdate.setRoomId(roomId);
                     emitMessageUpdate.setMessageId(updateMessageId);
-                    socketRequestController.emitter().emitMessageUpdate(emitMessageUpdate);
+                    TildaChatApp.getSocketRequestController().emitter().emitMessageUpdate(emitMessageUpdate);
                     //Reset state
                     resetUpdate();
                 } else {
@@ -539,7 +542,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                     } else {
                         emitMessageStore.setSecondUserId(secondUserId);
                     }
-                    socketRequestController.emitter().emitMessageStore(emitMessageStore);
+                    TildaChatApp.getSocketRequestController().emitter().emitMessageStore(emitMessageStore);
                     //Reset state
                     activityChatroomMessagingBinding.etMessage.setText("");
                     resetReply();

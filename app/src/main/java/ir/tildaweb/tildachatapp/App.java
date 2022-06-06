@@ -11,6 +11,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         TildaChatApp.setUp("http://chat.nazmenovin.ir", "user_id=" + 1);
+//        TildaChatApp.startCommunicationService(getApplicationContext());
 //        TildaChatApp.setUp(BuildConfig.CHAT_URL, "user_id=2");
     }
 }

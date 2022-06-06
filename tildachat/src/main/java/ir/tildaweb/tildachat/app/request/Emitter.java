@@ -1,5 +1,7 @@
 package ir.tildaweb.tildachat.app.request;
 
+import android.util.Log;
+
 import ir.tildaweb.tildachat.app.DataParser;
 import ir.tildaweb.tildachat.app.request.interfaces.SocketEmitInterface;
 import ir.tildaweb.tildachat.app.SocketEndpoints;

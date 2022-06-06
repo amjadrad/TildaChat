@@ -2274,5 +2274,9 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         }
     }
 
+    public void clearAll(){
+        this.chatMessages.clear();
+        notifyDataSetChanged();
+    }
 
 }
