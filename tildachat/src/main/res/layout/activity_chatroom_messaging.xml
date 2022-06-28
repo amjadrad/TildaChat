@@ -5,12 +5,10 @@
     android:layout_height="match_parent"
     android:layoutDirection="rtl">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
@@ -149,7 +147,7 @@
                 <TextView
                     android:id="@+id/tvReplyMessage"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="right"
                     android:maxLines="1"
@@ -205,7 +203,7 @@
                 <TextView
                     android:id="@+id/tvUpdateMessage"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="right"
                     android:maxLines="1"
@@ -225,7 +223,6 @@
                 android:tint="@color/colorDark2" />
 
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -270,7 +267,7 @@
 
             <EditText
                 android:id="@+id/etMessage"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginRight="@dimen/_5sdp"
                 android:layout_weight="1"
@@ -300,7 +297,6 @@
         android:background="@drawable/bg_info_rounded_default"
         android:orientation="vertical"
         android:visibility="gone">
-
 
         <TextView
             android:id="@+id/tvJoinChannel"
@@ -348,7 +344,7 @@
             android:layout_height="@dimen/_32sdp"
             android:layout_gravity="center|top"
             android:layout_marginTop="0dp"
-            android:background="@drawable/bg_primary_rounded_default"
+            android:background="@drawable/bg_primary_pill_default"
             android:padding="@dimen/_10sdp"
             android:tint="@color/colorWhite"
             app:srcCompat="@drawable/ic_shield_secure" />

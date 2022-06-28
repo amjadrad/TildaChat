@@ -600,7 +600,9 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
     @Override
     public int getItemViewType(int position) {
         Message chatMessage = chatMessages.get(position);
-        return MessageTypeUtil.getType(chatMessage, userId, roomType);
+        int type = MessageTypeUtil.getType(chatMessage, userId, roomType);
+        Log.d(TAG, "getItemViewType: " + type + " _ " + chatMessage.getMessage() + " _ " + chatMessage.getUserId());
+        return type;
     }
 
 
@@ -704,7 +706,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
         final Message chatMessage = chatMessages.get(position);
 
-        Log.d(TAG, "onBindViewHolder: " + viewHolder.getItemViewType());
         //Message type (text , picture , file , voice)
         //Reply (false, true)
         //User type (me , other)
