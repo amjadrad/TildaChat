@@ -1,7 +1,6 @@
 package ir.tildaweb.tildachat.ui.chatroom_messaging;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,17 +16,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 
-import java.io.File;
 import java.util.ArrayList;
 
-import io.socket.emitter.Emitter;
 import ir.tildaweb.tildachat.R;
-//import ir.tildaweb.tildachat.adapter.AdapterPrivateChatMessages;
 import ir.tildaweb.tildachat.adapter.AdapterPrivateChatMessages;
+import ir.tildaweb.tildachat.app.DataParser;
 import ir.tildaweb.tildachat.app.SocketEndpoints;
 import ir.tildaweb.tildachat.app.TildaChatApp;
-import ir.tildaweb.tildachat.app.request.SocketRequestController;
 import ir.tildaweb.tildachat.databinding.ActivityChatroomMessagingBinding;
+import ir.tildaweb.tildachat.dialogs.DialogConfirmMessage;
 import ir.tildaweb.tildachat.enums.ChatroomType;
 import ir.tildaweb.tildachat.enums.MessageType;
 import ir.tildaweb.tildachat.interfaces.IChatUtils;
@@ -47,16 +44,13 @@ import ir.tildaweb.tildachat.models.connection_models.receives.ReceiveMessageDel
 import ir.tildaweb.tildachat.models.connection_models.receives.ReceiveMessageSeen;
 import ir.tildaweb.tildachat.models.connection_models.receives.ReceiveMessageStore;
 import ir.tildaweb.tildachat.models.connection_models.receives.ReceiveMessageUpdate;
-import ir.tildaweb.tildachat.ui.models.ChatMessage;
-import ir.tildaweb.tildachat.utils.FileUploader;
-import ir.tildaweb.tildachat.utils.FileUtils;
 import ir.tildaweb.tildachat.utils.MathUtils;
 
 public class ChatroomMessagingActivity extends AppCompatActivity implements View.OnClickListener, LoadMoreData, IChatUtils {
 
     private String TAG = this.getClass().getName();
     private ActivityChatroomMessagingBinding activityChatroomMessagingBinding;
-//    private SocketRequestController socketRequestController;
+    //    private SocketRequestController socketRequestController;
     private Integer userId;
     private String roomId;
     private static String FILE_URL;
@@ -276,6 +270,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         });
 
         TildaChatApp.getSocketRequestController().receiver().receiveMessageStore(this, ReceiveMessageStore.class, response -> {
+            Log.d(TAG, "setSocketListeners:Store.............:  " + DataParser.toJson(response));
             if (roomId.equals(response.getRoomId())) {
                 if (response.getStatus() == 200) {
                     adapterPrivateChatMessages.addItem(response.getMessage());
@@ -303,6 +298,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         });
 
         TildaChatApp.getSocketRequestController().receiver().receiveMessageDelete(this, ReceiveMessageDelete.class, response -> {
+            Log.d(TAG, "setSocketListeners: " + DataParser.toJson(response));
             if (response.getRoomId().equals(roomId)) {
                 if (response.getStatus() == 200) {
                     adapterPrivateChatMessages.deleteItem(response.getMessageId());
@@ -479,16 +475,17 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     @Override
     public void onDelete(Message message) {
         String description = "آیا می خواهید این پیام حذف شود؟";
-//        DialogConfirmMessage dialogConfirmMessage = new DialogConfirmMessage(ChatroomMessagingActivity.this, "حذف پیام", description);
-//        dialogConfirmMessage.setOnCancelClickListener((View.OnClickListener) view -> dialogConfirmMessage.dismiss());
-//        dialogConfirmMessage.setOnConfirmClickListener((View.OnClickListener) view -> {
-//            EmitMessageDelete emitMessageDelete = new EmitMessageDelete();
-//            emitMessageDelete.setMessageId(message.getId());
-//            socket.emit(SocketEndpoints.TAG_CLIENT_SEND_MESSAGE_DELETE, chatroomId, roomId, DataParser.toJson(emitMessageDelete));
-//            dialogConfirmMessage.dismiss();
-//        });
-//
-//        dialogConfirmMessage.show();
+        DialogConfirmMessage dialogConfirmMessage = new DialogConfirmMessage(ChatroomMessagingActivity.this, "حذف پیام", description);
+        dialogConfirmMessage.setOnCancelClickListener(view -> dialogConfirmMessage.dismiss());
+        dialogConfirmMessage.setOnConfirmClickListener(view -> {
+            EmitMessageDelete emitMessageDelete = new EmitMessageDelete();
+            emitMessageDelete.setMessageId(message.getId());
+            emitMessageDelete.setRoomId(roomId);
+            TildaChatApp.getSocketRequestController().emitter().emitMessageDelete(emitMessageDelete);
+            dialogConfirmMessage.dismiss();
+        });
+
+        dialogConfirmMessage.show();
     }
 
     @Override
@@ -537,11 +534,13 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                     emitMessageStore.setMessage(message);
                     emitMessageStore.setReplyMessageId(replyMessageId);
                     emitMessageStore.setUpdate(isUpdate);
+                    emitMessageStore.setChatroomId(chatroomId);
                     if (roomId != null) {
                         emitMessageStore.setRoomId(roomId);
                     } else {
                         emitMessageStore.setSecondUserId(secondUserId);
                     }
+                    Log.d(TAG, "onClick: " + DataParser.toJson(emitMessageStore));
                     TildaChatApp.getSocketRequestController().emitter().emitMessageStore(emitMessageStore);
                     //Reset state
                     activityChatroomMessagingBinding.etMessage.setText("");

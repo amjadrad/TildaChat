@@ -33,22 +33,30 @@ public class MainActivity extends AppCompatActivity {
 
         binding.button.setOnClickListener(view -> {
             binding.tv.setText("Reuqest...");
-            socketRequestController.emitter().emitUserChatrooms(emitUserChatrooms);
+//            socketRequestController.emitter().emitUserChatrooms(emitUserChatrooms);
+
+//            chatroom_1_184
+            Intent intent = new Intent(MainActivity.this, ChatroomMessagingActivity.class);
+            intent.putExtra("user_id", 1);//184
+            intent.putExtra("file_url", "");
+            intent.putExtra("room_id", "chatroom_1_184");
+            startActivity(intent);
+
         });
 
-        socketRequestController.receiver().receiveUserChatrooms(this , ReceiveUserChatrooms.class , response -> {
-            binding.tv.setText("Response :)))))");
-            for (Chatroom chatroom : response.getChatrooms()) {
-                Log.d(TAG, "onCreate: " + chatroom.getRoomTitle());
-                Log.d(TAG, "onCreate: " + chatroom.getRoomId());
-                Intent intent = new Intent(MainActivity.this, ChatroomMessagingActivity.class);
-                intent.putExtra("user_id" , 1);
-                intent.putExtra("file_url" , "");
-                intent.putExtra("room_id" , chatroom.getRoomId());
-                startActivity(intent);
-                break;
-            }
-        });
+//        socketRequestController.receiver().receiveUserChatrooms(this , ReceiveUserChatrooms.class , response -> {
+//            binding.tv.setText("Response :)))))");
+//            for (Chatroom chatroom : response.getChatrooms()) {
+//                Log.d(TAG, "onCreate: " + chatroom.getRoomTitle());
+//                Log.d(TAG, "onCreate: " + chatroom.getRoomId());
+//                Intent intent = new Intent(MainActivity.this, ChatroomMessagingActivity.class);
+//                intent.putExtra("user_id" , 1);
+//                intent.putExtra("file_url" , "");
+//                intent.putExtra("room_id" , chatroom.getRoomId());
+////                startActivity(intent);
+////                break;
+//            }
+//        });
 
         socketRequestController.receiver().receiveCustomString(this, "error", String.class, response -> {
             binding.tv.setText("Error!");

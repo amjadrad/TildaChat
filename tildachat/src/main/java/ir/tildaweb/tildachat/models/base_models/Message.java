@@ -24,18 +24,17 @@ public class Message {
     //Inject
     @SerializedName("user")
     private User user;
-    @SerializedName("reply_message")
-    private Message replyMessage;
-    //Local
-    private int seenCount;
+    @SerializedName("reply")
+    private Message reply;
+    @SerializedName("seen_count")
+    private Integer seenCount;
 
-
-    public Message getReplyMessage() {
-        return replyMessage;
+    public Message getReply() {
+        return reply;
     }
 
-    public void setReplyMessage(Message replyMessage) {
-        this.replyMessage = replyMessage;
+    public void setReply(Message reply) {
+        this.reply = reply;
     }
 
     public User getUser() {
@@ -46,11 +45,11 @@ public class Message {
         this.user = user;
     }
 
-    public int getSeenCount() {
+    public Integer getSeenCount() {
         return seenCount;
     }
 
-    public void setSeenCount(int seenCount) {
+    public void setSeenCount(Integer seenCount) {
         this.seenCount = seenCount;
     }
 

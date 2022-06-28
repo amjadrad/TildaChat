@@ -17,8 +17,18 @@ public class EmitMessageStore extends BaseModel {
     private Boolean isUpdate;
     @SerializedName("room_id")
     private String roomId;
+    @SerializedName("chatroom_id")
+    private Integer chatroomId;
     @SerializedName("second_user_id")
     private Integer secondUserId;
+
+    public Integer getChatroomId() {
+        return chatroomId;
+    }
+
+    public void setChatroomId(Integer chatroomId) {
+        this.chatroomId = chatroomId;
+    }
 
     public Integer getSecondUserId() {
         return secondUserId;

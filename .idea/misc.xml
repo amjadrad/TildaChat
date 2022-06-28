@@ -16,6 +16,7 @@
         <entry key="..\:/_WORK/android/TildaChatApp/tildachat/src/main/res/drawable/ic_reply.xml" value="0.194" />
         <entry key="..\:/_WORK/android/TildaChatApp/tildachat/src/main/res/drawable/ic_shield_secure.xml" value="0.194" />
         <entry key="..\:/_WORK/android/TildaChatApp/tildachat/src/main/res/layout/activity_chatroom_messaging.xml" value="0.25416666666666665" />
+        <entry key="..\:/_WORK/android/TildaChatApp/tildachat/src/main/res/layout/dialog_confirm_message.xml" value="0.25" />
         <entry key="..\:/_WORK/android/TildaChatApp/tildachat/src/main/res/layout/dialog_show_picture.xml" value="0.25416666666666665" />
         <entry key="..\:/_WORK/android/TildaChatApp/tildachat/src/main/res/layout/list_socket_chat_file_replyfalse_me_group.xml" value="0.25416666666666665" />
         <entry key="..\:/_WORK/android/TildaChatApp/tildachat/src/main/res/layout/list_socket_chat_file_replyfalse_me_private.xml" value="0.25416666666666665" />

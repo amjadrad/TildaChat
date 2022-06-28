@@ -917,7 +917,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             case 12111: {
                 ChatHolder_Text_ReplyTrue_Me_Private holder = (ChatHolder_Text_ReplyTrue_Me_Private) viewHolder;
                 holder.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
-                switch (chatMessage.getReplyMessage().getMessageType()) {
+                switch (chatMessage.getReply().getMessageType()) {
                     case "text":
                         holder.tvReply.setVisibility(View.VISIBLE);
                         holder.cardViewReplyPicture.setVisibility(View.GONE);
@@ -925,21 +925,21 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     case "picture":
                         holder.cardViewReplyPicture.setVisibility(View.VISIBLE);
                         holder.tvReply.setVisibility(View.GONE);
-                        Glide.with(context).load(FILE_URL + chatMessage.getReplyMessage().getMessage()).into(holder.imageViewReplyMessage);
+                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.imageViewReplyMessage);
                         break;
                     case "file":
                         holder.cardViewReplyPicture.setVisibility(View.GONE);
                         holder.tvReply.setVisibility(View.VISIBLE);
                         break;
                 }
-                if (chatMessage.getReplyMessage().getMessageType().equals("file")) {
-                    if (chatMessage.getReplyMessage().getMessage().contains("_nznv_")) {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage().substring(chatMessage.getReplyMessage().getMessage().indexOf("_nznv_") + 6)));
+                if (chatMessage.getReply().getMessageType().equals("file")) {
+                    if (chatMessage.getReply().getMessage().contains("_nznv_")) {
+                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
                     } else {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage()));
+                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
                     }
                 } else {
-                    holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage()));
+                    holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
                 }
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
@@ -993,7 +993,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             case 12131: {
                 ChatHolder_Text_ReplyTrue_Me_Group holder = (ChatHolder_Text_ReplyTrue_Me_Group) viewHolder;
                 holder.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
-                switch (chatMessage.getReplyMessage().getMessageType()) {
+                switch (chatMessage.getReply().getMessageType()) {
                     case "text":
                         holder.tvReply.setVisibility(View.VISIBLE);
                         holder.cardViewReplyPicture.setVisibility(View.GONE);
@@ -1001,21 +1001,21 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     case "picture":
                         holder.cardViewReplyPicture.setVisibility(View.VISIBLE);
                         holder.tvReply.setVisibility(View.GONE);
-                        Glide.with(context).load(FILE_URL + chatMessage.getReplyMessage().getMessage()).into(holder.imageViewReplyMessage);
+                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.imageViewReplyMessage);
                         break;
                     case "file":
                         holder.cardViewReplyPicture.setVisibility(View.GONE);
                         holder.tvReply.setVisibility(View.VISIBLE);
                         break;
                 }
-                if (chatMessage.getReplyMessage().getMessageType().equals("file")) {
-                    if (chatMessage.getReplyMessage().getMessage().contains("_nznv_")) {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage().substring(chatMessage.getReplyMessage().getMessage().indexOf("_nznv_") + 6)));
+                if (chatMessage.getReply().getMessageType().equals("file")) {
+                    if (chatMessage.getReply().getMessage().contains("_nznv_")) {
+                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
                     } else {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage()));
+                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
                     }
                 } else {
-                    holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage()));
+                    holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
                 }
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
@@ -1068,7 +1068,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             case 12211: {
                 ChatHolder_Text_ReplyTrue_Other_Private holder = (ChatHolder_Text_ReplyTrue_Other_Private) viewHolder;
                 holder.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
-                switch (chatMessage.getReplyMessage().getMessageType()) {
+                switch (chatMessage.getReply().getMessageType()) {
                     case "text":
                         holder.tvReply.setVisibility(View.VISIBLE);
                         holder.cardViewReplyPicture.setVisibility(View.GONE);
@@ -1076,21 +1076,21 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     case "picture":
                         holder.cardViewReplyPicture.setVisibility(View.VISIBLE);
                         holder.tvReply.setVisibility(View.GONE);
-                        Glide.with(context).load(FILE_URL + chatMessage.getReplyMessage().getMessage()).into(holder.imageViewReplyMessage);
+                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.imageViewReplyMessage);
                         break;
                     case "file":
                         holder.cardViewReplyPicture.setVisibility(View.GONE);
                         holder.tvReply.setVisibility(View.VISIBLE);
                         break;
                 }
-                if (chatMessage.getReplyMessage().getMessageType().equals("file")) {
-                    if (chatMessage.getReplyMessage().getMessage().contains("_nznv_")) {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage().substring(chatMessage.getReplyMessage().getMessage().indexOf("_nznv_") + 6)));
+                if (chatMessage.getReply().getMessageType().equals("file")) {
+                    if (chatMessage.getReply().getMessage().contains("_nznv_")) {
+                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
                     } else {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage()));
+                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
                     }
                 } else {
-                    holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage()));
+                    holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
                 }
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
@@ -1137,7 +1137,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             case 12231: {
                 ChatHolder_Text_ReplyTrue_Other_Group holder = (ChatHolder_Text_ReplyTrue_Other_Group) viewHolder;
                 holder.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
-                switch (chatMessage.getReplyMessage().getMessageType()) {
+                switch (chatMessage.getReply().getMessageType()) {
                     case "text":
                         holder.tvReply.setVisibility(View.VISIBLE);
                         holder.cardViewReplyPicture.setVisibility(View.GONE);
@@ -1145,21 +1145,21 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     case "picture":
                         holder.cardViewReplyPicture.setVisibility(View.VISIBLE);
                         holder.tvReply.setVisibility(View.GONE);
-                        Glide.with(context).load(FILE_URL + chatMessage.getReplyMessage().getMessage()).into(holder.imageViewReplyMessage);
+                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.imageViewReplyMessage);
                         break;
                     case "file":
                         holder.cardViewReplyPicture.setVisibility(View.GONE);
                         holder.tvReply.setVisibility(View.VISIBLE);
                         break;
                 }
-                if (chatMessage.getReplyMessage().getMessageType().equals("file")) {
-                    if (chatMessage.getReplyMessage().getMessage().contains("_nznv_")) {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage().substring(chatMessage.getReplyMessage().getMessage().indexOf("_nznv_") + 6)));
+                if (chatMessage.getReply().getMessageType().equals("file")) {
+                    if (chatMessage.getReply().getMessage().contains("_nznv_")) {
+                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
                     } else {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage()));
+                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
                     }
                 } else {
-                    holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage()));
+                    holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
                 }
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
@@ -1377,7 +1377,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
                 }
 
-                switch (chatMessage.getReplyMessage().getMessageType()) {
+                switch (chatMessage.getReply().getMessageType()) {
                     case "text":
                         holder.tvReply.setVisibility(View.VISIBLE);
                         holder.cardViewReplyPicture.setVisibility(View.GONE);
@@ -1385,21 +1385,21 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     case "picture":
                         holder.cardViewReplyPicture.setVisibility(View.VISIBLE);
                         holder.tvReply.setVisibility(View.GONE);
-                        Glide.with(context).load(FILE_URL + chatMessage.getReplyMessage().getMessage()).into(holder.imageViewReplyMessage);
+                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.imageViewReplyMessage);
                         break;
                     case "file":
                         holder.cardViewReplyPicture.setVisibility(View.GONE);
                         holder.tvReply.setVisibility(View.VISIBLE);
                         break;
                 }
-                if (chatMessage.getReplyMessage().getMessageType().equals("file")) {
-                    if (chatMessage.getReplyMessage().getMessage().contains("_nznv_")) {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage().substring(chatMessage.getReplyMessage().getMessage().indexOf("_nznv_") + 6)));
+                if (chatMessage.getReply().getMessageType().equals("file")) {
+                    if (chatMessage.getReply().getMessage().contains("_nznv_")) {
+                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
                     } else {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage()));
+                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
                     }
                 } else {
-                    holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage()));
+                    holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
                 }
                 holder.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
 
@@ -1443,7 +1443,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
                 }
 
-                switch (chatMessage.getReplyMessage().getMessageType()) {
+                switch (chatMessage.getReply().getMessageType()) {
                     case "text":
                         holder.tvReply.setVisibility(View.VISIBLE);
                         holder.cardViewReplyPicture.setVisibility(View.GONE);
@@ -1451,21 +1451,21 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     case "picture":
                         holder.cardViewReplyPicture.setVisibility(View.VISIBLE);
                         holder.tvReply.setVisibility(View.GONE);
-                        Glide.with(context).load(FILE_URL + chatMessage.getReplyMessage().getMessage()).into(holder.imageViewReplyMessage);
+                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.imageViewReplyMessage);
                         break;
                     case "file":
                         holder.cardViewReplyPicture.setVisibility(View.GONE);
                         holder.tvReply.setVisibility(View.VISIBLE);
                         break;
                 }
-                if (chatMessage.getReplyMessage().getMessageType().equals("file")) {
-                    if (chatMessage.getReplyMessage().getMessage().contains("_nznv_")) {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage().substring(chatMessage.getReplyMessage().getMessage().indexOf("_nznv_") + 6)));
+                if (chatMessage.getReply().getMessageType().equals("file")) {
+                    if (chatMessage.getReply().getMessage().contains("_nznv_")) {
+                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
                     } else {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage()));
+                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
                     }
                 } else {
-                    holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage()));
+                    holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
                 }
                 holder.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
 
@@ -1501,7 +1501,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
                 holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
 
-                switch (chatMessage.getReplyMessage().getMessageType()) {
+                switch (chatMessage.getReply().getMessageType()) {
                     case "text":
                         holder.tvReply.setVisibility(View.VISIBLE);
                         holder.cardViewReplyPicture.setVisibility(View.GONE);
@@ -1509,21 +1509,21 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     case "picture":
                         holder.cardViewReplyPicture.setVisibility(View.VISIBLE);
                         holder.tvReply.setVisibility(View.GONE);
-                        Glide.with(context).load(FILE_URL + chatMessage.getReplyMessage().getMessage()).into(holder.imageViewReplyMessage);
+                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.imageViewReplyMessage);
                         break;
                     case "file":
                         holder.cardViewReplyPicture.setVisibility(View.GONE);
                         holder.tvReply.setVisibility(View.VISIBLE);
                         break;
                 }
-                if (chatMessage.getReplyMessage().getMessageType().equals("file")) {
-                    if (chatMessage.getReplyMessage().getMessage().contains("_nznv_")) {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage().substring(chatMessage.getReplyMessage().getMessage().indexOf("_nznv_") + 6)));
+                if (chatMessage.getReply().getMessageType().equals("file")) {
+                    if (chatMessage.getReply().getMessage().contains("_nznv_")) {
+                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
                     } else {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage()));
+                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
                     }
                 } else {
-                    holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage()));
+                    holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
                 }
                 holder.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
 
@@ -1559,7 +1559,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
                 holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
-                switch (chatMessage.getReplyMessage().getMessageType()) {
+                switch (chatMessage.getReply().getMessageType()) {
                     case "text":
                         holder.tvReply.setVisibility(View.VISIBLE);
                         holder.cardViewReplyPicture.setVisibility(View.GONE);
@@ -1567,21 +1567,21 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     case "picture":
                         holder.cardViewReplyPicture.setVisibility(View.VISIBLE);
                         holder.tvReply.setVisibility(View.GONE);
-                        Glide.with(context).load(FILE_URL + chatMessage.getReplyMessage().getMessage()).into(holder.imageViewReplyMessage);
+                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.imageViewReplyMessage);
                         break;
                     case "file":
                         holder.cardViewReplyPicture.setVisibility(View.GONE);
                         holder.tvReply.setVisibility(View.VISIBLE);
                         break;
                 }
-                if (chatMessage.getReplyMessage().getMessageType().equals("file")) {
-                    if (chatMessage.getReplyMessage().getMessage().contains("_nznv_")) {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage().substring(chatMessage.getReplyMessage().getMessage().indexOf("_nznv_") + 6)));
+                if (chatMessage.getReply().getMessageType().equals("file")) {
+                    if (chatMessage.getReply().getMessage().contains("_nznv_")) {
+                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
                     } else {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage()));
+                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
                     }
                 } else {
-                    holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage()));
+                    holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
                 }
                 holder.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
 
@@ -1858,7 +1858,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             case 32111: {
                 ChatHolder_File_ReplyTrue_Me_Private holder = (ChatHolder_File_ReplyTrue_Me_Private) viewHolder;
                 holder.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
-                switch (chatMessage.getReplyMessage().getMessageType()) {
+                switch (chatMessage.getReply().getMessageType()) {
                     case "text":
                         holder.tvReply.setVisibility(View.VISIBLE);
                         holder.cardViewReplyPicture.setVisibility(View.GONE);
@@ -1866,21 +1866,21 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     case "picture":
                         holder.cardViewReplyPicture.setVisibility(View.VISIBLE);
                         holder.tvReply.setVisibility(View.GONE);
-                        Glide.with(context).load(FILE_URL + chatMessage.getReplyMessage().getMessage()).into(holder.imageViewReplyMessage);
+                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.imageViewReplyMessage);
                         break;
                     case "file":
                         holder.cardViewReplyPicture.setVisibility(View.GONE);
                         holder.tvReply.setVisibility(View.VISIBLE);
                         break;
                 }
-                if (chatMessage.getReplyMessage().getMessageType().equals("file")) {
-                    if (chatMessage.getReplyMessage().getMessage().contains("_nznv_")) {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage().substring(chatMessage.getReplyMessage().getMessage().indexOf("_nznv_") + 6)));
+                if (chatMessage.getReply().getMessageType().equals("file")) {
+                    if (chatMessage.getReply().getMessage().contains("_nznv_")) {
+                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
                     } else {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage()));
+                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
                     }
                 } else {
-                    holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage()));
+                    holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
                 }
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
@@ -1939,7 +1939,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             case 32131: {
                 ChatHolder_File_ReplyTrue_Me_Group holder = (ChatHolder_File_ReplyTrue_Me_Group) viewHolder;
                 holder.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
-                switch (chatMessage.getReplyMessage().getMessageType()) {
+                switch (chatMessage.getReply().getMessageType()) {
                     case "text":
                         holder.tvReply.setVisibility(View.VISIBLE);
                         holder.cardViewReplyPicture.setVisibility(View.GONE);
@@ -1947,21 +1947,21 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     case "picture":
                         holder.cardViewReplyPicture.setVisibility(View.VISIBLE);
                         holder.tvReply.setVisibility(View.GONE);
-                        Glide.with(context).load(FILE_URL + chatMessage.getReplyMessage().getMessage()).into(holder.imageViewReplyMessage);
+                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.imageViewReplyMessage);
                         break;
                     case "file":
                         holder.cardViewReplyPicture.setVisibility(View.GONE);
                         holder.tvReply.setVisibility(View.VISIBLE);
                         break;
                 }
-                if (chatMessage.getReplyMessage().getMessageType().equals("file")) {
-                    if (chatMessage.getReplyMessage().getMessage().contains("_nznv_")) {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage().substring(chatMessage.getReplyMessage().getMessage().indexOf("_nznv_") + 6)));
+                if (chatMessage.getReply().getMessageType().equals("file")) {
+                    if (chatMessage.getReply().getMessage().contains("_nznv_")) {
+                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
                     } else {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage()));
+                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
                     }
                 } else {
-                    holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage()));
+                    holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
                 }
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
@@ -2022,25 +2022,25 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             case 32211: {
                 ChatHolder_File_ReplyTrue_Other_Private holder = (ChatHolder_File_ReplyTrue_Other_Private) viewHolder;
                 holder.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
-                if (chatMessage.getReplyMessage().getMessageType().equals("text")) {
+                if (chatMessage.getReply().getMessageType().equals("text")) {
                     holder.tvReply.setVisibility(View.VISIBLE);
                     holder.cardViewReplyPicture.setVisibility(View.GONE);
-                } else if (chatMessage.getReplyMessage().getMessageType().equals("picture")) {
+                } else if (chatMessage.getReply().getMessageType().equals("picture")) {
                     holder.cardViewReplyPicture.setVisibility(View.VISIBLE);
                     holder.tvReply.setVisibility(View.GONE);
-                    Glide.with(context).load(FILE_URL + chatMessage.getReplyMessage().getMessage()).into(holder.imageViewReplyMessage);
+                    Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.imageViewReplyMessage);
                 } else {
                     holder.tvReply.setVisibility(View.VISIBLE);
                     holder.cardViewReplyPicture.setVisibility(View.GONE);
                 }
-                if (chatMessage.getReplyMessage().getMessageType().equals("file")) {
-                    if (chatMessage.getReplyMessage().getMessage().contains("_nznv_")) {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage().substring(chatMessage.getReplyMessage().getMessage().indexOf("_nznv_") + 6)));
+                if (chatMessage.getReply().getMessageType().equals("file")) {
+                    if (chatMessage.getReply().getMessage().contains("_nznv_")) {
+                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
                     } else {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage()));
+                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
                     }
                 } else {
-                    holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage()));
+                    holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
                 }
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
@@ -2092,7 +2092,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 ChatHolder_File_ReplyTrue_Other_Group holder = (ChatHolder_File_ReplyTrue_Other_Group) viewHolder;
 
                 holder.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
-                switch (chatMessage.getReplyMessage().getMessageType()) {
+                switch (chatMessage.getReply().getMessageType()) {
                     case "text":
                         holder.tvReply.setVisibility(View.VISIBLE);
                         holder.cardViewReplyPicture.setVisibility(View.GONE);
@@ -2100,21 +2100,21 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     case "picture":
                         holder.cardViewReplyPicture.setVisibility(View.VISIBLE);
                         holder.tvReply.setVisibility(View.GONE);
-                        Glide.with(context).load(FILE_URL + chatMessage.getReplyMessage().getMessage()).into(holder.imageViewReplyMessage);
+                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.imageViewReplyMessage);
                         break;
                     case "file":
                         holder.cardViewReplyPicture.setVisibility(View.GONE);
                         holder.tvReply.setVisibility(View.VISIBLE);
                         break;
                 }
-                if (chatMessage.getReplyMessage().getMessageType().equals("file")) {
-                    if (chatMessage.getReplyMessage().getMessage().contains("_nznv_")) {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage().substring(chatMessage.getReplyMessage().getMessage().indexOf("_nznv_") + 6)));
+                if (chatMessage.getReply().getMessageType().equals("file")) {
+                    if (chatMessage.getReply().getMessage().contains("_nznv_")) {
+                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
                     } else {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage()));
+                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
                     }
                 } else {
-                    holder.tvReply.setText(String.format("%s", chatMessage.getReplyMessage().getMessage()));
+                    holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
                 }
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
