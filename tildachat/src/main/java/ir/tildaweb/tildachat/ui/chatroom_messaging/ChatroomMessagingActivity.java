@@ -228,7 +228,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                     chatroomId = response.getChatroom().getId();
                     roomId = response.getChatroom().getRoomId();
                     activityChatroomMessagingBinding.linearChatBox.setVisibility(View.VISIBLE);
-                    activityChatroomMessagingBinding.tvUserStatus.setText(String.format("%s %s", MathUtils.convertNumberToKilo(response.getChatroom().getMembersCount()), "عضو"));
+                    activityChatroomMessagingBinding.tvUserStatus.setText(String.format("%s %s", MathUtils.convertNumberToKilo(response.getMemberCount()), "عضو"));
                     setChatroomInfo();
                     join();
                     break;

@@ -39,7 +39,8 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, ChatroomMessagingActivity.class);
             intent.putExtra("user_id", 1);//184
             intent.putExtra("file_url", "");
-            intent.putExtra("room_id", "chatroom_1_184");
+            intent.putExtra("room_id", "group_sp_282_X8Ua3g1i");
+//            intent.putExtra("room_id", "chatroom_1_184");
             startActivity(intent);
 
         });

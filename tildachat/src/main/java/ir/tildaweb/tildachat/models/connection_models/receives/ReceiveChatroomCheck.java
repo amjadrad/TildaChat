@@ -18,6 +18,18 @@ public class ReceiveChatroomCheck {
     private Chatroom chatroom;
     @SerializedName("second_user")
     private User secondUser;
+    @SerializedName("member_count")
+    private Integer memberCount;
+    @SerializedName("is_join")
+    private Boolean isJoin;
+
+    public Integer getMemberCount() {
+        return memberCount;
+    }
+
+    public void setMemberCount(Integer memberCount) {
+        this.memberCount = memberCount;
+    }
 
     public User getSecondUser() {
         return secondUser;
