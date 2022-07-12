@@ -4,6 +4,11 @@
     package="tildachatapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
 
     <application
         android:name="ir.tildaweb.tildachatapp.App"
@@ -23,10 +28,33 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name="ir.tildaweb.tildachat.services.TildaFileUploaderForegroundService"
+            android:exported="false" />
+
+        <receiver
+            android:name="ir.tildaweb.tildachatapp.MainActivity$MyReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="ir.tildaweb.tildachat.UploaderFileUploaded" />
+            </intent-filter>
+        </receiver>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="ir.tildaweb.tildachatapp.myprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
+
     </application>
 
 </manifest>

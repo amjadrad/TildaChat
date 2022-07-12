@@ -59,17 +59,24 @@ public class FileDownloader extends AsyncTask<String, String, String> {
 
         String filename = params[0];
         String fileUrl = FILE_URL + filename;
+        Log.d(TAG, "doInBackground: " + fileUrl);
         try {
+//            filename = "amjad.png";
+            String fileUrlDirectory = filename.substring(0, filename.lastIndexOf("/"));
+            Log.d(TAG, "doInBackground: " + fileUrlDirectory);
+            String folderPathToCreate = "";
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                pathFolder = context.getExternalFilesDir(null) + "/nazmenovin/chat/files/";
+                pathFolder = context.getExternalFilesDir(null) + "/nazmenovin/";
+                folderPathToCreate = pathFolder + fileUrlDirectory;
             } else {
-                pathFolder = Environment.getExternalStorageDirectory() + "/nazmenovin/chat/files/";
+                pathFolder = Environment.getExternalStorageDirectory() + "/nazmenovin/";
+                folderPathToCreate = pathFolder + fileUrlDirectory;
             }
             pathFile = pathFolder + "/" + filename;
-            File file = new File(pathFolder);
-            if (!file.exists()) {
-                Log.d(TAG, "doInBackground: Create folder: " + pathFolder);
-                boolean isCreated = file.mkdirs();
+            File foldersToCreate = new File(folderPathToCreate);
+            if (!foldersToCreate.exists()) {
+                Log.d(TAG, "doInBackground: Create folder: " + foldersToCreate);
+                boolean isCreated = foldersToCreate.mkdirs();
                 Log.d(TAG, "doInBackground:created? " + isCreated);
             }
 
@@ -130,9 +137,9 @@ public class FileDownloader extends AsyncTask<String, String, String> {
     public static void openFile(Context context, String pathFile) {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                pathFile = context.getExternalFilesDir(null) + "/nazmenovin/chat/files/" + pathFile;
+                pathFile = context.getExternalFilesDir(null) + "/nazmenovin/" + pathFile;
             } else {
-                pathFile = Environment.getExternalStorageDirectory() + "/nazmenovin/chat/files/" + pathFile;
+                pathFile = Environment.getExternalStorageDirectory() + "/nazmenovin/" + pathFile;
             }
             File file = new File(pathFile);
             Log.d(TAG, "openFile: " + pathFile);

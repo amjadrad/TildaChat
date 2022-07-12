@@ -1627,7 +1627,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             case 31111: {
                 ChatHolder_File_ReplyFalse_Me_Private holder = (ChatHolder_File_ReplyFalse_Me_Private) viewHolder;
 
-                holder.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
+                holder.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
 
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
@@ -1644,7 +1644,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
                 }
 
-
                 if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                     holder.coordinatorDownloadedFile.setVisibility(View.GONE);
                 } else {
@@ -1655,7 +1654,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                             FileDownloader.openFile(context, chatMessage.getMessage());
                         } else {
-                            FileDownloader fileDownloader = new FileDownloader(context , FILE_URL);
+                            FileDownloader fileDownloader = new FileDownloader(context, FILE_URL);
                             fileDownloader.setOnFileDownloadListener(() -> {
                                 FileDownloader.openFile(context, chatMessage.getMessage());
                                 notifyItemChanged(position);
@@ -1713,7 +1712,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                         FileDownloader.openFile(context, chatMessage.getMessage());
                     } else {
-                        FileDownloader fileDownloader = new FileDownloader(context , FILE_URL);
+                        FileDownloader fileDownloader = new FileDownloader(context, FILE_URL);
                         fileDownloader.setOnFileDownloadListener(() -> {
                             FileDownloader.openFile(context, chatMessage.getMessage());
                             notifyItemChanged(position);
@@ -1765,7 +1764,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                             FileDownloader.openFile(context, chatMessage.getMessage());
                         } else {
-                            FileDownloader fileDownloader = new FileDownloader(context , FILE_URL);
+                            FileDownloader fileDownloader = new FileDownloader(context, FILE_URL);
                             fileDownloader.setOnFileDownloadListener(() -> {
                                 FileDownloader.openFile(context, chatMessage.getMessage());
                                 notifyItemChanged(position);
@@ -1827,7 +1826,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                             FileDownloader.openFile(context, chatMessage.getMessage());
                         } else {
-                            FileDownloader fileDownloader = new FileDownloader(context , FILE_URL);
+                            FileDownloader fileDownloader = new FileDownloader(context, FILE_URL);
                             fileDownloader.setOnFileDownloadListener(() -> {
                                 FileDownloader.openFile(context, chatMessage.getMessage());
                                 notifyItemChanged(position);
@@ -1924,7 +1923,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                             FileDownloader.openFile(context, chatMessage.getMessage());
                         } else {
-                            FileDownloader fileDownloader = new FileDownloader(context , FILE_URL);
+                            FileDownloader fileDownloader = new FileDownloader(context, FILE_URL);
                             fileDownloader.setOnFileDownloadListener(() -> {
                                 FileDownloader.openFile(context, chatMessage.getMessage());
                                 notifyItemChanged(position);
@@ -2005,7 +2004,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                             FileDownloader.openFile(context, chatMessage.getMessage());
                         } else {
-                            FileDownloader fileDownloader = new FileDownloader(context , FILE_URL);
+                            FileDownloader fileDownloader = new FileDownloader(context, FILE_URL);
                             fileDownloader.setOnFileDownloadListener(() -> {
                                 FileDownloader.openFile(context, chatMessage.getMessage());
                                 notifyItemChanged(position);
@@ -2065,7 +2064,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                             FileDownloader.openFile(context, chatMessage.getMessage());
                         } else {
-                            FileDownloader fileDownloader = new FileDownloader(context , FILE_URL);
+                            FileDownloader fileDownloader = new FileDownloader(context, FILE_URL);
                             fileDownloader.setOnFileDownloadListener(() -> {
                                 FileDownloader.openFile(context, chatMessage.getMessage());
                                 notifyItemChanged(position);
@@ -2139,7 +2138,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                             FileDownloader.openFile(context, chatMessage.getMessage());
                         } else {
-                            FileDownloader fileDownloader = new FileDownloader(context , FILE_URL);
+                            FileDownloader fileDownloader = new FileDownloader(context, FILE_URL);
                             fileDownloader.setOnFileDownloadListener(() -> {
                                 FileDownloader.openFile(context, chatMessage.getMessage());
                                 notifyItemChanged(position);
@@ -2265,17 +2264,20 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
     }
 
     protected boolean checkReadExternalPermission(Activity activity) {
+        Log.d(TAG, "checkReadExternalPermission: 11");
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
                 ActivityCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            Log.d(TAG, "checkReadExternalPermission: 22");
             ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 10001);
             return false;
         } else {
+            Log.d(TAG, "checkReadExternalPermission: 33");
             return true;
         }
     }
 
-    public void clearAll(){
+    public void clearAll() {
         this.chatMessages.clear();
         notifyDataSetChanged();
     }

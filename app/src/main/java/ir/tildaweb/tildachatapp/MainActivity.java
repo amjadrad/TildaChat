@@ -1,16 +1,16 @@
 package ir.tildaweb.tildachatapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import ir.tildaweb.tildachat.app.request.SocketRequestController;
-import ir.tildaweb.tildachat.app.request.interfaces.OnReceiveListener;
-import ir.tildaweb.tildachat.models.base_models.Chatroom;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitUserChatrooms;
-import ir.tildaweb.tildachat.models.connection_models.receives.ReceiveUserChatrooms;
+import ir.tildaweb.tildachat.services.TildaChatNotificationService;
 import ir.tildaweb.tildachat.ui.chatroom_messaging.ChatroomMessagingActivity;
 import tildachatapp.databinding.ActivityMainBinding;
 
@@ -28,8 +28,10 @@ public class MainActivity extends AppCompatActivity {
 
         socketRequestController = SocketRequestController.getInstance();
         EmitUserChatrooms emitUserChatrooms = new EmitUserChatrooms();
-        emitUserChatrooms.setUserId(1);
+        emitUserChatrooms.setUserId(App.userId);
         emitUserChatrooms.setPage(1);
+
+        startService(new Intent(this , TildaChatNotificationService.class));
 
         binding.button.setOnClickListener(view -> {
             binding.tv.setText("Reuqest...");
@@ -37,10 +39,11 @@ public class MainActivity extends AppCompatActivity {
 
 //            chatroom_1_184
             Intent intent = new Intent(MainActivity.this, ChatroomMessagingActivity.class);
-            intent.putExtra("user_id", 1);//184
-            intent.putExtra("file_url", "");
-            intent.putExtra("room_id", "group_sp_282_X8Ua3g1i");
-//            intent.putExtra("room_id", "chatroom_1_184");
+            intent.putExtra("user_id", App.userId);//184
+            intent.putExtra("file_url", "https://nazmenovin.ir/uploaded_files/");
+            intent.putExtra("upload_route", "https://nazmenovin.ir/api/chat_uploader");
+//            intent.putExtra("room_id", "group_sp_282_X8Ua3g1i");
+            intent.putExtra("room_id", "chatroom_1_184");
             startActivity(intent);
 
         });
@@ -63,5 +66,16 @@ public class MainActivity extends AppCompatActivity {
             binding.tv.setText("Error!");
             Log.d(TAG, "onCreate:e " + response);
         });
+
+    }
+
+    public static class MyReceiver extends BroadcastReceiver {
+        private final String TAG = this.getClass().getName();
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String uploadedFilePath = intent.getStringExtra("uploaded_file_path");
+            Log.d(TAG, "onReceive:" + uploadedFilePath);
+        }
     }
 }

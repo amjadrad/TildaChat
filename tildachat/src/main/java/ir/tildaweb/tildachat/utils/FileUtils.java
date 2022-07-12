@@ -43,9 +43,9 @@ public class FileUtils {
     public static boolean isChatFileExists(Context context, String filename) {
         String pathFolder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            pathFolder = context.getExternalFilesDir(null) + "/nazmenovin/chat/files/";
+            pathFolder = context.getExternalFilesDir(null) + "/nazmenovin/";
         } else {
-            pathFolder = Environment.getExternalStorageDirectory() + "/nazmenovin/chat/files/";
+            pathFolder = Environment.getExternalStorageDirectory() + "/nazmenovin/";
         }
         String pathFile = pathFolder + filename;
         Log.d(TAG, "isChatFileExists: " + pathFile);

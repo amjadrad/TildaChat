@@ -1,6 +1,8 @@
 package ir.tildaweb.tildachat.ui.chatroom_messaging;
 
+import android.Manifest;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,6 +22,8 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
+import ir.tildaweb.tilda_filepicker.TildaFilePicker;
+import ir.tildaweb.tilda_filepicker.models.FileModel;
 import ir.tildaweb.tildachat.R;
 import ir.tildaweb.tildachat.adapter.AdapterPrivateChatMessages;
 import ir.tildaweb.tildachat.app.DataParser;
@@ -44,16 +50,17 @@ import ir.tildaweb.tildachat.models.connection_models.receives.ReceiveMessageDel
 import ir.tildaweb.tildachat.models.connection_models.receives.ReceiveMessageSeen;
 import ir.tildaweb.tildachat.models.connection_models.receives.ReceiveMessageStore;
 import ir.tildaweb.tildachat.models.connection_models.receives.ReceiveMessageUpdate;
+import ir.tildaweb.tildachat.services.TildaFileUploaderForegroundService;
 import ir.tildaweb.tildachat.utils.MathUtils;
 
 public class ChatroomMessagingActivity extends AppCompatActivity implements View.OnClickListener, LoadMoreData, IChatUtils {
 
     private String TAG = this.getClass().getName();
     private ActivityChatroomMessagingBinding activityChatroomMessagingBinding;
-    //    private SocketRequestController socketRequestController;
     private Integer userId;
     private String roomId;
     private static String FILE_URL;
+    private static String UPLOAD_ROUTE;
 
     private String roomTitle;
     private String roomPicture;
@@ -63,13 +70,11 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     private int nextPage = 0;
     private int lastPage = 0;
     private AdapterPrivateChatMessages adapterPrivateChatMessages;
-    private boolean isReply = false;
     private Integer replyMessageId = null;
     private boolean isUpdate = false;
     private Integer updateMessageId = null;
     private boolean isSearchForReply = false;
     private Integer searchMessageId;
-    private Integer uploadFileRequestId = 0;
 
     //Image File
     private int PICK_IMAGE_PERMISSION_CODE = 1001;
@@ -78,11 +83,17 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getIntent().getBooleanExtra("is_status_bar_light", false)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            }
+        }
         activityChatroomMessagingBinding = ActivityChatroomMessagingBinding.inflate(getLayoutInflater());
         setContentView(activityChatroomMessagingBinding.getRoot());
         //Get intent info
         userId = getIntent().getIntExtra("user_id", -1);
         FILE_URL = getIntent().getStringExtra("file_url");
+        UPLOAD_ROUTE = getIntent().getStringExtra("upload_route");
         if (getIntent().hasExtra("room_id"))
             roomId = getIntent().getExtras().getString("room_id");
 
@@ -422,11 +433,9 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         }
     }
 
-
     private void resetReply() {
         activityChatroomMessagingBinding.tvReplyMessage.setText("");
         activityChatroomMessagingBinding.linearReply.setVisibility(View.GONE);
-        isReply = false;
         replyMessageId = null;
     }
 
@@ -459,7 +468,6 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             activityChatroomMessagingBinding.tvReplyMessage.setText(String.format("%s", message.getMessage()));
         }
         activityChatroomMessagingBinding.linearReply.setVisibility(View.VISIBLE);
-        isReply = true;
         replyMessageId = message.getId();
     }
 
@@ -564,61 +572,25 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 //                        .start(ChatroomMessagingActivity.this);
 //            }
         } else if (id == R.id.imageViewFile) {
-//            if (checkReadExternalPermission(ChatroomMessagingActivity.this, PICK_FILE_PERMISSION_CODE)) {
-//                TildaFilePicker tildaFilePicker = new TildaFilePicker(ChatroomMessagingActivity.this);
-//                tildaFilePicker.setOnTildaFileSelectListener(list -> {
-//                    for (FileModel model : list) {
-//                        uploadFileRequestId++;
-//                        String fileBase64 = FileUtils.convertFileToBase64(model.getPath());
-//                        if (fileBase64 != null && fileBase64.length() > 0) {
-//                            FileUploader fileUploader = new FileUploader();
-//                            fileUploader.setOnFileUploaderListener(new FileUploader.OnFileUploaderListener() {
-//                                @Override
-//                                public void onFileUploaded(String fileName) {
-//                                    if (fileName != null) {
-//                                        EmitMessageNew emitMessageNew = new EmitMessageNew();
-//                                        emitMessageNew.setType("file");
-//                                        emitMessageNew.setMessage(fileName);
-//                                        emitMessageNew.setReplyMessageId(replyMessageId);
-//                                        emitMessageNew.setReply(isReply);
-//                                        emitMessageNew.setUpdate(isUpdate);
-//                                        emitMessageNew.setRequestId(uploadFileRequestId);
-//                                        if (roomId == null) {
-//                                            emitMessageNew.setSecondUserId(secondUserId);
-//                                        }
-//                                        socket.emit(SocketEndpoints.TAG_CLIENT_SEND_MESSAGE_NEW, chatroomId, roomId, DataParser.toJson(emitMessageNew));
-////                            //Reset state
-//                                        activityChatroomMessagingBinding.etMessage.setText("");
-//                                        resetReply();
-//                                    }
-//                                }
-//
-//                                @Override
-//                                public void onFileUploadError() {
-//                                    toast("امکان ارسال فایل وجود ندارد.");
-//                                }
-//
-//                                @Override
-//                                public void onFileUploadProgress(int id, int percent) {
-////                                        Log.d(TAG, "onFileUploadProgress: " + id + "____ " + percent);
-////                                        adapterPrivateChatMessages.updateItem(id, percent);
-//                                }
-//                            });
-////                                ChatMessage chatMessage = new ChatMessage();
-////                                chatMessage.setMessage(model.getTitle());
-////                                chatMessage.setUpload(true);
-////                                chatMessage.setRequestId(uploadFileRequestId);
-////                                adapterPrivateChatMessages.addItem(chatMessage);
-//                            fileUploader.execute(model.getPath(), String.valueOf(uploadFileRequestId));
-//
-//                        } else {
-//                            toast("امکان ارسال فایل وجود ندارد.");
-//                        }
-//
-//                    }
-//                });
-//                tildaFilePicker.show(getSupportFragmentManager());
-//            }
+//            if (ActivityCompat.checkSelfPermission(ChatroomMessagingActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+//                    && ActivityCompat.checkSelfPermission(ChatroomMessagingActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+
+            TildaFilePicker tildaFilePicker = new TildaFilePicker(ChatroomMessagingActivity.this);
+            tildaFilePicker.setOnTildaFileSelectListener(list -> {
+                for (FileModel model : list) {
+                    Intent intent = new Intent(ChatroomMessagingActivity.this, TildaFileUploaderForegroundService.class);
+                    intent.setAction("chat_uploader");
+                    intent.putExtra("file_path", model.getPath());
+                    intent.putExtra("upload_route", UPLOAD_ROUTE);
+                    intent.putExtra("is_send_to_chatroom", true);
+                    intent.putExtra("chatroom_id", chatroomId);
+                    intent.putExtra("room_id", roomId);
+                    intent.putExtra("second_user_id", secondUserId);
+                    intent.putExtra("is_second_user", roomId == null);
+                    startService(intent);
+                }
+            });
+            tildaFilePicker.show(getSupportFragmentManager());
         } else if (id == R.id.linearChatroomDetails) {
 //            Intent intent = new Intent(ChatroomMessagingActivity.this, ChatroomDetailsActivity.class);
 //            intent.putExtra("room_id", chatroomId);
@@ -626,6 +598,28 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 //            intent.putExtra("room_type", roomType);
 //            startActivity(intent);
         }
+    }
+
+
+    private void requestFilePermission() {
+        ActivityResultLauncher<String[]> filePermissionRequest =
+                registerForActivityResult(new ActivityResultContracts
+                                .RequestMultiplePermissions(), result -> {
+                            Boolean readPermission = result.get(
+                                    Manifest.permission.READ_EXTERNAL_STORAGE);
+                            Boolean writePermission = result.get(
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                            if (readPermission != null && writePermission != null) {
+
+                            } else {
+                                toast("شما اجازه دسترسی به فایل را ندادید.");
+                            }
+                        }
+                );
+        filePermissionRequest.launch(new String[]{
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+        });
     }
 
     private void toast(String str) {

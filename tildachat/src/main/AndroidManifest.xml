@@ -8,6 +8,32 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ui.chatroom_messaging.ChatroomMessagingActivity" />
-        <service android:name=".services.TildaChatCommunicationService" />
+
+        <service
+            android:name=".services.TildaChatCommunicationService"
+            android:stopWithTask="false" />
+
+        <service
+            android:name=".services.TildaChatNotificationService"
+            android:stopWithTask="false" />
+
+        <receiver
+            android:name=".services.TildaFileUploaderForegroundService$CancelUploaderReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="CancelUploader" />
+            </intent-filter>
+        </receiver>
+
+<!--        <provider-->
+<!--            android:name="androidx.core.content.FileProvider"-->
+<!--            android:authorities="ir.tildaweb.tildachat.myprovider"-->
+<!--            android:exported="false"-->
+<!--            android:grantUriPermissions="true">-->
+<!--            <meta-data-->
+<!--                android:name="android.support.FILE_PROVIDER_PATHS"-->
+<!--                android:resource="@xml/provider_paths" />-->
+<!--        </provider>-->
+
     </application>
 </manifest>

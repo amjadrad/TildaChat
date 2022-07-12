@@ -4,10 +4,13 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/_WORK/android/TildaChatApp/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
+        <entry key="..\:/_WORK/android/TildaChatApp/app/src/main/res/xml/file_provider.xml" value="0.25" />
         <entry key="..\:/_WORK/android/TildaChatApp/tildachat/src/main/res/drawable/bg_badge_fill_primary.xml" value="0.194" />
         <entry key="..\:/_WORK/android/TildaChatApp/tildachat/src/main/res/drawable/bg_badge_transparent_curved.xml" value="0.194" />
         <entry key="..\:/_WORK/android/TildaChatApp/tildachat/src/main/res/drawable/bg_danger_circle_default.xml" value="0.194" />
         <entry key="..\:/_WORK/android/TildaChatApp/tildachat/src/main/res/drawable/bg_danger_circle_outline.xml" value="0.194" />
+        <entry key="..\:/_WORK/android/TildaChatApp/tildachat/src/main/res/drawable/bg_light_rounded_default.xml" value="0.2555" />
+        <entry key="..\:/_WORK/android/TildaChatApp/tildachat/src/main/res/drawable/bg_light_rounded_outline.xml" value="0.1715" />
         <entry key="..\:/_WORK/android/TildaChatApp/tildachat/src/main/res/drawable/chat_bubble_send_me.xml" value="0.194" />
         <entry key="..\:/_WORK/android/TildaChatApp/tildachat/src/main/res/drawable/chat_bubble_send_other.xml" value="0.194" />
         <entry key="..\:/_WORK/android/TildaChatApp/tildachat/src/main/res/drawable/chat_et_selector.xml" value="0.194" />
@@ -44,6 +47,8 @@
         <entry key="..\:/_WORK/android/TildaChatApp/tildachat/src/main/res/layout/list_socket_chat_text_replytrue_me_private.xml" value="0.25416666666666665" />
         <entry key="..\:/_WORK/android/TildaChatApp/tildachat/src/main/res/layout/list_socket_chat_text_replytrue_other_group.xml" value="0.25416666666666665" />
         <entry key="..\:/_WORK/android/TildaChatApp/tildachat/src/main/res/layout/list_socket_chat_text_replytrue_other_private.xml" value="0.25416666666666665" />
+        <entry key="..\:/_WORK/android/TildaChatApp/tildachat/src/main/res/layout/notification_layout_small.xml" value="0.25" />
+        <entry key="..\:/_WORK/android/TildaChatApp/tildachat/src/main/res/layout/tilda_file_uploader_service_layout.xml" value="0.25" />
         <entry key="..\:/_WORK/android/TildaChatApp/tildachat/src/main/res/menu/popup_menu_chat_click_message_me.xml" value="0.25416666666666665" />
         <entry key="..\:/_WORK/android/TildaChatApp/tildachat/src/main/res/menu/popup_menu_chat_click_message_me_text.xml" value="0.25416666666666665" />
         <entry key="..\:/_WORK/android/TildaChatApp/tildachat/src/main/res/menu/popup_menu_chat_click_message_other.xml" value="0.25416666666666665" />
