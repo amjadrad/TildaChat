@@ -80,6 +80,7 @@ public class TildaFileUploaderForegroundService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
+        Log.d(TAG, "onStartCommand: upload file service started.");
         this.context = this;
         isSendToChatroom = intent.getBooleanExtra("is_send_to_chatroom", false);
         if (isSendToChatroom) {
@@ -223,6 +224,7 @@ public class TildaFileUploaderForegroundService extends Service {
                     bufferSize = Math.min(bytesAvailable, maxBufferSize);
                     buffer = new byte[bufferSize];
 
+                    Log.d(TAG, "uploadFile: start uploading...");
                     // read file and write it into form...
                     bytesRead = fileInputStream.read(buffer, 0, bufferSize);
                     totalBytesAvailable = fileInputStream.available();
