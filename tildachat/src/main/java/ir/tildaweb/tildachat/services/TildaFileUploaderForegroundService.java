@@ -161,8 +161,12 @@ public class TildaFileUploaderForegroundService extends Service {
 
     @Override
     public void onDestroy() {
-        handlerTimeDigital.removeCallbacks(runnableTimeDigital);
-        fileUploader.cancel(false);
+        try {
+            handlerTimeDigital.removeCallbacks(runnableTimeDigital);
+            fileUploader.cancel(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         super.onDestroy();
         stopSelf();
     }

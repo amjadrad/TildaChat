@@ -544,7 +544,11 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                     intent.putExtra("room_id", roomId);
                     intent.putExtra("second_user_id", secondUserId);
                     intent.putExtra("is_second_user", roomId == null);
-                    startService(intent);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        startForegroundService(intent);
+                    } else {
+                        startService(intent);
+                    }
                 }
             });
             tildaFilePicker.show(getSupportFragmentManager());
@@ -567,7 +571,11 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                     intent.putExtra("room_id", roomId);
                     intent.putExtra("second_user_id", secondUserId);
                     intent.putExtra("is_second_user", roomId == null);
-                    startService(intent);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        startForegroundService(intent);
+                    } else {
+                        startService(intent);
+                    }
                 }
             });
             tildaFilePicker.show(getSupportFragmentManager());
