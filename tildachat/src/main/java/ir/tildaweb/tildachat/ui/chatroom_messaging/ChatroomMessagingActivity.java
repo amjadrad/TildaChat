@@ -2,7 +2,6 @@ package ir.tildaweb.tildachat.ui.chatroom_messaging;
 
 import android.Manifest;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -20,8 +19,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.ArrayList;
 
@@ -352,87 +349,43 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-                CropImage.ActivityResult result = CropImage.getActivityResult(data);
-                Uri resultUri = result.getUri();
-                if (resultUri != null && resultUri.getPath() != null) {
-                    Intent intent = new Intent(ChatroomMessagingActivity.this, TildaFileUploaderForegroundService.class);
-                    intent.setAction("chat_uploader");
-                    intent.putExtra("file_path", resultUri.getPath());
-                    intent.putExtra("upload_route", UPLOAD_ROUTE);
-                    intent.putExtra("is_send_to_chatroom", true);
-                    intent.putExtra("chatroom_id", chatroomId);
-                    intent.putExtra("file_type", MessageType.PICTURE);
-                    intent.putExtra("room_id", roomId);
-                    intent.putExtra("second_user_id", secondUserId);
-                    intent.putExtra("is_second_user", roomId == null);
-                    startService(intent);
-//                    String fileBase64 = FileUtils.convertImageToBase64(new File(resultUri.getPath()));
-//                    if (fileBase64 != null && fileBase64.length() > 0) {
-//                        FileUploader fileUploader = new FileUploader();
-//                        fileUploader.setOnFileUploaderListener(new FileUploader.OnFileUploaderListener() {
-//                            @Override
-//                            public void onFileUploaded(String fileName) {
-//                                if (fileName != null) {
-//                                    EmitMessageStore emitMessageStore = new EmitMessageStore();
-//                                    emitMessageStore.setType(MessageType.PICTURE);
-//                                    emitMessageStore.setMessage(fileName);
-//                                    emitMessageStore.setReplyMessageId(replyMessageId);
-//                                    emitMessageStore.setUpdate(isUpdate);
-//                                    if (roomId != null) {
-//                                        emitMessageStore.setRoomId(roomId);
-//                                    } else {
-//                                        emitMessageStore.setSecondUserId(secondUserId);
-//                                    }
-//                                    TildaChatApp.getSocketRequestController().emitter().emitMessageStore(emitMessageStore);
-////                            //Reset state
-//                                    activityChatroomMessagingBinding.etMessage.setText("");
-//                                    resetReply();
-//                                }
-//                            }
+//        if (resultCode == RESULT_OK) {
+//            if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+//                CropImage.ActivityResult result = CropImage.getActivityResult(data);
+//                Uri resultUri = result.getUri();
+//                if (resultUri != null && resultUri.getPath() != null) {
+//                    Intent intent = new Intent(ChatroomMessagingActivity.this, TildaFileUploaderForegroundService.class);
+//                    intent.setAction("chat_uploader");
+//                    intent.putExtra("file_path", resultUri.getPath());
+//                    intent.putExtra("upload_route", UPLOAD_ROUTE);
+//                    intent.putExtra("is_send_to_chatroom", true);
+//                    intent.putExtra("chatroom_id", chatroomId);
+//                    intent.putExtra("file_type", MessageType.PICTURE);
+//                    intent.putExtra("room_id", roomId);
+//                    intent.putExtra("second_user_id", secondUserId);
+//                    intent.putExtra("is_second_user", roomId == null);
+//                    startService(intent);
+////                        EmitMessageNew emitMessageNew = new EmitMessageNew();
+////                        emitMessageNew.setType("picture");
+////                        emitMessageNew.setMessage(fileBase64);
+////                        emitMessageNew.setReplyMessageId(replyMessageId);
+////                        emitMessageNew.setReply(isReply);
+////                        emitMessageNew.setUpdate(isUpdate);
+////                        if (roomId == null) {
+////                            emitMessageNew.setSecondUserId(secondUserId);
+////                        }
+////                        Log.d(TAG, "onClick: " + DataParser.toJson(emitMessageNew));
+////                        socket.emit(SocketEndpoints.TAG_CLIENT_SEND_MESSAGE_NEW, roomId, roomId, DataParser.toJson(emitMessageNew));
+////
+////                        //Reset state
+////                        activityChatroomMessagingBinding.etMessage.setText("");
+////                        resetReply();
 //
-//                            @Override
-//                            public void onFileUploadError() {
-//                                toast("امکان ارسال عکس وجود ندارد.");
-//                            }
-//
-//                            @Override
-//                            public void onFileUploadProgress(int id, int percent) {
-//                                Log.d(TAG, "onFileUploadProgress: " + id + "____ " + percent);
-//                            }
-//                        });
-////                            ChatMessage chatMessage = new ChatMessage();
-////                            chatMessage.setUpload(true);
-////                            adapterPrivateChatMessages.addItem(chatMessage);
-//                        fileUploader.execute(resultUri.getPath());
-//
-//                    } else {
-//                        toast("امکان ارسال فایل وجود ندارد.");
-//                    }
-
-
-//                        EmitMessageNew emitMessageNew = new EmitMessageNew();
-//                        emitMessageNew.setType("picture");
-//                        emitMessageNew.setMessage(fileBase64);
-//                        emitMessageNew.setReplyMessageId(replyMessageId);
-//                        emitMessageNew.setReply(isReply);
-//                        emitMessageNew.setUpdate(isUpdate);
-//                        if (roomId == null) {
-//                            emitMessageNew.setSecondUserId(secondUserId);
-//                        }
-//                        Log.d(TAG, "onClick: " + DataParser.toJson(emitMessageNew));
-//                        socket.emit(SocketEndpoints.TAG_CLIENT_SEND_MESSAGE_NEW, roomId, roomId, DataParser.toJson(emitMessageNew));
-//
-//                        //Reset state
-//                        activityChatroomMessagingBinding.etMessage.setText("");
-//                        resetReply();
-
-                } else {
-                    toast("انتخاب تصویر با مشکل مواجه شد. لطفا تصویر دیگری را انتخاب کنید.");
-                }
-            }
-        }
+//                } else {
+//                    toast("انتخاب تصویر با مشکل مواجه شد. لطفا تصویر دیگری را انتخاب کنید.");
+//                }
+//            }
+//        }
     }
 
     @Override
