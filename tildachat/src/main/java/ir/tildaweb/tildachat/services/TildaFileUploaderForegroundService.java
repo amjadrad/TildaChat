@@ -162,6 +162,7 @@ public class TildaFileUploaderForegroundService extends Service {
     @Override
     public void onDestroy() {
         try {
+            Log.d(TAG, "onDestroy: ");
             handlerTimeDigital.removeCallbacks(runnableTimeDigital);
             fileUploader.cancel(false);
         } catch (Exception e) {
