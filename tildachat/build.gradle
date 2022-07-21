@@ -60,6 +60,9 @@ dependencies {
     implementation 'com.github.hamsaadev:Persian-Date-Picker-Dialog:V1.0'
     //Tilda file picker
     implementation 'com.github.amjadrad:TildaFilePicker:1.5'
+    //Image Cropper
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.4.7'
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'

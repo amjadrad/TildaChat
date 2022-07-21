@@ -66,6 +66,7 @@ public class TildaFileUploaderForegroundService extends Service {
     private boolean isSendToChatroom = false;
     private String roomId;
     private Integer chatroomId;
+    private String messageType;
     private Integer secondUserId;
     private String uploadedFilePath;
     private FileUploader fileUploader;
@@ -83,6 +84,7 @@ public class TildaFileUploaderForegroundService extends Service {
         Log.d(TAG, "onStartCommand: upload file service started.");
         this.context = this;
         isSendToChatroom = intent.getBooleanExtra("is_send_to_chatroom", false);
+        messageType = intent.getStringExtra("message_type");
         if (isSendToChatroom) {
             if (intent.getBooleanExtra("is_second_user", false)) {
                 secondUserId = intent.getIntExtra("second_user_id", -1);
@@ -349,7 +351,7 @@ public class TildaFileUploaderForegroundService extends Service {
 
     private void sendToChatroom() {
         EmitMessageStore emitMessageStore = new EmitMessageStore();
-        emitMessageStore.setType(MessageType.FILE);
+        emitMessageStore.setMessageType(messageType);
         emitMessageStore.setMessage(uploadedFilePath);
         emitMessageStore.setUpdate(false);
         emitMessageStore.setChatroomId(chatroomId);

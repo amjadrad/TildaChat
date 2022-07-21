@@ -17,6 +17,7 @@
         <item name="colorBackground">@color/colorBg</item>
         <item name="colorText">@color/colorText</item>
         <item name="colorButton">@color/colorAccent</item>
+        <item name="colorPrimary1">@color/colorPrimary</item>
         <item name="colorPrimarySoft">@color/colorPrimarySoft</item>
         <item name="colorBgLight">@color/colorBgLight</item>
         <item name="colorBg">@color/colorBg</item>

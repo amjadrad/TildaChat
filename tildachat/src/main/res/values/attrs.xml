@@ -3,6 +3,8 @@
     <declare-styleable name="ds">
         <attr name="colorBackground" format="color" />
         <attr name="colorButton" format="color" />
+        <attr name="colorPrimary" format="color" />
+        <attr name="colorPrimary1" format="color" />
         <attr name="colorPrimarySoft" format="color" />
         <attr name="colorAccent" format="color" />
         <attr name="colorAccentSoft" format="color" />

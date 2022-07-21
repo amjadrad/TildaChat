@@ -11,6 +11,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ui.chatroom_messaging.ChatroomMessagingActivity" />
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme" />
 
         <service
             android:name=".services.TildaChatCommunicationService"
