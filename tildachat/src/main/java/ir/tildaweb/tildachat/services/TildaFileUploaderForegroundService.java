@@ -108,14 +108,14 @@ public class TildaFileUploaderForegroundService extends Service {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        startForeground(filePath, uploadRoute);
+        startForegroundNotification(filePath, uploadRoute);
         handlerTimeDigital = new Handler();
         runnableTimeDigital = this::updateService;
         updateService();
         return Service.START_STICKY;
     }
 
-    private void startForeground(String filePath, String uploadRoute) {
+    private void startForegroundNotification(String filePath, String uploadRoute) {
         totalBytesUploaded = 0;
         manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         try {
