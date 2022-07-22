@@ -1,7 +1,11 @@
 package ir.tildaweb.tildachat.app;
 
+import android.app.Application;
 import android.content.Context;
 import android.util.Log;
+
+import com.aghajari.emojiview.AXEmojiManager;
+import com.aghajari.emojiview.appleprovider.AXAppleEmojiProvider;
 
 import java.net.URISyntaxException;
 
@@ -15,6 +19,10 @@ public class TildaChatApp {
     private static Socket socket;
     private static SocketRequestController socketRequestController;
 //    private static PublishSubject<String> publishSubject;
+
+    public static void setUpEmojis(Context context){
+        AXEmojiManager.install(context, new AXAppleEmojiProvider(context));
+    }
 
     public static void setUp(String chatUrl, String query) {
         if (socket == null) {

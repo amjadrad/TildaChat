@@ -101,7 +101,6 @@
 
     </LinearLayout>
 
-
     <LinearLayout
         android:id="@+id/linearChatBox"
         android:layout_width="match_parent"
@@ -283,7 +282,7 @@
                 android:layout_width="@dimen/_48sdp"
                 android:layout_height="@dimen/_48sdp"
                 android:padding="@dimen/_14sdp"
-                android:src="@drawable/ic_emoji"
+                android:src="@drawable/ic_smile"
                 android:tint="@color/colorDark2" />
         </LinearLayout>
     </LinearLayout>

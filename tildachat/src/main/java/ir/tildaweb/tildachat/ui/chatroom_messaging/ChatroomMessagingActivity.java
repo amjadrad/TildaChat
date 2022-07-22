@@ -16,8 +16,11 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.aghajari.emojiview.view.AXEmojiPopup;
+import com.aghajari.emojiview.view.AXEmojiView;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -62,6 +65,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     private String roomId;
     private static String FILE_URL;
     private static String UPLOAD_ROUTE;
+    private AXEmojiPopup emojiPopup;
 
     private String roomTitle;
     private String roomPicture;
@@ -91,6 +95,10 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         }
         activityChatroomMessagingBinding = ActivityChatroomMessagingBinding.inflate(getLayoutInflater());
         setContentView(activityChatroomMessagingBinding.getRoot());
+
+        AXEmojiView emojiView = new AXEmojiView(ChatroomMessagingActivity.this);
+        emojiView.setEditText(activityChatroomMessagingBinding.etMessage);
+        emojiPopup = new AXEmojiPopup(emojiView);
         //Get intent info
         userId = getIntent().getIntExtra("user_id", -1);
         FILE_URL = getIntent().getStringExtra("file_url");
@@ -98,6 +106,8 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         if (getIntent().hasExtra("room_id"))
             roomId = getIntent().getExtras().getString("room_id");
 
+        activityChatroomMessagingBinding.etMessage.setOnClickListener(this);
+        activityChatroomMessagingBinding.imageViewEmoji.setOnClickListener(this);
         activityChatroomMessagingBinding.imageViewBack.setOnClickListener(this);
         activityChatroomMessagingBinding.imageViewReplyClose.setOnClickListener(this);
         activityChatroomMessagingBinding.imageViewUpdateClose.setOnClickListener(this);
@@ -530,7 +540,6 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             //Todo: channel abilities not yet.
 //            socket.emit(SocketEndpoints.TAG_CLIENT_SEND_CHATROOM_CHANNEL_MEMBERSHIP, roomId, chatroomId, userId);
         } else if (id == R.id.imageViewImage) {
-
             TildaFilePicker tildaFilePicker = new TildaFilePicker(ChatroomMessagingActivity.this, new FileType[]{FileType.FILE_TYPE_IMAGE});
             tildaFilePicker.setOnTildaFileSelectListener(list -> {
                 for (FileModel model : list) {
@@ -552,11 +561,6 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                 }
             });
             tildaFilePicker.show(getSupportFragmentManager());
-
-//            CropImage.activity()
-//                    .setCropShape(CropImageView.CropShape.RECTANGLE)
-//                    .setGuidelines(CropImageView.Guidelines.ON_TOUCH)
-//                    .start(ChatroomMessagingActivity.this);
         } else if (id == R.id.imageViewFile) {
             TildaFilePicker tildaFilePicker = new TildaFilePicker(ChatroomMessagingActivity.this);
             tildaFilePicker.setOnTildaFileSelectListener(list -> {
@@ -585,6 +589,18 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 //            intent.putExtra("room_name", roomId);
 //            intent.putExtra("room_type", roomType);
 //            startActivity(intent);
+        } else if (id == R.id.imageViewEmoji) {
+            if (emojiPopup.isShowing()) {
+                activityChatroomMessagingBinding.imageViewEmoji.setImageDrawable(ContextCompat.getDrawable(ChatroomMessagingActivity.this, R.drawable.ic_smile));
+            } else {
+                activityChatroomMessagingBinding.imageViewEmoji.setImageDrawable(ContextCompat.getDrawable(ChatroomMessagingActivity.this, R.drawable.ic_type));
+            }
+            emojiPopup.toggle();
+        } else if (id == R.id.etMessage) {
+            if (emojiPopup.isShowing()) {
+                activityChatroomMessagingBinding.imageViewEmoji.setImageDrawable(ContextCompat.getDrawable(ChatroomMessagingActivity.this, R.drawable.ic_smile));
+                emojiPopup.dismiss();
+            }
         }
     }
 

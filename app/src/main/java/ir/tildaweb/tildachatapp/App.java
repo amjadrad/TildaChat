@@ -15,6 +15,7 @@ public class App extends Application {
 
         String query = "user_id=" + userId;
         TildaChatApp.setUp(BuildConfig.CHAT_URL , query);
+        TildaChatApp.setUpEmojis(this);
 
 //        TildaChatApp.setUp("http://192.168.1.5:1755", "user_id=" + 1);
 //        TildaChatApp.setUp("http://chat.nazmenovin.ir", "user_id=184");
