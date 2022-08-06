@@ -10,7 +10,7 @@
 //
 //import java.util.ArrayList;
 //
-//import io.socket.client.Socket;
+//import ir.tildaweb.tildachat.ui.chatroom_messaging.ChatroomMessagingActivity;
 //
 //public class ChatroomDetailsActivity extends AppCompatActivity implements View.OnClickListener, AdapterChatroomMembers.OnChatroomMemberListener {
 //
@@ -19,7 +19,6 @@
 //    private Integer roomId;
 //    private String roomName;
 //    private String roomType;
-//    private Socket socket;
 //    private AdapterChatroomMembers adapterChatroomMembers;
 //
 //    @Override
@@ -27,11 +26,6 @@
 //        super.onCreate(savedInstanceState);
 //        binding = ActivityChatroomDetailsBinding.inflate(getLayoutInflater());
 //        setContentView(binding.getRoot());
-//
-//        socket = App.getSocket(this);
-//        if (!socket.connected()) {
-//            socket.connect();
-//        }
 //
 //        binding.toolbar.imageViewBack.setOnClickListener(this);
 //        binding.toolbar.tvToolbarTitle.setText("اطلاعات چت");
@@ -104,14 +98,10 @@
 //    @Override
 //    public void onClick(View view) {
 //        switch (view.getId()) {
-//            case R.id.imageViewBack: {
-//                onBackPressed();
-//                break;
-//            }
-//            case R.id.linearAddMember: {
-//                toast("شما دسترسی افزودن عضو ندارید.");
-//                break;
-//            }
+////            case R.id.imageViewBack: {
+////                onBackPressed();
+////                break;
+////            }
 //        }
 //    }
 //

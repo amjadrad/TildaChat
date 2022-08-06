@@ -72,11 +72,15 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         this.context = context;
         this.activity = activity;
         this.userId = userId;
-        this.FILE_URL = FILE_URL;
         this.iChatUtils = iChatUtils;
         this.recyclerView = recyclerView;
         this.loadMoreData = loadMoreData;
         this.dateHelper = new DateUtils();
+        if (FILE_URL.endsWith("/")) {
+            this.FILE_URL = FILE_URL;
+        } else {
+            this.FILE_URL = FILE_URL.concat("/");
+        }
         setScrollListener();
     }
 

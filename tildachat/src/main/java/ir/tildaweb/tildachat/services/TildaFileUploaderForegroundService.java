@@ -115,6 +115,7 @@ public class TildaFileUploaderForegroundService extends Service {
         return Service.START_STICKY;
     }
 
+
     private void startForegroundNotification(String filePath, String uploadRoute) {
         totalBytesUploaded = 0;
         manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -135,7 +136,7 @@ public class TildaFileUploaderForegroundService extends Service {
             notificationBuilder = new NotificationCompat.Builder(this,
                     channel)
                     .setOngoing(true)
-                    .setSmallIcon(R.drawable.ic_file_attach)
+                    .setSmallIcon(R.drawable.ic_upload_cloud)
                     .setCustomContentView(remoteViews)
                     .setSound(null);
             notificationBuilder.setOnlyAlertOnce(true);
@@ -173,11 +174,13 @@ public class TildaFileUploaderForegroundService extends Service {
     }
 
     private void updateService() {
-        remoteViews.setTextViewText(R.id.tvProgress, String.format("%.2fMB - %.2fMB", (totalBytesUploaded / 1048576), (totalBytesAvailable / 1048576)));
-        notificationBuilder.setOnlyAlertOnce(true);
-        notification = notificationBuilder.build();
-        startForeground(notificationId, notification);
-        handlerTimeDigital.postDelayed(runnableTimeDigital, 1000);
+        if (remoteViews != null && notificationBuilder != null) {
+            remoteViews.setTextViewText(R.id.tvProgress, String.format("%.2fMB - %.2fMB", (totalBytesUploaded / 1048576), (totalBytesAvailable / 1048576)));
+            notificationBuilder.setOnlyAlertOnce(true);
+            notification = notificationBuilder.build();
+            startForeground(notificationId, notification);
+            handlerTimeDigital.postDelayed(runnableTimeDigital, 1000);
+        }
     }
 
     class FileUploader extends AsyncTask<String, Void, Void> {

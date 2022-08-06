@@ -63,6 +63,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     private ActivityChatroomMessagingBinding activityChatroomMessagingBinding;
     private Integer userId;
     private String roomId;
+    private String username;
     private static String FILE_URL;
     private static String UPLOAD_ROUTE;
     private AXEmojiPopup emojiPopup;
@@ -105,6 +106,8 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         UPLOAD_ROUTE = getIntent().getStringExtra("upload_route");
         if (getIntent().hasExtra("room_id"))
             roomId = getIntent().getExtras().getString("room_id");
+        if (getIntent().hasExtra("username"))
+            username = getIntent().getExtras().getString("username");
 
         activityChatroomMessagingBinding.etMessage.setOnClickListener(this);
         activityChatroomMessagingBinding.imageViewEmoji.setOnClickListener(this);
@@ -151,7 +154,12 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         setSocketListeners();
         EmitChatroomCheck emitChatroomCheck = new EmitChatroomCheck();
         emitChatroomCheck.setRoomId(roomId);
-        emitChatroomCheck.setType(EmitChatroomCheck.ChatroomCheckType.ROOM_ID);
+        emitChatroomCheck.setRoomId(username);
+        if (roomId == null && username != null) {
+            emitChatroomCheck.setType(EmitChatroomCheck.ChatroomCheckType.USERNAME);
+        } else {
+            emitChatroomCheck.setType(EmitChatroomCheck.ChatroomCheckType.ROOM_ID);
+        }
         TildaChatApp.getSocketRequestController().emitter().emitChatroomCheck(emitChatroomCheck);
     }
 
@@ -503,6 +511,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             onBackPressed();
         } else if (id == R.id.imageViewSend) {
             String message = activityChatroomMessagingBinding.etMessage.getText().toString();
+            emojiPopup.dismiss();
             if (message.length() > 0) {
                 if (isUpdate) {
                     EmitMessageUpdate emitMessageUpdate = new EmitMessageUpdate();
@@ -525,7 +534,6 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                     } else {
                         emitMessageStore.setSecondUserId(secondUserId);
                     }
-                    Log.d(TAG, "onClick: " + DataParser.toJson(emitMessageStore));
                     TildaChatApp.getSocketRequestController().emitter().emitMessageStore(emitMessageStore);
                     //Reset state
                     activityChatroomMessagingBinding.etMessage.setText("");

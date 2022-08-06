@@ -18,8 +18,18 @@ public class EmitChatroomCheck {
 
     @SerializedName("room_id")
     private String roomId;
+    @SerializedName("username")
+    private String username;
     @SerializedName("type")
     private String type;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public String getType() {
         return type;
