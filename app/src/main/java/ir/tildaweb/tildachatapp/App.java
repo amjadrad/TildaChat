@@ -7,7 +7,7 @@ import tildachatapp.BuildConfig;
 
 public class App extends Application {
 
-    public static int userId = 184;
+    public static int userId = 1;
 
     @Override
     public void onCreate() {

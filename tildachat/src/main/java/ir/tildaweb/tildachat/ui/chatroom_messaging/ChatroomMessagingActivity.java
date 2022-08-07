@@ -104,10 +104,15 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         userId = getIntent().getIntExtra("user_id", -1);
         FILE_URL = getIntent().getStringExtra("file_url");
         UPLOAD_ROUTE = getIntent().getStringExtra("upload_route");
-        if (getIntent().hasExtra("room_id"))
+        if (getIntent().hasExtra("room_id")) {
             roomId = getIntent().getExtras().getString("room_id");
-        if (getIntent().hasExtra("username"))
+        }
+        if (getIntent().hasExtra("username")) {
             username = getIntent().getExtras().getString("username");
+        }
+
+        Log.d(TAG, "onCreate: " + roomId);
+        Log.d(TAG, "onCreate: " + username);
 
         activityChatroomMessagingBinding.etMessage.setOnClickListener(this);
         activityChatroomMessagingBinding.imageViewEmoji.setOnClickListener(this);
@@ -154,12 +159,13 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         setSocketListeners();
         EmitChatroomCheck emitChatroomCheck = new EmitChatroomCheck();
         emitChatroomCheck.setRoomId(roomId);
-        emitChatroomCheck.setRoomId(username);
+        emitChatroomCheck.setUsername(username);
         if (roomId == null && username != null) {
             emitChatroomCheck.setType(EmitChatroomCheck.ChatroomCheckType.USERNAME);
         } else {
             emitChatroomCheck.setType(EmitChatroomCheck.ChatroomCheckType.ROOM_ID);
         }
+        Log.d(TAG, "onCreate: " + DataParser.toJson(emitChatroomCheck));
         TildaChatApp.getSocketRequestController().emitter().emitChatroomCheck(emitChatroomCheck);
     }
 
@@ -183,7 +189,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 
     private void setSocketListeners() {
         TildaChatApp.getSocketRequestController().receiver().receiveChatroomCheck(ChatroomMessagingActivity.this, ReceiveChatroomCheck.class, response -> {
-            Log.d(TAG, "setSocketListeners: CheckChatroom");
+            Log.d(TAG, "setSocketListeners: CheckChatroom: " + DataParser.toJson(response));
             if (response.getChatroom() != null) {
                 if (response.getChatroom().getType().equals("channel")) {
                     adapterPrivateChatMessages.setRoomType(ChatroomType.CHANNEL);
@@ -301,7 +307,14 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 
         TildaChatApp.getSocketRequestController().receiver().receiveMessageStore(this, ReceiveMessageStore.class, response -> {
             Log.d(TAG, "setSocketListeners:Store.............:  " + DataParser.toJson(response));
-            if (roomId.equals(response.getRoomId())) {
+            if (roomId != null && roomId.equals(response.getRoomId())) {
+                if (response.getStatus() == 200) {
+                    adapterPrivateChatMessages.addItem(response.getMessage());
+                    if (activityChatroomMessagingBinding.noItem.getVisibility() == View.VISIBLE) {
+                        activityChatroomMessagingBinding.noItem.setVisibility(View.GONE);
+                    }
+                }
+            } else {
                 if (response.getStatus() == 200) {
                     adapterPrivateChatMessages.addItem(response.getMessage());
                     if (activityChatroomMessagingBinding.noItem.getVisibility() == View.VISIBLE) {
