@@ -2,67 +2,27 @@ package ir.tildaweb.tildachat.services;
 
 import android.app.ActivityManager;
 import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.View;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import com.google.gson.annotations.SerializedName;
-
-import org.apache.http.NameValuePair;
-
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.Random;
 
-import ir.tildaweb.tildachat.R;
-import ir.tildaweb.tildachat.adapter.AdapterPrivateChatMessages;
 import ir.tildaweb.tildachat.app.DataParser;
 import ir.tildaweb.tildachat.app.SocketEndpoints;
 import ir.tildaweb.tildachat.app.TildaChatApp;
-import ir.tildaweb.tildachat.app.request.Receiver;
-import ir.tildaweb.tildachat.enums.ChatroomType;
-import ir.tildaweb.tildachat.enums.MessageType;
-import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomMessages;
-import ir.tildaweb.tildachat.models.connection_models.emits.EmitMessageStore;
-import ir.tildaweb.tildachat.models.connection_models.receives.ReceiveChatroomCheck;
-import ir.tildaweb.tildachat.models.connection_models.receives.ReceiveChatroomJoin;
-import ir.tildaweb.tildachat.models.connection_models.receives.ReceiveChatroomMessages;
-import ir.tildaweb.tildachat.models.connection_models.receives.ReceiveMessageDelete;
-import ir.tildaweb.tildachat.models.connection_models.receives.ReceiveMessageSeen;
 import ir.tildaweb.tildachat.models.connection_models.receives.ReceiveMessageStore;
-import ir.tildaweb.tildachat.models.connection_models.receives.ReceiveMessageUpdate;
-import ir.tildaweb.tildachat.ui.chatroom_messaging.ChatroomMessagingActivity;
-import ir.tildaweb.tildachat.utils.MathUtils;
 import ir.tildaweb.tildachat.utils.notification.NotificationHelper;
 
 public class TildaChatNotificationService extends Service {
@@ -77,6 +37,7 @@ public class TildaChatNotificationService extends Service {
     private Handler handlerTimeDigital;
     private Runnable runnableTimeDigital;
     private int notificationId = -1;
+    private int userId;
 
     @Nullable
     @Override
@@ -87,16 +48,14 @@ public class TildaChatNotificationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         this.context = this;
-
-        channel = "TildaChatNotificationChannel_" + new Random().nextInt(100);
-        notificationId = new Random().nextInt(1000);
+        userId = TildaChatApp.getUserId();
+//        channel = "TildaChatNotificationChannel_" + new Random().nextInt(100);
+//        notificationId = new Random().nextInt(1000);
         handlerTimeDigital = new Handler();
         runnableTimeDigital = this::updateService;
-//        updateService();
+        updateService();
         Log.d(TAG, "onStartCommand: ");
         setSocketListeners();
-
-
         return Service.START_STICKY;
     }
 
@@ -115,15 +74,19 @@ public class TildaChatNotificationService extends Service {
 //        notificationBuilder.setOnlyAlertOnce(true);
 //        notification = notificationBuilder.build();
 //        startForeground(notificationId, notification);
-//        handlerTimeDigital.postDelayed(runnableTimeDigital, 1000);
+        setSocketListeners();
+
+        handlerTimeDigital.postDelayed(runnableTimeDigital, 1000);
     }
 
     private void setSocketListeners() {
         Log.d(TAG, "setSocketListeners: ");
-        if(!TildaChatApp.getSocket().hasListeners(SocketEndpoints.TAG_RECEIVE_MESSAGE_STORE)) {
+        if (!TildaChatApp.getSocket().hasListeners(SocketEndpoints.TAG_RECEIVE_MESSAGE_STORE)) {
+            Log.d(TAG, "setSocketListeners: aaa");
             TildaChatApp.getSocketRequestController().receiver().receiveMessageStore(null, ReceiveMessageStore.class, response -> {
                 Log.d(TAG, "setSocketListeners:Store.............:  " + DataParser.toJson(response));
-                if (response.getStatus() == 200) {
+                Log.d(TAG, "setSocketListeners: " + userId + "_" + response.getMessage().getUserId());
+                if (response.getStatus() == 200 && response.getMessage().getUserId() != userId) {
                     if (!isNotInApp()) {
 
                         Log.d(TAG, "setSocketListeners: Notification");

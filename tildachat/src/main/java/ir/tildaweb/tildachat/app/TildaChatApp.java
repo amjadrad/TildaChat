@@ -1,6 +1,5 @@
 package ir.tildaweb.tildachat.app;
 
-import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
@@ -17,16 +16,18 @@ public class TildaChatApp {
 
     private static final String TAG = "TildaChatApp";
     private static Socket socket;
+    private static Integer mUserId;
     private static SocketRequestController socketRequestController;
 //    private static PublishSubject<String> publishSubject;
 
-    public static void setUpEmojis(Context context){
+    public static void setUpEmojis(Context context) {
         AXEmojiManager.install(context, new AXAppleEmojiProvider(context));
     }
 
-    public static void setUp(String chatUrl, String query) {
+    public static void setUp(String chatUrl, String query, Integer userId) {
         if (socket == null) {
             try {
+                mUserId = userId;
                 IO.Options options = new IO.Options();
                 options.forceNew = true;
                 options.query = query;
@@ -51,6 +52,10 @@ public class TildaChatApp {
 //        }else{
 //            context.startService(new Intent(context, TildaChatCommunicationService.class));
 //        }
+    }
+
+    public static Integer getUserId() {
+        return mUserId;
     }
 
     public static Socket getSocket() {

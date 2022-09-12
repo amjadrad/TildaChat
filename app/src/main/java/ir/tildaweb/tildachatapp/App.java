@@ -7,14 +7,14 @@ import tildachatapp.BuildConfig;
 
 public class App extends Application {
 
-    public static int userId = 1;
+    public static int userId = 2;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
         String query = "user_id=" + userId;
-        TildaChatApp.setUp(BuildConfig.CHAT_URL , query);
+        TildaChatApp.setUp(BuildConfig.CHAT_URL, query, userId);
         TildaChatApp.setUpEmojis(this);
 
 //        TildaChatApp.setUp("http://192.168.1.5:1755", "user_id=" + 1);
