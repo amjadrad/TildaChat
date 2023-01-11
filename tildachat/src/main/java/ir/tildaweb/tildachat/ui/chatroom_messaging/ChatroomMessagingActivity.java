@@ -198,8 +198,28 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                 }
             }
             switch (response.getCode()) {
-                case 111:
+                case 111: {
+                    roomTitle = response.getChatroom().getRoomTitle();
+                    roomPicture = response.getChatroom().getRoomPicture();
+                    roomType = response.getChatroom().getType();
+                    chatroomId = response.getChatroom().getId();
+                    roomId = response.getChatroom().getRoomId();
+                    activityChatroomMessagingBinding.linearChatBox.setVisibility(View.VISIBLE);
+                    activityChatroomMessagingBinding.tvUserStatus.setText(String.format("%s %s", MathUtils.convertNumberToKilo(response.getMemberCount()), "عضو"));
+                    activityChatroomMessagingBinding.linearJoinChannel.setVisibility(View.VISIBLE);
+                    setChatroomInfo();
+                    break;
+                }
                 case 112: {
+                    roomTitle = response.getChatroom().getRoomTitle();
+                    roomPicture = response.getChatroom().getRoomPicture();
+                    roomType = response.getChatroom().getType();
+                    chatroomId = response.getChatroom().getId();
+                    roomId = response.getChatroom().getRoomId();
+                    activityChatroomMessagingBinding.linearChatBox.setVisibility(View.VISIBLE);
+                    activityChatroomMessagingBinding.tvUserStatus.setText(String.format("%s %s", MathUtils.convertNumberToKilo(response.getMemberCount()), "عضو"));
+                    setChatroomInfo();
+                    join();
                     // Channel info, user is joined to channel if code=111
 //                    roomTitle = response.getChatroom().getRoomTitle();
 //                    roomPicture = response.getChatroom().getRoomPicture();
@@ -559,7 +579,8 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             resetUpdate();
         } else if (id == R.id.tvJoinChannel) {
             //Todo: channel abilities not yet.
-//            socket.emit(SocketEndpoints.TAG_CLIENT_SEND_CHATROOM_CHANNEL_MEMBERSHIP, roomId, chatroomId, userId);
+            join();
+//            TildaChatApp.getSocketRequestController().emitter().emitChatroomJoin(SocketEndpoints.TAG_CLIENT_SEND_CHATROOM_CHANNEL_MEMBERSHIP, roomId, chatroomId, userId);
         } else if (id == R.id.imageViewImage) {
             TildaFilePicker tildaFilePicker = new TildaFilePicker(ChatroomMessagingActivity.this, new FileType[]{FileType.FILE_TYPE_IMAGE});
             tildaFilePicker.setOnTildaFileSelectListener(list -> {
