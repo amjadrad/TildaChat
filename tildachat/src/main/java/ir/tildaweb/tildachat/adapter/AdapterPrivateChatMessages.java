@@ -641,13 +641,13 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 return new ChatHolder_Text_ReplyFalse_Me_Group(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_text_replyfalse_me_group, parent, false));
             case 11211:
                 return new ChatHolder_Text_ReplyFalse_Other_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_text_replyfalse_other_private, parent, false));
-//            case 11221:
-//                return new ChatHolder_Text_ReplyFalse_Me_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_text_replyfalse_me_private, parent, false));
+            case 11221://Channel,todo
+                return new ChatHolder_Text_ReplyFalse_Other_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_text_replyfalse_me_private, parent, false));
             case 11231:
                 return new ChatHolder_Text_ReplyFalse_Other_Group(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_text_replyfalse_other_group, parent, false));
             case 12111:
                 return new ChatHolder_Text_ReplyTrue_Me_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_text_replytrue_me_private, parent, false));
-//            case 12121:
+//            case 12121://Channel
 //                return new ChatHolder_Text_ReplyFalse_Me_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_text_replyfalse_me_private, parent, false));
             case 12131:
                 return new ChatHolder_Text_ReplyTrue_Me_Group(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_text_replytrue_me_group, parent, false));
@@ -666,8 +666,8 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 return new ChatHolder_Picture_ReplyFalse_Me_Group(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_picture_replyfalse_me_group, parent, false));
             case 21211:
                 return new ChatHolder_Picture_ReplyFalse_Other_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_picture_replyfalse_other_private, parent, false));
-//            case 21221:
-//                return new ChatHolder_Text_ReplyFalse_Me_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_text_replyfalse_me_private, parent, false));
+            case 21221://channel todo
+                return new ChatHolder_Text_ReplyFalse_Me_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_text_replyfalse_me_private, parent, false));
             case 21231:
                 return new ChatHolder_Picture_ReplyFalse_Other_Group(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_picture_replyfalse_other_group, parent, false));
             case 22111:
@@ -701,6 +701,9 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 return new ChatHolder_File_ReplyTrue_Other_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_file_replytrue_other_private, parent, false));
             case 32231:
                 return new ChatHolder_File_ReplyTrue_Other_Group(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_file_replytrue_other_group, parent, false));
+            case 31221://channel todo
+                return new ChatHolder_File_ReplyFalse_Other_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_file_replyfalse_other_private, parent, false));
+
         }
 
         return new ChatHolder_Text_ReplyFalse_Me_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_text_replyfalse_me_private, parent, false));
@@ -865,6 +868,42 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 });
 
 
+                break;
+            }
+            //Channel text
+            case 11221: {
+                ChatHolder_Text_ReplyFalse_Other_Private holder = (ChatHolder_Text_ReplyFalse_Other_Private) viewHolder;
+                holder.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
+                if (chatMessage.getUpdatedAt() != null) {
+                    String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
+                    DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
+                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                } else {
+                    String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
+                    DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
+                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                }
+                holder.itemView.setOnClickListener(view -> {
+
+                    PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                    MenuInflater inflater = popup.getMenuInflater();
+                    inflater.inflate(R.menu.popup_menu_chat_click_message_other_text, popup.getMenu());
+                    popup.show();
+                    popup.setOnMenuItemClickListener(item -> {
+                        int itemId = item.getItemId();
+                        if (itemId == R.id.copy) {
+                            ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                            ClipData clip = ClipData.newPlainText("متن", holder.tvMessage.getText().toString());
+                            clipboard.setPrimaryClip(clip);
+                            iChatUtils.onCopy();
+                        } else if (itemId == R.id.reply) {
+                            iChatUtils.onReply(chatMessage);
+                        }
+                        return false;
+                    });
+
+
+                });
                 break;
             }
 
@@ -1290,6 +1329,39 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
 //            ChatHolder_Picture_ReplyFalse_Other_Private
             case 21211: {
+                final ChatHolder_Picture_ReplyFalse_Other_Private holder = (ChatHolder_Picture_ReplyFalse_Other_Private) viewHolder;
+                String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
+                DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
+                holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+
+
+                holder.itemView.setOnClickListener(view -> {
+
+                    PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                    MenuInflater inflater = popup.getMenuInflater();
+                    if (chatMessage.getMessageType().equals("text")) {
+                        inflater.inflate(R.menu.popup_menu_chat_click_message_other_text, popup.getMenu());
+                    } else {
+                        inflater.inflate(R.menu.popup_menu_chat_click_message_other, popup.getMenu());
+                    }
+                    popup.show();
+                    popup.setOnMenuItemClickListener(item -> {
+                        if (item.getItemId() == R.id.reply) {
+                            iChatUtils.onReply(chatMessage);
+                        }
+                        return false;
+                    });
+
+
+                });
+
+                Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.imageView);
+
+                holder.imageView.setOnClickListener(view -> new DialogShowPicture(context, FILE_URL, chatMessage.getMessage()).show());
+                break;
+            }
+            //channel picture
+            case 21221: {
                 final ChatHolder_Picture_ReplyFalse_Other_Private holder = (ChatHolder_Picture_ReplyFalse_Other_Private) viewHolder;
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
@@ -1779,6 +1851,53 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 });
 
 
+                holder.itemView.setOnClickListener(view -> {
+
+                    PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                    MenuInflater inflater = popup.getMenuInflater();
+                    inflater.inflate(R.menu.popup_menu_chat_click_message_other, popup.getMenu());
+                    popup.show();
+                    popup.setOnMenuItemClickListener(item -> {
+                        if (item.getItemId() == R.id.reply) {
+                            iChatUtils.onReply(chatMessage);
+                        }
+                        return false;
+                    });
+                });
+                break;
+            }
+            //channel file
+            case 31221: {
+                ChatHolder_File_ReplyFalse_Other_Private holder = (ChatHolder_File_ReplyFalse_Other_Private) viewHolder;
+                holder.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
+                if (chatMessage.getUpdatedAt() != null) {
+                    String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
+                    DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
+                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                } else {
+                    String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
+                    DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
+                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                }
+                if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
+                    holder.coordinatorDownloadedFile.setVisibility(View.GONE);
+                } else {
+                    holder.coordinatorDownloadedFile.setVisibility(View.VISIBLE);
+                }
+                holder.coordinatorDownloadFile.setOnClickListener(v -> {
+                    if (checkReadExternalPermission(activity)) {
+                        if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
+                            FileDownloader.openFile(context, chatMessage.getMessage());
+                        } else {
+                            FileDownloader fileDownloader = new FileDownloader(context, FILE_URL);
+                            fileDownloader.setOnFileDownloadListener(() -> {
+                                FileDownloader.openFile(context, chatMessage.getMessage());
+                                notifyItemChanged(position);
+                            });
+                            fileDownloader.execute(chatMessage.getMessage());
+                        }
+                    }
+                });
                 holder.itemView.setOnClickListener(view -> {
 
                     PopupMenu popup = new PopupMenu(context, (holder.tvTime));
