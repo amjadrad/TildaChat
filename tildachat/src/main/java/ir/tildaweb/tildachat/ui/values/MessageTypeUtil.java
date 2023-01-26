@@ -39,7 +39,7 @@ public class MessageTypeUtil {
         }
 
         //User Type
-        if (chatMessage.getUserId() == userId) {
+        if (chatMessage.getUserId() == userId && roomType != ChatroomType.CHANNEL) {
             type += (userFactor);
         } else {
             type += (userFactor * 2);
