@@ -22,6 +22,24 @@ public class ReceiveChatroomCheck {
     private Integer memberCount;
     @SerializedName("is_join")
     private Boolean isJoin;
+    @SerializedName("is_admin")
+    private Boolean isAdmin;
+
+    public Boolean getJoin() {
+        return isJoin;
+    }
+
+    public void setJoin(Boolean join) {
+        isJoin = join;
+    }
+
+    public Boolean getAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        isAdmin = admin;
+    }
 
     public Integer getMemberCount() {
         return memberCount;

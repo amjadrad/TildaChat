@@ -220,21 +220,6 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                     activityChatroomMessagingBinding.tvUserStatus.setText(String.format("%s %s", MathUtils.convertNumberToKilo(response.getMemberCount()), "عضو"));
                     setChatroomInfo();
                     join();
-                    // Channel info, user is joined to channel if code=111
-//                    roomTitle = response.getChatroom().getRoomTitle();
-//                    roomPicture = response.getChatroom().getRoomPicture();
-//                    roomType = response.getChatroom().getType();
-//                    chatroomId = response.getChatroom().getId();
-//                    roomId = response.getChatroom().getRoomId();
-//                    boolean isJoin = response.getJoin();
-//                    if (isJoin) {
-//                        activityChatroomMessagingBinding.linearJoinChannel.setVisibility(View.GONE);
-//                    } else {
-//                        activityChatroomMessagingBinding.linearJoinChannel.setVisibility(View.VISIBLE);
-//                    }
-//                    activityChatroomMessagingBinding.tvUserStatus.setText(MathUtils.convertNumberToKilo(response.getMemberCount()) + " عضو");
-//                    setChatroomInfo();
-//                    join();
                     break;
                 }
                 case 121: {
@@ -295,6 +280,15 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                     break;
                 }
             }
+
+            //Check channel admin
+            if (response.getChatroom().getType().equals("channel")) {
+                if (response.getAdmin()) {
+                    Log.d(TAG, "setSocketListeners: is admin, show chat box");
+                    activityChatroomMessagingBinding.linearChatBox.setVisibility(View.VISIBLE);
+                }
+            }
+
         });
 
         TildaChatApp.getSocketRequestController().receiver().receiveChatroomJoin(this, ReceiveChatroomJoin.class, response -> {
@@ -579,8 +573,8 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             resetUpdate();
         } else if (id == R.id.tvJoinChannel) {
             //Todo: channel abilities not yet.
+            activityChatroomMessagingBinding.linearJoinChannel.setVisibility(View.GONE);
             join();
-//            TildaChatApp.getSocketRequestController().emitter().emitChatroomJoin(SocketEndpoints.TAG_CLIENT_SEND_CHATROOM_CHANNEL_MEMBERSHIP, roomId, chatroomId, userId);
         } else if (id == R.id.imageViewImage) {
             TildaFilePicker tildaFilePicker = new TildaFilePicker(ChatroomMessagingActivity.this, new FileType[]{FileType.FILE_TYPE_IMAGE});
             tildaFilePicker.setOnTildaFileSelectListener(list -> {
