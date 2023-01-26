@@ -199,6 +199,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             if (response.getChatroom() != null) {
                 if (response.getChatroom().getType().equals("channel")) {
                     adapterPrivateChatMessages.setRoomType(ChatroomType.CHANNEL);
+                    adapterPrivateChatMessages.setRoomAdmin(true);
                     isAdmin = response.getAdmin();
                 } else if (response.getChatroom().getType().equals("group")) {
                     adapterPrivateChatMessages.setRoomType(ChatroomType.GROUP);

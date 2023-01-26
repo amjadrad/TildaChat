@@ -58,6 +58,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
     private final DateUtils dateHelper;
     private ChatroomType roomType = ChatroomType.PRIVATE;
     private final String FILE_URL;
+    private boolean isAdmin;
 
     private final int visibleThreshold = 5;
     private int firstVisibleItem;
@@ -886,7 +887,11 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 holder.itemView.setOnClickListener(view -> {
                     PopupMenu popup = new PopupMenu(context, (holder.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
-                    inflater.inflate(R.menu.popup_menu_chat_click_message_channel_other_text, popup.getMenu());
+                    if (isAdmin) {
+                        inflater.inflate(R.menu.popup_menu_chat_click_message_me_text, popup.getMenu());
+                    } else {
+                        inflater.inflate(R.menu.popup_menu_chat_click_message_channel_other_text, popup.getMenu());
+                    }
                     popup.show();
                     popup.setOnMenuItemClickListener(item -> {
                         int itemId = item.getItemId();
@@ -895,6 +900,12 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                             ClipData clip = ClipData.newPlainText("متن", holder.tvMessage.getText().toString());
                             clipboard.setPrimaryClip(clip);
                             iChatUtils.onCopy();
+                        } else if (itemId == R.id.reply) {
+                            iChatUtils.onReply(chatMessage);
+                        } else if (itemId == R.id.delete) {
+                            iChatUtils.onDelete(chatMessage);
+                        } else if (itemId == R.id.edit) {
+                            iChatUtils.onEdit(chatMessage);
                         }
                         return false;
                     });
@@ -1362,6 +1373,21 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
                 holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
                 holder.itemView.setOnClickListener(view -> {
+                    if (isAdmin) {
+                        PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                        MenuInflater inflater = popup.getMenuInflater();
+                        inflater.inflate(R.menu.popup_menu_chat_click_message_me, popup.getMenu());
+                        popup.show();
+                        popup.setOnMenuItemClickListener(item -> {
+                            int itemId = item.getItemId();
+                            if (itemId == R.id.reply) {
+                                iChatUtils.onReply(chatMessage);
+                            } else if (itemId == R.id.delete) {
+                                iChatUtils.onDelete(chatMessage);
+                            }
+                            return false;
+                        });
+                    }
                 });
                 Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.imageView);
                 holder.imageView.setOnClickListener(view -> new DialogShowPicture(context, FILE_URL, chatMessage.getMessage()).show());
@@ -1873,16 +1899,32 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     }
                 });
                 holder.itemView.setOnClickListener(view -> {
-                    if (checkReadExternalPermission(activity)) {
-                        if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
-                            FileDownloader.openFile(context, chatMessage.getMessage());
-                        } else {
-                            FileDownloader fileDownloader = new FileDownloader(context, FILE_URL);
-                            fileDownloader.setOnFileDownloadListener(() -> {
+                    if (isAdmin) {
+                        PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                        MenuInflater inflater = popup.getMenuInflater();
+                        inflater.inflate(R.menu.popup_menu_chat_click_message_me, popup.getMenu());
+                        popup.show();
+                        popup.setOnMenuItemClickListener(item -> {
+                            int itemId = item.getItemId();
+                            if (itemId == R.id.reply) {
+                                iChatUtils.onReply(chatMessage);
+                            } else if (itemId == R.id.delete) {
+                                iChatUtils.onDelete(chatMessage);
+                            }
+                            return false;
+                        });
+                    } else {
+                        if (checkReadExternalPermission(activity)) {
+                            if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                                 FileDownloader.openFile(context, chatMessage.getMessage());
-                                notifyItemChanged(position);
-                            });
-                            fileDownloader.execute(chatMessage.getMessage());
+                            } else {
+                                FileDownloader fileDownloader = new FileDownloader(context, FILE_URL);
+                                fileDownloader.setOnFileDownloadListener(() -> {
+                                    FileDownloader.openFile(context, chatMessage.getMessage());
+                                    notifyItemChanged(position);
+                                });
+                                fileDownloader.execute(chatMessage.getMessage());
+                            }
                         }
                     }
                 });
@@ -2334,6 +2376,10 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         this.roomType = roomType;
     }
 
+    public void setRoomAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+
     public void setLoaded() {
         this.loading = false;
     }
@@ -2351,7 +2397,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         }
         iChatUtils.onLoadMoreForSearch(messageId, searchType);
     }
-
 
     private void showReplySearch(int position) {
         if (position >= 0) {
