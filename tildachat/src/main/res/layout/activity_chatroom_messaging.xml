@@ -10,88 +10,75 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="@dimen/_48sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="horizontal">
 
-            <!--            <ir.nazmenovin.nazmenovin_app.utils.wave_view.WaveView-->
-            <!--                android:id="@+id/waveView"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:rotation="180"-->
-            <!--                android:visibility="visible" />-->
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageViewBack"
+                android:layout_width="@dimen/_48sdp"
+                android:layout_height="@dimen/_48sdp"
+                android:layout_gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="@dimen/_15sdp"
+                android:src="@drawable/ic_back"
+                android:tint="@color/colorText" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:id="@+id/linearChatroomDetails"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/_48sdp"
-                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_weight="1"
                 android:orientation="horizontal">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/imageViewBack"
-                    android:layout_width="@dimen/_48sdp"
-                    android:layout_height="@dimen/_48sdp"
-                    android:layout_gravity="center"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:padding="@dimen/_15sdp"
-                    android:src="@drawable/ic_back"
-                    android:tint="@color/colorText" />
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/imageViewProfilePicture"
+                    android:layout_width="@dimen/_38sdp"
+                    android:layout_height="@dimen/_38sdp"
+                    android:layout_gravity="center" />
 
                 <LinearLayout
-                    android:id="@+id/linearChatroomDetails"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/_48sdp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|right"
+                    android:layout_marginRight="@dimen/_3sdp"
+                    android:orientation="vertical">
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/imageViewProfilePicture"
-                        android:layout_width="@dimen/_38sdp"
-                        android:layout_height="@dimen/_38sdp"
-                        android:layout_gravity="center" />
-
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/tvUserName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center|right"
-                        android:layout_marginRight="@dimen/_3sdp"
-                        android:orientation="vertical">
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/colorText"
+                        android:textStyle="bold" />
 
-                        <TextView
-                            android:id="@+id/tvUserName"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="right"
-                            android:text=""
-                            android:textColor="@color/colorText"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tvUserStatus"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="right"
-                            android:textColor="@color/colorMutedText"
-                            android:textDirection="rtl" />
-                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/tvUserStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:textColor="@color/colorMutedText"
+                        android:textDirection="rtl" />
                 </LinearLayout>
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/imageViewMenu"
-                    android:layout_width="@dimen/_48sdp"
-                    android:layout_height="@dimen/_48sdp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/bg_badge_transparent_curved"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:padding="@dimen/_18sdp"
-                    android:src="@drawable/ic_menu_threepoints"
-                    android:tint="@color/colorText"
-                    android:visibility="gone" />
             </LinearLayout>
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageViewMenu"
+                android:layout_width="@dimen/_48sdp"
+                android:layout_height="@dimen/_48sdp"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_badge_transparent_curved"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="@dimen/_18sdp"
+                android:src="@drawable/ic_menu_threepoints"
+                android:tint="@color/colorText"
+                android:visibility="gone" />
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewMessages"

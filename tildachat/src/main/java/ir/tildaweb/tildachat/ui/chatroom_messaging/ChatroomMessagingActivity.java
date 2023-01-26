@@ -68,6 +68,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     private static String UPLOAD_ROUTE;
     private AXEmojiPopup emojiPopup;
 
+    private boolean isAdmin = false;
     private String roomTitle;
     private String roomPicture;
     private Integer secondUserId = null;
@@ -175,9 +176,14 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             Glide.with(this).load(FILE_URL + roomPicture).into(activityChatroomMessagingBinding.imageViewProfilePicture);
         }
         if (roomType.equals("channel")) {
-            activityChatroomMessagingBinding.linearChatBox.setVisibility(View.GONE);
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            activityChatroomMessagingBinding.recyclerViewMessages.setLayoutParams(layoutParams);
+            if (isAdmin) {
+                Log.d(TAG, "setSocketListeners: is admin, show chat box");
+                activityChatroomMessagingBinding.linearChatBox.setVisibility(View.VISIBLE);
+            } else {
+                activityChatroomMessagingBinding.linearChatBox.setVisibility(View.GONE);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                activityChatroomMessagingBinding.recyclerViewMessages.setLayoutParams(layoutParams);
+            }
         }
     }
 
@@ -193,6 +199,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             if (response.getChatroom() != null) {
                 if (response.getChatroom().getType().equals("channel")) {
                     adapterPrivateChatMessages.setRoomType(ChatroomType.CHANNEL);
+                    isAdmin = response.getAdmin();
                 } else if (response.getChatroom().getType().equals("group")) {
                     adapterPrivateChatMessages.setRoomType(ChatroomType.GROUP);
                 }
@@ -280,15 +287,6 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                     break;
                 }
             }
-
-            //Check channel admin
-            if (response.getChatroom().getType().equals("channel")) {
-                if (response.getAdmin()) {
-                    Log.d(TAG, "setSocketListeners: is admin, show chat box");
-                    activityChatroomMessagingBinding.linearChatBox.setVisibility(View.VISIBLE);
-                }
-            }
-
         });
 
         TildaChatApp.getSocketRequestController().receiver().receiveChatroomJoin(this, ReceiveChatroomJoin.class, response -> {
