@@ -62,11 +62,11 @@ public class TildaChatNotificationService extends Service {
     @Override
     public void onDestroy() {
         Log.d(TAG, "onDestroy: --------------------");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(new Intent(this, TildaChatNotificationService.class));
-        } else {
-            startService(new Intent(this, TildaChatNotificationService.class));
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            startForegroundService(new Intent(this, TildaChatNotificationService.class));
+//        } else {
+//            startService(new Intent(this, TildaChatNotificationService.class));
+//        }
         super.onDestroy();
     }
 
@@ -74,7 +74,7 @@ public class TildaChatNotificationService extends Service {
 //        notificationBuilder.setOnlyAlertOnce(true);
 //        notification = notificationBuilder.build();
 //        startForeground(notificationId, notification);
-        setSocketListeners();
+//        setSocketListeners();
 
         handlerTimeDigital.postDelayed(runnableTimeDigital, 1000);
     }
@@ -97,8 +97,8 @@ public class TildaChatNotificationService extends Service {
                             notificationModel.setMessage("یک فایل جدید دریافت کرده اید.");
                         }
 
-                        notificationModel.setTitle("پیام جدید");
-                        notificationModel.setUserFullName("امجد قاسمی راد");
+                        notificationModel.setTitle("./");
+                        notificationModel.setUserFullName("./");
                         NotificationHelper.showNotification(this, notificationModel);
                     }
                 }

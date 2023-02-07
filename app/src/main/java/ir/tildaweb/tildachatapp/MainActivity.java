@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import ir.tildaweb.tildachat.app.request.SocketRequestController;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitUserChatrooms;
-import ir.tildaweb.tildachat.services.TildaChatNotificationService;
 import ir.tildaweb.tildachat.ui.chatroom_messaging.ChatroomMessagingActivity;
 import tildachatapp.databinding.ActivityMainBinding;
 
@@ -31,8 +30,8 @@ public class MainActivity extends AppCompatActivity {
         emitUserChatrooms.setUserId(App.userId);
         emitUserChatrooms.setPage(1);
 
-        Intent intentNotification = new Intent(this, TildaChatNotificationService.class);
-        startService(intentNotification);
+//        Intent intentNotification = new Intent(this, TildaChatNotificationService.class);
+//        startService(intentNotification);
 
         binding.button.setOnClickListener(view -> {
             binding.tv.setText("Reuqest...");

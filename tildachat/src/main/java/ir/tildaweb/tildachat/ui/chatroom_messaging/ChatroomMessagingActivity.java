@@ -68,7 +68,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     private static String UPLOAD_ROUTE;
     private AXEmojiPopup emojiPopup;
 
-    private boolean isAdmin = false;
+    private Boolean isAdmin = false;
     private String roomTitle;
     private String roomPicture;
     private Integer secondUserId = null;
@@ -176,7 +176,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             Glide.with(this).load(FILE_URL + roomPicture).into(activityChatroomMessagingBinding.imageViewProfilePicture);
         }
         if (roomType.equals("channel")) {
-            if (isAdmin) {
+            if (isAdmin != null && isAdmin) {
                 Log.d(TAG, "setSocketListeners: is admin, show chat box");
                 activityChatroomMessagingBinding.linearChatBox.setVisibility(View.VISIBLE);
             } else {
@@ -199,8 +199,10 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             if (response.getChatroom() != null) {
                 if (response.getChatroom().getType().equals("channel")) {
                     adapterPrivateChatMessages.setRoomType(ChatroomType.CHANNEL);
-                    adapterPrivateChatMessages.setRoomAdmin(true);
-                    isAdmin = response.getAdmin();
+                    if (response.getAdmin() != null) {
+                        isAdmin = response.getAdmin();
+                        adapterPrivateChatMessages.setRoomAdmin(isAdmin);
+                    }
                 } else if (response.getChatroom().getType().equals("group")) {
                     adapterPrivateChatMessages.setRoomType(ChatroomType.GROUP);
                 }
