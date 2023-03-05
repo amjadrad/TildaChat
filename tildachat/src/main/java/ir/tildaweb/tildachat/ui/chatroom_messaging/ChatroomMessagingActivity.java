@@ -127,7 +127,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         activityChatroomMessagingBinding.imageViewFile.setOnClickListener(this);
 
         activityChatroomMessagingBinding.recyclerViewMessages.setLayoutManager(new LinearLayoutManager(this));
-        adapterPrivateChatMessages = new AdapterPrivateChatMessages(this, ChatroomMessagingActivity.this, userId, FILE_URL, activityChatroomMessagingBinding.recyclerViewMessages, new ArrayList<>(), this, this);
+        adapterPrivateChatMessages = new AdapterPrivateChatMessages(getApplicationContext(), ChatroomMessagingActivity.this, userId, FILE_URL, activityChatroomMessagingBinding.recyclerViewMessages, new ArrayList<>(), this, this);
         activityChatroomMessagingBinding.recyclerViewMessages.setAdapter(adapterPrivateChatMessages);
 
         activityChatroomMessagingBinding.etMessage.addTextChangedListener(new TextWatcher() {
@@ -173,7 +173,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     private void setChatroomInfo() {
         activityChatroomMessagingBinding.tvUserName.setText(String.valueOf(roomTitle));
         if (roomPicture != null) {
-            Glide.with(this).load(FILE_URL + roomPicture).into(activityChatroomMessagingBinding.imageViewProfilePicture);
+            Glide.with(getApplicationContext()).load(FILE_URL + roomPicture).into(activityChatroomMessagingBinding.imageViewProfilePicture);
         }
         if (roomType.equals("channel")) {
             if (isAdmin != null && isAdmin) {
