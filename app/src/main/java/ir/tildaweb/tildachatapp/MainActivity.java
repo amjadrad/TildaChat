@@ -9,6 +9,7 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 
 import ir.tildaweb.tildachat.app.request.SocketRequestController;
+import ir.tildaweb.tildachat.dialogs.DialogShowPicture;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitUserChatrooms;
 import ir.tildaweb.tildachat.ui.chatroom_messaging.ChatroomMessagingActivity;
 import tildachatapp.databinding.ActivityMainBinding;
@@ -29,6 +30,10 @@ public class MainActivity extends AppCompatActivity {
         EmitUserChatrooms emitUserChatrooms = new EmitUserChatrooms();
         emitUserChatrooms.setUserId(App.userId);
         emitUserChatrooms.setPage(1);
+
+
+        DialogShowPicture dialogShowPicture = new DialogShowPicture(this, "", "");
+        dialogShowPicture.show();
 
 
         binding.button.setOnClickListener(view -> {

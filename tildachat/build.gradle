@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
+//apply plugin: 'com.github.dcendents.android-maven'
 
 group = 'com.github.amjadrad'
 
@@ -10,13 +10,11 @@ def emojiViewProvider = "AppleProvider"
 android {
     useLibrary 'org.apache.http.legacy'
     compileSdkVersion 33
-    buildToolsVersion "29.0.3"
+    buildToolsVersion '30.0.3'
 
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 1
-        versionName "0.4.4"
         vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -38,12 +36,15 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    namespace 'ir.tildaweb.tildachat'
 }
 
 dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
+
+//    implementation 'com.google.android.material:material:1.8.0'
 
     //SocketIO
     implementation('io.socket:socket.io-client:2.0.1') {
