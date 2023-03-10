@@ -14,7 +14,7 @@ import java.io.FileInputStream;
 
 public class FileUtils {
 
-    private static String TAG = "FileUtils";
+    private static final String TAG = "FileUtils";
 
     public static String convertImageToBase64(File file) {
         String extension = file.getAbsolutePath().substring(file.getAbsolutePath().lastIndexOf(".") + 1);

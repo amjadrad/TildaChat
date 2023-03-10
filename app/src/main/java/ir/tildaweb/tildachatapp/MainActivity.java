@@ -30,8 +30,6 @@ public class MainActivity extends AppCompatActivity {
         emitUserChatrooms.setUserId(App.userId);
         emitUserChatrooms.setPage(1);
 
-//        Intent intentNotification = new Intent(this, TildaChatNotificationService.class);
-//        startService(intentNotification);
 
         binding.button.setOnClickListener(view -> {
             binding.tv.setText("Reuqest...");

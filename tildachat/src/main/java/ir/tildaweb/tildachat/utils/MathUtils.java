@@ -7,7 +7,7 @@ import android.util.DisplayMetrics;
 
 public class MathUtils {
 
-    private static String TAG = "MathUtils";
+    private static final String TAG = "MathUtils";
 
     public static int convertDipToPixels(Context context, float dips) {
         return (int) (dips * context.getResources().getDisplayMetrics().density + 0.5f);

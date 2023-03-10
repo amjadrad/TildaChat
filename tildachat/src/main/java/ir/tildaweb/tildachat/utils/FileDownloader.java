@@ -18,14 +18,12 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class FileDownloader extends AsyncTask<String, String, String> {
+public class FileDownloader extends AsyncTask<Object, String, String> {
 
-    private static String TAG = "FileDownloader";
+    private static final String TAG = "FileDownloader";
     private ProgressDialog pd;
-    private String pathFolder = "";
     private String pathFile = "";
     private Context context;
-    private String FILE_URL;
     private OnFileDownloadListener onFileDownloadListener;
 
     public void setOnFileDownloadListener(OnFileDownloadListener onFileDownloadListener) {
@@ -36,14 +34,20 @@ public class FileDownloader extends AsyncTask<String, String, String> {
         void onFileDownloaded();
     }
 
-    public FileDownloader(Context context, String FILE_URL) {
-        this.context = context;
-        this.FILE_URL = FILE_URL;
-    }
-
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+
+    }
+
+    @Override
+    protected String doInBackground(Object... params) {
+        int count;
+
+        String filename = (String) params[0];
+        context = (Context) params[1];
+        String FILE_URL = (String) params[2];
+
         pd = new ProgressDialog(context);
         pd.setTitle("در حال دانلود فایل");
         pd.setMessage("لطفا منتظر بمانید...");
@@ -51,13 +55,7 @@ public class FileDownloader extends AsyncTask<String, String, String> {
         pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         pd.setCancelable(true);
         pd.show();
-    }
 
-    @Override
-    protected String doInBackground(String... params) {
-        int count;
-
-        String filename = params[0];
         String fileUrl = FILE_URL + filename;
         Log.d(TAG, "doInBackground: " + fileUrl);
         try {
@@ -65,6 +63,7 @@ public class FileDownloader extends AsyncTask<String, String, String> {
             String fileUrlDirectory = filename.substring(0, filename.lastIndexOf("/"));
             Log.d(TAG, "doInBackground: " + fileUrlDirectory);
             String folderPathToCreate = "";
+            String pathFolder = "";
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 pathFolder = context.getExternalFilesDir(null) + "/nazmenovin/";
                 folderPathToCreate = pathFolder + fileUrlDirectory;

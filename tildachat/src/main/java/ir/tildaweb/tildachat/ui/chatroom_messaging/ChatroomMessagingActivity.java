@@ -296,7 +296,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             nextPage = 0;
             EmitChatroomMessages emitChatroomMessages = new EmitChatroomMessages();
             emitChatroomMessages.setRoomId(roomId);
-            emitChatroomMessages.setUserId(1);
+            emitChatroomMessages.setUserId(userId);
             emitChatroomMessages.setPage(++nextPage);
             adapterPrivateChatMessages.clearAll();
             TildaChatApp.getSocketRequestController().emitter().emitChatroomMessages(emitChatroomMessages);
@@ -573,7 +573,6 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         } else if (id == R.id.imageViewUpdateClose) {
             resetUpdate();
         } else if (id == R.id.tvJoinChannel) {
-            //Todo: channel abilities not yet.
             activityChatroomMessagingBinding.linearJoinChannel.setVisibility(View.GONE);
             join();
         } else if (id == R.id.imageViewImage) {

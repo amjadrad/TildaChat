@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "ir.tildaweb.tildachatapp"
         minSdkVersion 21
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode 1
-        versionName "0.4.3"
+        versionName "0.4.4"
 
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

@@ -16,10 +16,6 @@
             android:name=".services.TildaChatCommunicationService"
             android:stopWithTask="false" />
 
-<!--        <service-->
-<!--            android:name=".services.TildaChatNotificationService"-->
-<!--            android:stopWithTask="false" />-->
-
         <service
             android:name=".services.TildaFileUploaderForegroundService"
             android:stopWithTask="false" />
