@@ -21,7 +21,7 @@ import java.net.URLConnection;
 public class FileDownloader extends AsyncTask<Object, String, String> {
 
     private static final String TAG = "FileDownloader";
-    private ProgressDialog pd;
+//    private ProgressDialog pd;
     private String pathFile = "";
     private Context context;
     private OnFileDownloadListener onFileDownloadListener;
@@ -48,13 +48,13 @@ public class FileDownloader extends AsyncTask<Object, String, String> {
         context = (Context) params[1];
         String FILE_URL = (String) params[2];
 
-        pd = new ProgressDialog(context);
-        pd.setTitle("در حال دانلود فایل");
-        pd.setMessage("لطفا منتظر بمانید...");
-        pd.setMax(100);
-        pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        pd.setCancelable(true);
-        pd.show();
+//        pd = new ProgressDialog(context);
+//        pd.setTitle("در حال دانلود فایل");
+//        pd.setMessage("لطفا منتظر بمانید...");
+//        pd.setMax(100);
+//        pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+//        pd.setCancelable(true);
+//        pd.show();
 
         String fileUrl = FILE_URL + filename;
         Log.d(TAG, "doInBackground: " + fileUrl);
@@ -120,14 +120,14 @@ public class FileDownloader extends AsyncTask<Object, String, String> {
 
     protected void onProgressUpdate(String... progress) {
         // setting progress percentage
-        pd.setProgress(Integer.parseInt(progress[0]));
+//        pd.setProgress(Integer.parseInt(progress[0]));
     }
 
     @Override
     protected void onPostExecute(String pathFile) {
-        if (pd != null) {
-            pd.dismiss();
-        }
+//        if (pd != null) {
+//            pd.dismiss();
+//        }
 
         onFileDownloadListener.onFileDownloaded();
         Log.d(TAG, "onPostExecute: Open file.");

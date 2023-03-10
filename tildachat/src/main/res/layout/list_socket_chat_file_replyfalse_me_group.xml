@@ -51,7 +51,7 @@
                         android:layout_height="@dimen/_12sdp"
                         android:layout_gravity="center"
                         android:tint="@color/colorPrimary"
-                        app:srcCompat="@drawable/ic_file_attach" />
+                        app:srcCompat="@drawable/ic_file_plus" />
 
 
                 </androidx.coordinatorlayout.widget.CoordinatorLayout>

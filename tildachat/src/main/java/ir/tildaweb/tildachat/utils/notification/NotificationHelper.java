@@ -35,7 +35,7 @@ public class NotificationHelper {
 
         RemoteViews notificationLayout = new RemoteViews(context.getPackageName(), R.layout.notification_layout_small);
         notification = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_file_attach)
+                .setSmallIcon(R.drawable.ic_file_plus)
                 .setCustomContentView(notificationLayout)
                 .build();
 
