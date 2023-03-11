@@ -753,7 +753,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 holder.itemView.setOnClickListener(view -> {
 
                     // copy , reply , delete
-                    PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_me_text, popup.getMenu());
                     popup.show();
@@ -804,7 +804,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 holder.itemView.setOnClickListener(view -> {
 
                     // copy , reply , delete
-                    PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_me_text, popup.getMenu());
                     popup.show();
@@ -848,7 +848,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_other_text, popup.getMenu());
                     popup.show();
@@ -885,7 +885,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
                 }
                 holder.itemView.setOnClickListener(view -> {
-                    PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     if (isAdmin) {
                         inflater.inflate(R.menu.popup_menu_chat_click_message_me_text, popup.getMenu());
@@ -942,7 +942,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 Glide.with(context).load(FILE_URL + chatMessage.getUser().getPicture()).placeholder(ContextCompat.getDrawable(context, R.drawable.ic_user_circle)).into(holder.imageViewProfile);
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_other_text, popup.getMenu());
                     popup.show();
@@ -1007,7 +1007,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 }
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     if (chatMessage.getMessageType().equals("text")) {
                         inflater.inflate(R.menu.popup_menu_chat_click_message_me_text, popup.getMenu());
@@ -1083,7 +1083,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 }
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     if (chatMessage.getMessageType().equals("text")) {
                         inflater.inflate(R.menu.popup_menu_chat_click_message_me_text, popup.getMenu());
@@ -1155,7 +1155,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 holder.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
 
                 holder.itemView.setOnClickListener(view -> {
-                    PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     if (chatMessage.getMessageType().equals("text")) {
                         inflater.inflate(R.menu.popup_menu_chat_click_message_other_text, popup.getMenu());
@@ -1234,7 +1234,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 Glide.with(context).load(FILE_URL + chatMessage.getUser().getPicture()).placeholder(ContextCompat.getDrawable(context, R.drawable.ic_user_circle)).into(holder.imageViewProfile);
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_other, popup.getMenu());
                     popup.show();
@@ -1270,7 +1270,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 holder.itemView.setOnClickListener(view -> {
 
-                    Log.d(TAG, "onBindViewHolder: picture_me_private");
                     PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_me, popup.getMenu());
@@ -1284,14 +1283,11 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         }
                         return false;
                     });
-
-
                 });
 
                 Log.d(TAG, "onBindViewHolder: " + FILE_URL + chatMessage.getMessage());
                 Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.imageView);
-
-                holder.imageView.setOnClickListener(view -> new DialogShowPicture(context, FILE_URL, chatMessage.getMessage()).show());
+                holder.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
                 break;
             }
 //            case 21121:
@@ -1311,7 +1307,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_me, popup.getMenu());
                     popup.show();
@@ -1330,7 +1326,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.imageView);
 
-                holder.imageView.setOnClickListener(view -> new DialogShowPicture(context, FILE_URL, chatMessage.getMessage()).show());
+                holder.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
                 break;
             }
 
@@ -1344,7 +1340,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     if (chatMessage.getMessageType().equals("text")) {
                         inflater.inflate(R.menu.popup_menu_chat_click_message_other_text, popup.getMenu());
@@ -1364,7 +1360,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.imageView);
 
-                holder.imageView.setOnClickListener(view -> new DialogShowPicture(context, FILE_URL, chatMessage.getMessage()).show());
+                holder.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
                 break;
             }
             //channel picture
@@ -1375,7 +1371,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
                 holder.itemView.setOnClickListener(view -> {
                     if (isAdmin) {
-                        PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                        PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
                         MenuInflater inflater = popup.getMenuInflater();
                         inflater.inflate(R.menu.popup_menu_chat_click_message_me, popup.getMenu());
                         popup.show();
@@ -1391,7 +1387,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     }
                 });
                 Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.imageView);
-                holder.imageView.setOnClickListener(view -> new DialogShowPicture(context, FILE_URL, chatMessage.getMessage()).show());
+                holder.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
                 break;
             }
 //            case 21221:
@@ -1418,7 +1414,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     if (chatMessage.getMessageType().equals("text")) {
                         inflater.inflate(R.menu.popup_menu_chat_click_message_other_text, popup.getMenu());
@@ -1438,7 +1434,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.imageView);
 
-                holder.imageView.setOnClickListener(view -> new DialogShowPicture(context, FILE_URL, chatMessage.getMessage()).show());
+                holder.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
                 break;
             }
 
@@ -1483,7 +1479,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_me, popup.getMenu());
                     popup.show();
@@ -1502,7 +1498,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.imageView);
 
-                holder.imageView.setOnClickListener(view -> new DialogShowPicture(context, FILE_URL, chatMessage.getMessage()).show());
+                holder.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
                 break;
             }
 
@@ -1549,7 +1545,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_me, popup.getMenu());
                     popup.show();
@@ -1568,7 +1564,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.imageView);
 
-                holder.imageView.setOnClickListener(view -> new DialogShowPicture(context, FILE_URL, chatMessage.getMessage()).show());
+                holder.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
                 break;
             }
 
@@ -1607,7 +1603,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     if (chatMessage.getMessageType().equals("text")) {
                         inflater.inflate(R.menu.popup_menu_chat_click_message_other_text, popup.getMenu());
@@ -1625,7 +1621,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.imageView);
 
-                holder.imageView.setOnClickListener(view -> new DialogShowPicture(context, FILE_URL, chatMessage.getMessage()).show());
+                holder.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
                 break;
             }
 
@@ -1679,7 +1675,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     if (chatMessage.getMessageType().equals("text")) {
                         inflater.inflate(R.menu.popup_menu_chat_click_message_other_text, popup.getMenu());
@@ -1697,7 +1693,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.imageView);
 
-                holder.imageView.setOnClickListener(view -> new DialogShowPicture(context, FILE_URL, chatMessage.getMessage()).show());
+                holder.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
                 break;
             }
             //File
@@ -1743,7 +1739,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_me, popup.getMenu());
                     popup.show();
@@ -1800,7 +1796,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_me, popup.getMenu());
                     popup.show();
@@ -1854,7 +1850,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_other, popup.getMenu());
                     popup.show();
@@ -1901,7 +1897,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 });
                 holder.itemView.setOnClickListener(view -> {
                     if (isAdmin) {
-                        PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                        PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
                         MenuInflater inflater = popup.getMenuInflater();
                         inflater.inflate(R.menu.popup_menu_chat_click_message_me, popup.getMenu());
                         popup.show();
@@ -1980,7 +1976,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_other, popup.getMenu());
                     popup.show();
@@ -2039,7 +2035,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 }
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_me, popup.getMenu());
                     popup.show();
@@ -2120,7 +2116,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 }
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_me, popup.getMenu());
                     popup.show();
@@ -2216,7 +2212,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 });
 
                 holder.itemView.setOnClickListener(view -> {
-                    PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_other, popup.getMenu());
                     popup.show();
@@ -2290,7 +2286,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 });
 
                 holder.itemView.setOnClickListener(view -> {
-                    PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_other, popup.getMenu());
                     popup.show();
