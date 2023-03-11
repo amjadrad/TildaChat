@@ -1270,7 +1270,8 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(context, (holder.tvTime));
+                    Log.d(TAG, "onBindViewHolder: picture_me_private");
+                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_me, popup.getMenu());
                     popup.show();

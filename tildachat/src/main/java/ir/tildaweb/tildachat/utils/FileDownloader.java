@@ -147,7 +147,7 @@ public class FileDownloader extends AsyncTask<Object, String, String> {
 //            context.grantUriPermission(context.getPackageName(), fileURI, Intent.FLAG_GRANT_READ_URI_PERMISSION);
             final Intent intent = new Intent(Intent.ACTION_VIEW)
                     .setData(fileURI)
-                    .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             Intent intentChooser = Intent.createChooser(intent, "انتخاب برنامه:");
             context.startActivity(intentChooser);
         } catch (Exception e) {
