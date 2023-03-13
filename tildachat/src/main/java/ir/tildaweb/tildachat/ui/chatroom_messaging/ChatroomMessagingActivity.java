@@ -294,6 +294,9 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 
         TildaChatApp.getSocketRequestController().receiver().receiveChatroomJoin(this, ReceiveChatroomJoin.class, response -> {
             nextPage = 0;
+            if (response.getRoomId() != null) {
+                roomId = response.getRoomId();
+            }
             EmitChatroomMessages emitChatroomMessages = new EmitChatroomMessages();
             emitChatroomMessages.setRoomId(roomId);
             emitChatroomMessages.setUserId(userId);
@@ -329,14 +332,15 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                         activityChatroomMessagingBinding.noItem.setVisibility(View.GONE);
                     }
                 }
-            } else {
-                if (response.getStatus() == 200) {
-                    adapterPrivateChatMessages.addItem(response.getMessage());
-                    if (activityChatroomMessagingBinding.noItem.getVisibility() == View.VISIBLE) {
-                        activityChatroomMessagingBinding.noItem.setVisibility(View.GONE);
-                    }
-                }
             }
+//            else {
+//                if (response.getStatus() == 200) {
+//                    adapterPrivateChatMessages.addItem(response.getMessage());
+//                    if (activityChatroomMessagingBinding.noItem.getVisibility() == View.VISIBLE) {
+//                        activityChatroomMessagingBinding.noItem.setVisibility(View.GONE);
+//                    }
+//                }
+//            }
         });
 
         TildaChatApp.getSocketRequestController().receiver().receiveMessageSeen(this, ReceiveMessageSeen.class, response -> {
