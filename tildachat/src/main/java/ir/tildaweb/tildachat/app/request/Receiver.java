@@ -47,11 +47,15 @@ public class Receiver implements SocketReceiverInterface {
     public <T> void receiveMessageStore(@Nullable Activity activityForRunOnUI, Class<T> receiveModel, OnReceiveListener<T> onReceiveListener) {
         TildaChatApp.getSocket().on(SocketEndpoints.TAG_RECEIVE_MESSAGE_STORE, args -> {
             Log.d(TAG, "receiveMessageStore: " + args[0]);
-            T t = (T) DataParser.fromJson(String.valueOf(args[0]), receiveModel);
-            if (activityForRunOnUI != null) {
-                activityForRunOnUI.runOnUiThread(() -> onReceiveListener.onReceive(t));
-            } else {
-                onReceiveListener.onReceive(t);
+            try {
+                T t = (T) DataParser.fromJson(String.valueOf(args[0]), receiveModel);
+                if (activityForRunOnUI != null) {
+                    activityForRunOnUI.runOnUiThread(() -> onReceiveListener.onReceive(t));
+                } else {
+                    onReceiveListener.onReceive(t);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
     }

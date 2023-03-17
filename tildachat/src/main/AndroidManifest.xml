@@ -14,11 +14,6 @@
         <activity
             android:name=".ui.chatroom_messaging.ChatroomMessagingActivity"
             android:exported="false" />
-
-        <service
-            android:name=".services.TildaChatCommunicationService"
-            android:stopWithTask="false" />
-
         <service
             android:name=".services.TildaFileUploaderForegroundService"
             android:stopWithTask="false" />

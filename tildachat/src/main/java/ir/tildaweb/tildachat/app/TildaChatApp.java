@@ -41,18 +41,6 @@ public class TildaChatApp {
         }
     }
 
-    public static void startCommunicationService(Context context) {
-//        socketRequestController = SocketRequestController.getInstance();
-//        publishSubject = PublishSubject.create();
-//        socketRequestController.receiver().receiveUserChatrooms(null, ReceiveUserChatrooms.class, response -> {
-//            publishSubject.onNext(DataParser.toJson(response));
-//        });
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            context.startForegroundService(new Intent(context, TildaChatCommunicationService.class));
-//        }else{
-//            context.startService(new Intent(context, TildaChatCommunicationService.class));
-//        }
-    }
 
     public static Integer getUserId() {
         return mUserId;
