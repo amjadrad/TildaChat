@@ -115,6 +115,8 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         Log.d(TAG, "onCreate: " + roomId);
         Log.d(TAG, "onCreate: " + username);
 
+        activityChatroomMessagingBinding.imageViewMenu.setOnClickListener(this);
+
         activityChatroomMessagingBinding.etMessage.setOnClickListener(this);
         activityChatroomMessagingBinding.imageViewEmoji.setOnClickListener(this);
         activityChatroomMessagingBinding.imageViewBack.setOnClickListener(this);
@@ -624,6 +626,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             });
             tildaFilePicker.show(getSupportFragmentManager());
         } else if (id == R.id.linearChatroomDetails) {
+            onChatDetailsClicked();
 //            Intent intent = new Intent(ChatroomMessagingActivity.this, ChatroomDetailsActivity.class);
 //            intent.putExtra("room_id", chatroomId);
 //            intent.putExtra("room_name", roomId);
@@ -641,7 +644,17 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                 activityChatroomMessagingBinding.imageViewEmoji.setImageDrawable(ContextCompat.getDrawable(ChatroomMessagingActivity.this, R.drawable.ic_smile));
                 emojiPopup.dismiss();
             }
+        } else if (id == activityChatroomMessagingBinding.imageViewMenu.getId()) {
+            onMoreClicked();
         }
+    }
+
+    protected void onMoreClicked() {
+
+    }
+
+    protected void onChatDetailsClicked() {
+
     }
 
     private void requestFilePermission() {

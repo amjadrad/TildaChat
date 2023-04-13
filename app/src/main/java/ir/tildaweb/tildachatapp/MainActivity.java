@@ -9,7 +9,6 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 
 import ir.tildaweb.tildachat.app.request.SocketRequestController;
-import ir.tildaweb.tildachat.dialogs.DialogShowPicture;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitUserChatrooms;
 import ir.tildaweb.tildachat.ui.chatroom_messaging.ChatroomMessagingActivity;
 import tildachatapp.databinding.ActivityMainBinding;
@@ -32,8 +31,8 @@ public class MainActivity extends AppCompatActivity {
         emitUserChatrooms.setPage(1);
 
 
-        DialogShowPicture dialogShowPicture = new DialogShowPicture(this, "", "");
-        dialogShowPicture.show();
+//        DialogShowPicture dialogShowPicture = new DialogShowPicture(this, "", "");
+//        dialogShowPicture.show();
 
 
         binding.button.setOnClickListener(view -> {
@@ -41,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 //            socketRequestController.emitter().emitUserChatrooms(emitUserChatrooms);
 
 //            chatroom_1_184
-            Intent intent = new Intent(MainActivity.this, ChatroomMessagingActivity.class);
+            Intent intent = new Intent(MainActivity.this, Chat.class);
             intent.putExtra("user_id", App.userId);//184
             intent.putExtra("file_url", "https://nazmenovin.ir/uploaded_files/");
             intent.putExtra("upload_route", "https://nazmenovin.ir/api/chat_uploader");
@@ -51,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
 
         });
+
+
+        binding.button.callOnClick();
 
 //        socketRequestController.receiver().receiveUserChatrooms(this , ReceiveUserChatrooms.class , response -> {
 //            binding.tv.setText("Response :)))))");
@@ -70,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
             binding.tv.setText("Error!");
             Log.d(TAG, "onCreate:e " + response);
         });
-
     }
 
     public static class MyReceiver extends BroadcastReceiver {

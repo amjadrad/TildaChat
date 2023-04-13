@@ -25,6 +25,9 @@
         tools:replace="android:theme,android:label"
         tools:targetApi="n">
         <activity
+            android:name="ir.tildaweb.tildachatapp.Chat"
+            android:exported="false" />
+        <activity
             android:name="ir.tildaweb.tildachatapp.MainActivity"
             android:exported="true">
             <intent-filter>
