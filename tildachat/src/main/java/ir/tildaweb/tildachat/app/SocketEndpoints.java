@@ -14,6 +14,7 @@ public class SocketEndpoints {
     public static final String TAG_EMIT_CHATROOM_MEMBERS = "emit_chatroom_members";
     public static final String TAG_EMIT_CHATROOM_SEARCH = "emit_chatroom_search";
     public static final String TAG_EMIT_CHATROOM_CHANNEL_MEMBERSHIP_STORE = "emit_chatroom_channel_membership_store";
+    public static final String TAG_EMIT_USER_ONLINE_STATUS = "emit_user_online_status";
     //---> Messages
     public static final String TAG_EMIT_MESSAGE_STORE = "emit_message_store";
     public static final String TAG_EMIT_MESSAGE_UPDATE = "emit_message_update";
@@ -37,6 +38,7 @@ public class SocketEndpoints {
     public static final String TAG_RECEIVE_CHATROOM_MEMBERS = "receive_chatroom_members";
     public static final String TAG_RECEIVE_CHATROOM_SEARCH = "receive_chatroom_search";
     public static final String TAG_RECEIVE_CHATROOM_CHANNEL_MEMBERSHIP_STORE = "receive_chatroom_channel_membership_store";
+    public static final String TAG_RECEIVE_USER_ONLINE_STATUS = "receive_user_online_status";
     //---> Messages
     public static final String TAG_RECEIVE_MESSAGE_STORE = "receive_message_store";
     public static final String TAG_RECEIVE_MESSAGE_UPDATE = "receive_message_update";

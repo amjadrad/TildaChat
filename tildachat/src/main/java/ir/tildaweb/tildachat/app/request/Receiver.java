@@ -219,4 +219,17 @@ public class Receiver implements SocketReceiverInterface {
         });
     }
 
+    @Override
+    public <T> void receiveUserOnlineStatus(@Nullable Activity activityForRunOnUI, Class<T> receiveModel, OnReceiveListener<T> onReceiveListener) {
+        TildaChatApp.getSocket().on(SocketEndpoints.TAG_RECEIVE_USER_ONLINE_STATUS, args -> {
+            Log.d(TAG, "receiveUserOnlineStatus: " + args[0]);
+            T t = (T) DataParser.fromJson(String.valueOf(args[0]), receiveModel);
+            if (activityForRunOnUI != null) {
+                activityForRunOnUI.runOnUiThread(() -> onReceiveListener.onReceive(t));
+            } else {
+                onReceiveListener.onReceive(t);
+            }
+        });
+    }
+
 }

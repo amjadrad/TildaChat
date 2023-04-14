@@ -18,6 +18,7 @@ import ir.tildaweb.tildachat.models.connection_models.emits.EmitMessageSeen;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitMessageStore;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitMessageUpdate;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitUserChatrooms;
+import ir.tildaweb.tildachat.models.connection_models.emits.EmitUserOnlineStatus;
 
 public class Emitter implements SocketEmitInterface {
 
@@ -84,6 +85,11 @@ public class Emitter implements SocketEmitInterface {
     @Override
     public void emitChatroomSearch(EmitChatroomSearch emit) {
         TildaChatApp.getSocket().emit(SocketEndpoints.TAG_EMIT_CHATROOM_SEARCH, DataParser.toJson(emit));
+    }
+
+    @Override
+    public void emitUserOnlineStatus(EmitUserOnlineStatus emit) {
+        TildaChatApp.getSocket().emit(SocketEndpoints.TAG_EMIT_USER_ONLINE_STATUS, DataParser.toJson(emit));
     }
 
 

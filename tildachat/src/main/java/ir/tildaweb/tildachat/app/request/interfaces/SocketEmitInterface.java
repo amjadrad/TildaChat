@@ -12,6 +12,7 @@ import ir.tildaweb.tildachat.models.connection_models.emits.EmitMessageSeen;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitMessageStore;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitMessageUpdate;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitUserChatrooms;
+import ir.tildaweb.tildachat.models.connection_models.emits.EmitUserOnlineStatus;
 
 public interface SocketEmitInterface {
 
@@ -49,5 +50,7 @@ public interface SocketEmitInterface {
     void emitChatroomMembers(EmitChatroomMembers emit);
 
     void emitChatroomSearch(EmitChatroomSearch emit);
+
+    void emitUserOnlineStatus(EmitUserOnlineStatus emit);
 
 }
