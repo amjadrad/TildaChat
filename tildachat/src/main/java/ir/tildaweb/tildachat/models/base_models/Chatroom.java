@@ -20,6 +20,16 @@ public class Chatroom {
     private Integer unseenCount;
     @SerializedName("members_count")
     private Integer membersCount;
+    @SerializedName("second_user")
+    private User secondUser;
+
+    public User getSecondUser() {
+        return secondUser;
+    }
+
+    public void setSecondUser(User secondUser) {
+        this.secondUser = secondUser;
+    }
 
     public Integer getMembersCount() {
         return membersCount;
