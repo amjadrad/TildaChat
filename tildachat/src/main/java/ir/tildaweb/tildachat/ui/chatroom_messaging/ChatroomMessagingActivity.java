@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -87,6 +89,12 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     private int PICK_IMAGE_PERMISSION_CODE = 1001;
     private int PICK_FILE_PERMISSION_CODE = 1003;
 
+    //Swipe to finish
+    private static final int SWIPE_MIN_DISTANCE = 120;
+    private static final int SWIPE_MAX_OFF_PATH = 250;
+    private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+    private GestureDetector gestureDetector;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +103,8 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                 getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
             }
         }
+        gestureDetector = new GestureDetector(new SwipeDetector());
+
         activityChatroomMessagingBinding = ActivityChatroomMessagingBinding.inflate(getLayoutInflater());
         setContentView(activityChatroomMessagingBinding.getRoot());
 
@@ -676,6 +686,41 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         });
+    }
+
+    private class SwipeDetector extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            // Check movement along the Y-axis. If it exceeds SWIPE_MAX_OFF_PATH,
+            // then dismiss the swipe.
+            if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
+                return false;
+            // Swipe from left to right.
+            // The swipe needs to exceed a certain distance (SWIPE_MIN_DISTANCE)
+            // and a certain velocity (SWIPE_THRESHOLD_VELOCITY).
+            if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                onBackPressed();
+                return true;
+            }
+            return false;
+        }
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        // TouchEvent dispatcher.
+        if (gestureDetector != null) {
+            if (gestureDetector.onTouchEvent(ev))
+                // If the gestureDetector handles the event, a swipe has been
+                // executed and no more needs to be done.
+                return true;
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return gestureDetector.onTouchEvent(event);
     }
 
     private void toast(String str) {

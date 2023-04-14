@@ -16,6 +16,26 @@ public class User {
     private String username;
     @SerializedName("phone")
     private String phone;
+    @SerializedName("fullname")
+    private String fullname;
+    @SerializedName("is_online")
+    private Boolean isOnline;
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public Boolean getOnline() {
+        return isOnline;
+    }
+
+    public void setOnline(Boolean online) {
+        isOnline = online;
+    }
 
     public String getUsername() {
         return username;

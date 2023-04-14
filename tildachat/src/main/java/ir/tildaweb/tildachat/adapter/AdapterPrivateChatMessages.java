@@ -6,6 +6,9 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -41,6 +44,7 @@ import ir.tildaweb.tildachat.ui.values.MessageTypeUtil;
 import ir.tildaweb.tildachat.utils.DateUtils;
 import ir.tildaweb.tildachat.utils.FileDownloader;
 import ir.tildaweb.tildachat.utils.FileUtils;
+import ir.tildaweb.tildachat.utils.OnSwipeTouchListener;
 
 
 public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -720,6 +724,33 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         //Chatroom type (private , channel, group)
 
         //MRUC0(4,2,2,3,0)
+
+        viewHolder.itemView.setOnTouchListener(new OnSwipeTouchListener(context) {
+            public void onSwipeTop() {
+                Log.d(TAG, "onSwipeTop: ");
+            }
+
+            public void onSwipeRight() {
+                Log.d(TAG, "onSwipeRight: ");
+            }
+
+            public void onSwipeLeft() {
+                Log.d(TAG, "onSwipeLeft: ");
+                Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    v.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE));
+                } else {
+                    //deprecated in API 26
+                    v.vibrate(50);
+                }
+                iChatUtils.onReply(chatMessage);
+            }
+
+            public void onSwipeBottom() {
+                Log.d(TAG, "onSwipeBottom: ");
+            }
+
+        });
 
         switch (viewHolder.getItemViewType()) {
 

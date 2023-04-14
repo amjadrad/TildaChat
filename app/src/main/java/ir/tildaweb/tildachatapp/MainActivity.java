@@ -42,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
 //            chatroom_1_184
             Intent intent = new Intent(MainActivity.this, Chat.class);
             intent.putExtra("user_id", App.userId);//184
-            intent.putExtra("file_url", "https://nazmenovin.ir/uploaded_files/");
-            intent.putExtra("upload_route", "https://nazmenovin.ir/api/chat_uploader");
+            intent.putExtra("file_url", "https://nazmenovin.com/uploaded_files/");
+            intent.putExtra("upload_route", "https://nazmenovin.com/api/chat_uploader");
 //            intent.putExtra("room_id", "group_sp_282_X8Ua3g1i");
 //            intent.putExtra("room_id", "chatroom_1_3");
             intent.putExtra("username", "nazmenovin");
