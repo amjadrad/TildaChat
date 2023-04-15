@@ -84,7 +84,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     private Integer updateMessageId = null;
     private boolean isSearchForReply = false;
     private Integer searchMessageId;
-
+    private boolean isWorkWithFullname = false;
     //Image File
     private int PICK_IMAGE_PERMISSION_CODE = 1001;
     private int PICK_FILE_PERMISSION_CODE = 1003;
@@ -120,6 +120,9 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         }
         if (getIntent().hasExtra("username")) {
             username = getIntent().getExtras().getString("username");
+        }
+        if (getIntent().hasExtra("is_work_with_fullname")) {
+            isWorkWithFullname = getIntent().getBooleanExtra("is_work_with_fullname", false);
         }
 
         Log.d(TAG, "onCreate: " + roomId);
@@ -246,11 +249,15 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                 }
                 case 121: {
                     //Private chat info , users have chatroom
-                    if (response.getSecondUser().getFirstName() != null) {
-                        roomTitle = response.getSecondUser().getFirstName();
-                    }
-                    if (response.getSecondUser().getLastName() != null) {
-                        roomTitle += " " + response.getSecondUser().getLastName();
+                    if (isWorkWithFullname) {
+                        roomTitle = response.getSecondUser().getFullname();
+                    } else {
+                        if (response.getSecondUser().getFirstName() != null) {
+                            roomTitle = response.getSecondUser().getFirstName();
+                        }
+                        if (response.getSecondUser().getLastName() != null) {
+                            roomTitle += " " + response.getSecondUser().getLastName();
+                        }
                     }
                     roomPicture = response.getSecondUser().getPicture();
                     roomType = "private";
@@ -263,11 +270,15 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                 }
                 case 122: {
                     //Private chat info , users don't have chatroom
-                    if (response.getSecondUser().getFirstName() != null) {
-                        roomTitle = response.getSecondUser().getFirstName();
-                    }
-                    if (response.getSecondUser().getLastName() != null) {
-                        roomTitle += " " + response.getSecondUser().getLastName();
+                    if (isWorkWithFullname) {
+                        roomTitle = response.getSecondUser().getFullname();
+                    } else {
+                        if (response.getSecondUser().getFirstName() != null) {
+                            roomTitle = response.getSecondUser().getFirstName();
+                        }
+                        if (response.getSecondUser().getLastName() != null) {
+                            roomTitle += " " + response.getSecondUser().getLastName();
+                        }
                     }
                     roomPicture = response.getSecondUser().getPicture();
                     secondUserId = response.getSecondUser().getId();
