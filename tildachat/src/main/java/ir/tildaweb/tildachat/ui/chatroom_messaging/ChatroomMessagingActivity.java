@@ -349,6 +349,14 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         TildaChatApp.getSocketRequestController().receiver().receiveMessageStore(this, ReceiveMessageStore.class, response -> {
             Log.d(TAG, "setSocketListeners:Store.............:  " + DataParser.toJson(response));
             if (roomId != null && roomId.equals(response.getRoomId()) || (roomId == null && response.getMessage().getUserId().intValue() == userId)) {
+                if (roomId == null) {//first message
+                    roomId = response.getRoomId();
+                    EmitChatroomCheck emitChatroomCheck = new EmitChatroomCheck();
+                    emitChatroomCheck.setRoomId(roomId);
+                    emitChatroomCheck.setType(EmitChatroomCheck.ChatroomCheckType.ROOM_ID);
+                    Log.d(TAG, "onCreate: " + DataParser.toJson(emitChatroomCheck));
+                    TildaChatApp.getSocketRequestController().emitter().emitChatroomCheck(emitChatroomCheck);
+                }
                 if (response.getStatus() == 200) {
                     adapterPrivateChatMessages.addItem(response.getMessage());
                     if (activityChatroomMessagingBinding.noItem.getVisibility() == View.VISIBLE) {
