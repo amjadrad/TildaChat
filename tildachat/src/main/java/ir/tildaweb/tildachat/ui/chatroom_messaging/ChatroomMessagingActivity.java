@@ -686,6 +686,22 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 
     }
 
+    protected void onSelectFileClicked() {
+
+    }
+
+    protected void onSelectPictureClicked() {
+
+    }
+
+    protected void onRecordVoiceClicked() {
+
+    }
+
+    protected void onSendClicked() {
+
+    }
+
     private void requestFilePermission() {
         ActivityResultLauncher<String[]> filePermissionRequest =
                 registerForActivityResult(new ActivityResultContracts
