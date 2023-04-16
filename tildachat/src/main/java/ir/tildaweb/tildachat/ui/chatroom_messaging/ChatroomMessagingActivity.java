@@ -96,6 +96,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     private static final int SWIPE_MAX_OFF_PATH = 250;
     private static final int SWIPE_THRESHOLD_VELOCITY = 200;
     private GestureDetector gestureDetector;
+    private ActivityResultLauncher<String[]> filePermissionRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +110,16 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 
         activityChatroomMessagingBinding = ActivityChatroomMessagingBinding.inflate(getLayoutInflater());
         setContentView(activityChatroomMessagingBinding.getRoot());
+
+        filePermissionRequest =
+                registerForActivityResult(new ActivityResultContracts
+                                .RequestMultiplePermissions(), result -> {
+                            Boolean readPermission = result.get(
+                                    Manifest.permission.READ_EXTERNAL_STORAGE);
+                            Boolean writePermission = result.get(
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                        }
+                );
 
         AXEmojiView emojiView = new AXEmojiView(ChatroomMessagingActivity.this);
         emojiView.setEditText(activityChatroomMessagingBinding.etMessage);
@@ -724,15 +735,6 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     }
 
     protected void requestFileAccessPermission() {
-        ActivityResultLauncher<String[]> filePermissionRequest =
-                registerForActivityResult(new ActivityResultContracts
-                                .RequestMultiplePermissions(), result -> {
-                            Boolean readPermission = result.get(
-                                    Manifest.permission.READ_EXTERNAL_STORAGE);
-                            Boolean writePermission = result.get(
-                                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                        }
-                );
         filePermissionRequest.launch(new String[]{
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
