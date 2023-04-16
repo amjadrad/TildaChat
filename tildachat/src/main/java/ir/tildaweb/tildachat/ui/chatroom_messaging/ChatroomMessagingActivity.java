@@ -2,6 +2,7 @@ package ir.tildaweb.tildachat.ui.chatroom_messaging;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,6 +19,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -573,6 +575,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         if (id == R.id.imageViewBack) {
             onBackPressed();
         } else if (id == R.id.imageViewSend) {
+            onSendClicked();
             String message = activityChatroomMessagingBinding.etMessage.getText().toString();
             emojiPopup.dismiss();
             if (message.length() > 0) {
@@ -611,49 +614,57 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             activityChatroomMessagingBinding.linearJoinChannel.setVisibility(View.GONE);
             join();
         } else if (id == R.id.imageViewImage) {
-            TildaFilePicker tildaFilePicker = new TildaFilePicker(ChatroomMessagingActivity.this, new FileType[]{FileType.FILE_TYPE_IMAGE});
-            tildaFilePicker.setOnTildaFileSelectListener(list -> {
-                for (FileModel model : list) {
-                    Intent intent = new Intent(ChatroomMessagingActivity.this, TildaFileUploaderForegroundService.class);
-                    intent.setAction("chat_uploader");
-                    intent.putExtra("file_path", model.getPath());
-                    intent.putExtra("upload_route", UPLOAD_ROUTE);
-                    intent.putExtra("is_send_to_chatroom", true);
-                    intent.putExtra("chatroom_id", chatroomId);
-                    intent.putExtra("message_type", MessageType.PICTURE.label);
-                    intent.putExtra("room_id", roomId);
-                    intent.putExtra("second_user_id", secondUserId);
-                    intent.putExtra("is_second_user", roomId == null);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        startForegroundService(intent);
-                    } else {
-                        startService(intent);
+            onSelectPictureClicked();
+            if (checkFilePermission()) {
+                TildaFilePicker tildaFilePicker = new TildaFilePicker(ChatroomMessagingActivity.this, new FileType[]{FileType.FILE_TYPE_IMAGE});
+                tildaFilePicker.setOnTildaFileSelectListener(list -> {
+                    for (FileModel model : list) {
+                        Intent intent = new Intent(ChatroomMessagingActivity.this, TildaFileUploaderForegroundService.class);
+                        intent.setAction("chat_uploader");
+                        intent.putExtra("file_path", model.getPath());
+                        intent.putExtra("upload_route", UPLOAD_ROUTE);
+                        intent.putExtra("is_send_to_chatroom", true);
+                        intent.putExtra("chatroom_id", chatroomId);
+                        intent.putExtra("message_type", MessageType.PICTURE.label);
+                        intent.putExtra("room_id", roomId);
+                        intent.putExtra("second_user_id", secondUserId);
+                        intent.putExtra("is_second_user", roomId == null);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            startForegroundService(intent);
+                        } else {
+                            startService(intent);
+                        }
                     }
-                }
-            });
-            tildaFilePicker.show(getSupportFragmentManager());
+                });
+                tildaFilePicker.show(getSupportFragmentManager());
+            }
         } else if (id == R.id.imageViewFile) {
-            TildaFilePicker tildaFilePicker = new TildaFilePicker(ChatroomMessagingActivity.this);
-            tildaFilePicker.setOnTildaFileSelectListener(list -> {
-                for (FileModel model : list) {
-                    Intent intent = new Intent(ChatroomMessagingActivity.this, TildaFileUploaderForegroundService.class);
-                    intent.setAction("chat_uploader");
-                    intent.putExtra("file_path", model.getPath());
-                    intent.putExtra("upload_route", UPLOAD_ROUTE);
-                    intent.putExtra("is_send_to_chatroom", true);
-                    intent.putExtra("chatroom_id", chatroomId);
-                    intent.putExtra("message_type", MessageType.FILE.label);
-                    intent.putExtra("room_id", roomId);
-                    intent.putExtra("second_user_id", secondUserId);
-                    intent.putExtra("is_second_user", roomId == null);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        startForegroundService(intent);
-                    } else {
-                        startService(intent);
+            onSelectFileClicked();
+            if (checkFilePermission()) {
+                TildaFilePicker tildaFilePicker = new TildaFilePicker(ChatroomMessagingActivity.this);
+                tildaFilePicker.setOnTildaFileSelectListener(list -> {
+                    for (FileModel model : list) {
+                        Intent intent = new Intent(ChatroomMessagingActivity.this, TildaFileUploaderForegroundService.class);
+                        intent.setAction("chat_uploader");
+                        intent.putExtra("file_path", model.getPath());
+                        intent.putExtra("upload_route", UPLOAD_ROUTE);
+                        intent.putExtra("is_send_to_chatroom", true);
+                        intent.putExtra("chatroom_id", chatroomId);
+                        intent.putExtra("message_type", MessageType.FILE.label);
+                        intent.putExtra("room_id", roomId);
+                        intent.putExtra("second_user_id", secondUserId);
+                        intent.putExtra("is_second_user", roomId == null);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            startForegroundService(intent);
+                        } else {
+                            startService(intent);
+                        }
                     }
-                }
-            });
-            tildaFilePicker.show(getSupportFragmentManager());
+                });
+                tildaFilePicker.show(getSupportFragmentManager());
+            }
+        } else if (id == R.id.imageViewVoice) {
+            onRecordVoiceClicked();
         } else if (id == R.id.linearChatroomDetails) {
             onChatDetailsClicked();
 //            Intent intent = new Intent(ChatroomMessagingActivity.this, ChatroomDetailsActivity.class);
@@ -702,7 +713,17 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 
     }
 
-    private void requestFilePermission() {
+    protected boolean checkFilePermission() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            requestFileAccessPermission();
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    protected void requestFileAccessPermission() {
         ActivityResultLauncher<String[]> filePermissionRequest =
                 registerForActivityResult(new ActivityResultContracts
                                 .RequestMultiplePermissions(), result -> {
@@ -710,16 +731,11 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                                     Manifest.permission.READ_EXTERNAL_STORAGE);
                             Boolean writePermission = result.get(
                                     Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                            if (readPermission != null && writePermission != null) {
-
-                            } else {
-                                toast("شما اجازه دسترسی به فایل را ندادید.");
-                            }
                         }
                 );
         filePermissionRequest.launch(new String[]{
                 Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
         });
     }
 
