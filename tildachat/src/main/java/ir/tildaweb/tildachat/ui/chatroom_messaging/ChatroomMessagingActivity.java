@@ -221,7 +221,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         TildaChatApp.getSocketRequestController().emitter().emitChatroomJoin(emitChatroomJoin);
     }
 
-    private void setSocketListeners() {
+    protected void setSocketListeners() {
         TildaChatApp.getSocketRequestController().receiver().receiveChatroomCheck(ChatroomMessagingActivity.this, ReceiveChatroomCheck.class, response -> {
             Log.d(TAG, "setSocketListeners: CheckChatroom: " + DataParser.toJson(response));
             if (response.getChatroom() != null) {

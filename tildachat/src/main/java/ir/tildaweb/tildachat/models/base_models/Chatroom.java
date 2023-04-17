@@ -22,6 +22,26 @@ public class Chatroom {
     private Integer membersCount;
     @SerializedName("second_user")
     private User secondUser;
+    @SerializedName("room_username")
+    private String roomUsername;
+    @SerializedName("description")
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getRoomUsername() {
+        return roomUsername;
+    }
+
+    public void setRoomUsername(String roomUsername) {
+        this.roomUsername = roomUsername;
+    }
 
     public User getSecondUser() {
         return secondUser;
