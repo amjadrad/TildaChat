@@ -283,9 +283,14 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                     secondUserId = response.getSecondUser().getId();
                     chatroomId = response.getChatroom().getId();
                     roomId = response.getChatroom().getRoomId();
-                    activityChatroomMessagingBinding.linearChatBox.setVisibility(View.VISIBLE);
                     setChatroomInfo();
                     join();
+                    if (response.getBlocked()) {
+                        activityChatroomMessagingBinding.tvUserStatus.setText("آخرین بازدید، خیلی وقت پیش");
+                        activityChatroomMessagingBinding.linearChatBox.setVisibility(View.GONE);
+                    } else {
+                        activityChatroomMessagingBinding.linearChatBox.setVisibility(View.VISIBLE);
+                    }
                     break;
                 }
                 case 122: {
@@ -305,8 +310,13 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                     roomType = "private";
                     chatroomId = null;
                     roomId = null;
-                    activityChatroomMessagingBinding.linearChatBox.setVisibility(View.VISIBLE);
                     setChatroomInfo();
+                    if (response.getBlocked()) {
+                        activityChatroomMessagingBinding.tvUserStatus.setText("آخرین بازدید، خیلی وقت پیش");
+                        activityChatroomMessagingBinding.linearChatBox.setVisibility(View.GONE);
+                    } else {
+                        activityChatroomMessagingBinding.linearChatBox.setVisibility(View.VISIBLE);
+                    }
                     break;
                 }
                 case 123: {
@@ -684,7 +694,9 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         } else if (id == R.id.imageViewVoice) {
             onRecordVoiceClicked();
         } else if (id == R.id.linearChatroomDetails) {
-            onChatDetailsClicked();
+            if (!receiveChatroomCheck.getBlocked()) {
+                onChatDetailsClicked();
+            }
 //            Intent intent = new Intent(ChatroomMessagingActivity.this, ChatroomDetailsActivity.class);
 //            intent.putExtra("room_id", chatroomId);
 //            intent.putExtra("room_name", roomId);
