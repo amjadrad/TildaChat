@@ -1,11 +1,9 @@
 package ir.tildaweb.tildachat.app.request;
 
-import android.util.Log;
-
 import ir.tildaweb.tildachat.app.DataParser;
-import ir.tildaweb.tildachat.app.request.interfaces.SocketEmitInterface;
 import ir.tildaweb.tildachat.app.SocketEndpoints;
 import ir.tildaweb.tildachat.app.TildaChatApp;
+import ir.tildaweb.tildachat.app.request.interfaces.SocketEmitInterface;
 import ir.tildaweb.tildachat.models.base_models.BaseModel;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomCheck;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomJoin;
@@ -17,6 +15,7 @@ import ir.tildaweb.tildachat.models.connection_models.emits.EmitMessageDelete;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitMessageSeen;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitMessageStore;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitMessageUpdate;
+import ir.tildaweb.tildachat.models.connection_models.emits.EmitUserBlock;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitUserChatrooms;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitUserOnlineStatus;
 
@@ -90,6 +89,11 @@ public class Emitter implements SocketEmitInterface {
     @Override
     public void emitUserOnlineStatus(EmitUserOnlineStatus emit) {
         TildaChatApp.getSocket().emit(SocketEndpoints.TAG_EMIT_USER_ONLINE_STATUS, DataParser.toJson(emit));
+    }
+
+    @Override
+    public void emitUserBlock(EmitUserBlock emit) {
+        TildaChatApp.getSocket().emit(SocketEndpoints.TAG_RECEIVE_MESSAGE_DELETE, emit);
     }
 
 

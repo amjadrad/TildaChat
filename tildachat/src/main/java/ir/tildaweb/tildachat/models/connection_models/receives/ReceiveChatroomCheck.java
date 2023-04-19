@@ -24,6 +24,16 @@ public class ReceiveChatroomCheck {
     private Boolean isJoin;
     @SerializedName("is_admin")
     private Boolean isAdmin;
+    @SerializedName("is_blocked")
+    private Boolean isBlocked;
+
+    public Boolean getBlocked() {
+        return isBlocked;
+    }
+
+    public void setBlocked(Boolean blocked) {
+        isBlocked = blocked;
+    }
 
     public Boolean getJoin() {
         return isJoin;

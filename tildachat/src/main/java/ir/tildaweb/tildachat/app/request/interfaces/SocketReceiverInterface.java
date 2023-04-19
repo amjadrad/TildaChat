@@ -45,4 +45,6 @@ public interface SocketReceiverInterface {
 
     <T> void receiveUserOnlineStatus(@Nullable Activity activityForRunOnUI, Class<T> receiveModel, OnReceiveListener<T> onReceiveListener);
 
+    <T> void receiveUserBlock(@Nullable Activity activityForRunOnUI, Class<T> receiveModel, OnReceiveListener<T> onReceiveListener);
+
 }
