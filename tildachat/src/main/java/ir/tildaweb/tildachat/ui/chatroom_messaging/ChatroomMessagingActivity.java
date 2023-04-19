@@ -89,6 +89,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     private Integer searchMessageId;
     private boolean isWorkWithFullname = false;
     private Chatroom chatroom;
+    private ReceiveChatroomCheck receiveChatroomCheck;
     //Image File
     private int PICK_IMAGE_PERMISSION_CODE = 1001;
     private int PICK_FILE_PERMISSION_CODE = 1003;
@@ -227,6 +228,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     protected void setSocketListeners() {
         TildaChatApp.getSocketRequestController().receiver().receiveChatroomCheck(ChatroomMessagingActivity.this, ReceiveChatroomCheck.class, response -> {
             Log.d(TAG, "setSocketListeners: CheckChatroom: " + DataParser.toJson(response));
+            receiveChatroomCheck = response;
             if (response.getChatroom() != null) {
                 chatroom = response.getChatroom();
                 if (response.getChatroom().getType().equals("channel")) {
@@ -738,6 +740,10 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 
     protected Chatroom getChatroom() {
         return chatroom;
+    }
+
+    protected ReceiveChatroomCheck getChatroomCheckResponse() {
+        return receiveChatroomCheck;
     }
 
     protected boolean checkFilePermission() {

@@ -234,7 +234,7 @@ public class Receiver implements SocketReceiverInterface {
 
     @Override
     public <T> void receiveUserBlock(@Nullable Activity activityForRunOnUI, Class<T> receiveModel, OnReceiveListener<T> onReceiveListener) {
-        TildaChatApp.getSocket().on(SocketEndpoints.TAG_RECEIVE_USER_ONLINE_STATUS, args -> {
+        TildaChatApp.getSocket().on(SocketEndpoints.TAG_RECEIVE_USER_BLOCK, args -> {
             Log.d(TAG, "receiveUserBlock: " + args[0]);
             T t = (T) DataParser.fromJson(String.valueOf(args[0]), receiveModel);
             if (activityForRunOnUI != null) {

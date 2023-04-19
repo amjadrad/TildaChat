@@ -20,6 +20,7 @@ public class SocketEndpoints {
     public static final String TAG_EMIT_MESSAGE_UPDATE = "emit_message_update";
     public static final String TAG_EMIT_MESSAGE_DELETE = "emit_message_delete";
     public static final String TAG_EMIT_MESSAGE_SEEN = "emit_message_seen";
+    public static final String TAG_EMIT_USER_BLOCK = "emit_user_block";
 
     /*
         Listeners
@@ -44,6 +45,8 @@ public class SocketEndpoints {
     public static final String TAG_RECEIVE_MESSAGE_UPDATE = "receive_message_update";
     public static final String TAG_RECEIVE_MESSAGE_DELETE = "receive_message_delete";
     public static final String TAG_RECEIVE_MESSAGE_SEEN = "receive_message_seen";
+    //More
+    public static final String TAG_RECEIVE_USER_BLOCK = "receive_user_block";
 
 
 }
