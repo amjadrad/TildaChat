@@ -289,7 +289,7 @@
         android:orientation="vertical"
         android:visibility="gone">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvJoinChannel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -310,7 +310,7 @@
         android:layout_gravity="center"
         android:visibility="gone">
 
-        <LinearLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -318,8 +318,7 @@
             android:background="@drawable/bg_primary_rounded_default"
             android:orientation="vertical">
 
-
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_16sdp"
@@ -328,7 +327,7 @@
                 android:padding="@dimen/_10sdp"
                 android:text="@string/chatroom_privacy_note"
                 android:textColor="@color/colorWhite" />
-        </LinearLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="@dimen/_32sdp"

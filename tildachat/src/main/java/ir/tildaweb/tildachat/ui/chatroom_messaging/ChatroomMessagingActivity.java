@@ -43,6 +43,7 @@ import ir.tildaweb.tildachat.enums.ChatroomType;
 import ir.tildaweb.tildachat.enums.MessageType;
 import ir.tildaweb.tildachat.interfaces.IChatUtils;
 import ir.tildaweb.tildachat.interfaces.LoadMoreData;
+import ir.tildaweb.tildachat.models.base_models.Chatroom;
 import ir.tildaweb.tildachat.models.base_models.Message;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomCheck;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomJoin;
@@ -87,9 +88,11 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     private boolean isSearchForReply = false;
     private Integer searchMessageId;
     private boolean isWorkWithFullname = false;
+    private Chatroom chatroom;
     //Image File
     private int PICK_IMAGE_PERMISSION_CODE = 1001;
     private int PICK_FILE_PERMISSION_CODE = 1003;
+
 
     //Swipe to finish
     private static final int SWIPE_MIN_DISTANCE = 120;
@@ -225,6 +228,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         TildaChatApp.getSocketRequestController().receiver().receiveChatroomCheck(ChatroomMessagingActivity.this, ReceiveChatroomCheck.class, response -> {
             Log.d(TAG, "setSocketListeners: CheckChatroom: " + DataParser.toJson(response));
             if (response.getChatroom() != null) {
+                chatroom = response.getChatroom();
                 if (response.getChatroom().getType().equals("channel")) {
                     adapterPrivateChatMessages.setRoomType(ChatroomType.CHANNEL);
                     if (response.getAdmin() != null) {
@@ -274,6 +278,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                     }
                     roomPicture = response.getSecondUser().getPicture();
                     roomType = "private";
+                    secondUserId = response.getSecondUser().getId();
                     chatroomId = response.getChatroom().getId();
                     roomId = response.getChatroom().getRoomId();
                     activityChatroomMessagingBinding.linearChatBox.setVisibility(View.VISIBLE);
@@ -722,6 +727,17 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 
     protected void onSendClicked() {
 
+    }
+
+    protected Integer getChatroomSecondUserId() {
+        if (roomType.equals("private")) {
+            return secondUserId;
+        }
+        return null;
+    }
+
+    protected Chatroom getChatroom() {
+        return chatroom;
     }
 
     protected boolean checkFilePermission() {
