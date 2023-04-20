@@ -18,7 +18,11 @@ public class TildaChatApp {
     private static Socket socket;
     private static Integer mUserId;
     private static SocketRequestController socketRequestController;
-//    private static PublishSubject<String> publishSubject;
+    //    private static PublishSubject<String> publishSubject;
+    public static String _FILE_URL;
+    public static String _downloadFolder = "tilda";
+    public static String _uploadRoute;
+    public static boolean _isTime48 = false;
 
     public static void setUpEmojis(Context context) {
         AXEmojiManager.install(context, new AXAppleEmojiProvider(context));
@@ -39,6 +43,19 @@ public class TildaChatApp {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    public static void setConstantsUp(String FILE_URL, String downloadFolder, String uploadRoute) {
+        _FILE_URL = FILE_URL;
+        _downloadFolder = downloadFolder;
+        _uploadRoute = uploadRoute;
+    }
+
+    public static void setConstantsUp(String FILE_URL, String downloadFolder, String uploadRoute, boolean isTime48) {
+        _FILE_URL = FILE_URL;
+        _downloadFolder = downloadFolder;
+        _uploadRoute = uploadRoute;
+        _isTime48 = isTime48;
     }
 
 

@@ -35,6 +35,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import ir.tildaweb.tildachat.R;
+import ir.tildaweb.tildachat.app.TildaChatApp;
 import ir.tildaweb.tildachat.dialogs.DialogShowPicture;
 import ir.tildaweb.tildachat.enums.ChatroomType;
 import ir.tildaweb.tildachat.interfaces.IChatUtils;
@@ -769,11 +770,11 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 }
                 if (chatMessage.getSeenCount() != 0) {
                     holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
@@ -820,11 +821,11 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 }
                 if (chatMessage.getSeenCount() != 0) {
                     holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
@@ -870,11 +871,11 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 }
 
                 holder.itemView.setOnClickListener(view -> {
@@ -909,11 +910,11 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 }
                 holder.itemView.setOnClickListener(view -> {
                     PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
@@ -954,11 +955,11 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 }
 
                 String name = "";
@@ -1025,11 +1026,11 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 }
                 if (chatMessage.getSeenCount() != 0) {
                     holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
@@ -1101,11 +1102,11 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 }
                 if (chatMessage.getSeenCount() != 0) {
                     holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
@@ -1176,11 +1177,11 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 }
 
                 holder.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
@@ -1245,11 +1246,11 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 }
 
                 String name = "";
@@ -1291,7 +1292,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 final ChatHolder_Picture_ReplyFalse_Me_Private holder = (ChatHolder_Picture_ReplyFalse_Me_Private) viewHolder;
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                holder.tvTime.setText(getTime(dateObject));
 
                 if (chatMessage.getSeenCount() != 0) {
                     holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
@@ -1328,7 +1329,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 final ChatHolder_Picture_ReplyFalse_Me_Group holder = (ChatHolder_Picture_ReplyFalse_Me_Group) viewHolder;
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                holder.tvTime.setText(getTime(dateObject));
 
                 if (chatMessage.getSeenCount() != 0) {
                     holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
@@ -1366,7 +1367,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 final ChatHolder_Picture_ReplyFalse_Other_Private holder = (ChatHolder_Picture_ReplyFalse_Other_Private) viewHolder;
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                holder.tvTime.setText(getTime(dateObject));
 
 
                 holder.itemView.setOnClickListener(view -> {
@@ -1399,7 +1400,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 final ChatHolder_Picture_ReplyFalse_Other_Private holder = (ChatHolder_Picture_ReplyFalse_Other_Private) viewHolder;
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                holder.tvTime.setText(getTime(dateObject));
                 holder.itemView.setOnClickListener(view -> {
                     if (isAdmin) {
                         PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
@@ -1428,7 +1429,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 final ChatHolder_Picture_ReplyFalse_Other_Group holder = (ChatHolder_Picture_ReplyFalse_Other_Group) viewHolder;
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                holder.tvTime.setText(getTime(dateObject));
 
                 String name = "";
                 if (chatMessage.getUser().getFirstName() != null) {
@@ -1474,7 +1475,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 final ChatHolder_Picture_ReplyTrue_Me_Private holder = (ChatHolder_Picture_ReplyTrue_Me_Private) viewHolder;
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                holder.tvTime.setText(getTime(dateObject));
 
                 if (chatMessage.getSeenCount() != 0) {
                     holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
@@ -1540,7 +1541,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 final ChatHolder_Picture_ReplyTrue_Me_Group holder = (ChatHolder_Picture_ReplyTrue_Me_Group) viewHolder;
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                holder.tvTime.setText(getTime(dateObject));
 
                 if (chatMessage.getSeenCount() != 0) {
                     holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
@@ -1604,7 +1605,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 final ChatHolder_Picture_ReplyTrue_Other_Private holder = (ChatHolder_Picture_ReplyTrue_Other_Private) viewHolder;
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                holder.tvTime.setText(getTime(dateObject));
 
                 switch (chatMessage.getReply().getMessageType()) {
                     case "text":
@@ -1663,7 +1664,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 final ChatHolder_Picture_ReplyTrue_Other_Group holder = (ChatHolder_Picture_ReplyTrue_Other_Group) viewHolder;
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                holder.tvTime.setText(getTime(dateObject));
                 switch (chatMessage.getReply().getMessageType()) {
                     case "text":
                         holder.tvReply.setVisibility(View.VISIBLE);
@@ -1736,11 +1737,11 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 }
                 if (chatMessage.getSeenCount() != 0) {
                     holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
@@ -1795,11 +1796,11 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 }
                 if (chatMessage.getSeenCount() != 0) {
                     holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
@@ -1850,11 +1851,11 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 }
 
                 if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
@@ -1901,11 +1902,11 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 }
                 if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                     holder.coordinatorDownloadedFile.setVisibility(View.GONE);
@@ -1966,11 +1967,11 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 }
 
                 String name = "";
@@ -2053,11 +2054,11 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 }
                 if (chatMessage.getSeenCount() != 0) {
                     holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
@@ -2134,11 +2135,11 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 }
                 if (chatMessage.getSeenCount() != 0) {
                     holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
@@ -2213,11 +2214,11 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 }
 
                 holder.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
@@ -2287,11 +2288,11 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute));
+                    holder.tvTime.setText(getTime(dateObject));
                 }
 
                 holder.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
@@ -2389,6 +2390,13 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         }
     }
 
+    public String getTime(DateUtils.DateObject dateObject) {
+        if (TildaChatApp._isTime48) {
+            return getTime(dateObject);
+        } else {
+            return DateUtils.getTimeWithZero(dateObject.hour, dateObject.minute);
+        }
+    }
 
     public void addItems(int page, List<Message> input) {
         for (Message chatMessage : input) {

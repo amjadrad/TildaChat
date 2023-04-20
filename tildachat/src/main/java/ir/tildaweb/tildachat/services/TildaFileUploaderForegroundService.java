@@ -23,18 +23,14 @@ import androidx.core.app.NotificationCompat;
 
 import com.google.gson.annotations.SerializedName;
 
-import org.apache.http.NameValuePair;
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -44,7 +40,6 @@ import java.util.Random;
 import ir.tildaweb.tildachat.R;
 import ir.tildaweb.tildachat.app.DataParser;
 import ir.tildaweb.tildachat.app.TildaChatApp;
-import ir.tildaweb.tildachat.enums.MessageType;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitMessageStore;
 
 public class TildaFileUploaderForegroundService extends Service {
@@ -98,7 +93,7 @@ public class TildaFileUploaderForegroundService extends Service {
         }
 
         String filePath = intent.getStringExtra("file_path");
-        String uploadRoute = intent.getStringExtra("upload_route");
+        String uploadRoute = TildaChatApp._uploadRoute;
 
         channel = "TildaChatChannel_" + new Random().nextInt(100);
         notificationId = new Random().nextInt(1000);
@@ -339,22 +334,6 @@ public class TildaFileUploaderForegroundService extends Service {
             explicit.setComponent(cn);
             context.sendBroadcast(explicit);
         }
-    }
-
-    private String getQuery(List<NameValuePair> params) throws UnsupportedEncodingException {
-        StringBuilder result = new StringBuilder();
-        boolean first = true;
-        for (NameValuePair pair : params) {
-            if (first)
-                first = false;
-            else
-                result.append("&");
-
-            result.append(URLEncoder.encode(pair.getName(), "UTF-8"));
-            result.append("=");
-            result.append(URLEncoder.encode(pair.getValue(), "UTF-8"));
-        }
-        return result.toString();
     }
 
     private void sendToChatroom() {

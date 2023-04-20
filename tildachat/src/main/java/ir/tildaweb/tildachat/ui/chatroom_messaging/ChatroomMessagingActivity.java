@@ -70,7 +70,6 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     private String roomId;
     private String username;
     private static String FILE_URL;
-    private static String UPLOAD_ROUTE;
     private AXEmojiPopup emojiPopup;
 
     private Boolean isAdmin = false;
@@ -130,8 +129,11 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         emojiPopup = new AXEmojiPopup(emojiView);
         //Get intent info
         userId = getIntent().getIntExtra("user_id", -1);
-        FILE_URL = getIntent().getStringExtra("file_url");
-        UPLOAD_ROUTE = getIntent().getStringExtra("upload_route");
+        if (TildaChatApp._FILE_URL != null && TildaChatApp._FILE_URL.length() > 0) {
+            FILE_URL = TildaChatApp._FILE_URL;
+        } else {
+            FILE_URL = getIntent().getStringExtra("file_url");
+        }
         if (getIntent().hasExtra("room_id")) {
             roomId = getIntent().getExtras().getString("room_id");
         }
@@ -468,7 +470,6 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 //                    Intent intent = new Intent(ChatroomMessagingActivity.this, TildaFileUploaderForegroundService.class);
 //                    intent.setAction("chat_uploader");
 //                    intent.putExtra("file_path", resultUri.getPath());
-//                    intent.putExtra("upload_route", UPLOAD_ROUTE);
 //                    intent.putExtra("is_send_to_chatroom", true);
 //                    intent.putExtra("chatroom_id", chatroomId);
 //                    intent.putExtra("file_type", MessageType.PICTURE);
@@ -645,12 +646,12 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             onSelectPictureClicked();
             if (checkFilePermission()) {
                 TildaFilePicker tildaFilePicker = new TildaFilePicker(ChatroomMessagingActivity.this, new FileType[]{FileType.FILE_TYPE_IMAGE});
+                tildaFilePicker.setSingleChoice();
                 tildaFilePicker.setOnTildaFileSelectListener(list -> {
                     for (FileModel model : list) {
                         Intent intent = new Intent(ChatroomMessagingActivity.this, TildaFileUploaderForegroundService.class);
                         intent.setAction("chat_uploader");
                         intent.putExtra("file_path", model.getPath());
-                        intent.putExtra("upload_route", UPLOAD_ROUTE);
                         intent.putExtra("is_send_to_chatroom", true);
                         intent.putExtra("chatroom_id", chatroomId);
                         intent.putExtra("message_type", MessageType.PICTURE.label);
@@ -670,12 +671,12 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             onSelectFileClicked();
             if (checkFilePermission()) {
                 TildaFilePicker tildaFilePicker = new TildaFilePicker(ChatroomMessagingActivity.this);
+                tildaFilePicker.setSingleChoice();
                 tildaFilePicker.setOnTildaFileSelectListener(list -> {
                     for (FileModel model : list) {
                         Intent intent = new Intent(ChatroomMessagingActivity.this, TildaFileUploaderForegroundService.class);
                         intent.setAction("chat_uploader");
                         intent.putExtra("file_path", model.getPath());
-                        intent.putExtra("upload_route", UPLOAD_ROUTE);
                         intent.putExtra("is_send_to_chatroom", true);
                         intent.putExtra("chatroom_id", chatroomId);
                         intent.putExtra("message_type", MessageType.FILE.label);

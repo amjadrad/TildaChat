@@ -18,10 +18,12 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
+import ir.tildaweb.tildachat.app.TildaChatApp;
+
 public class FileDownloader extends AsyncTask<Object, String, String> {
 
     private static final String TAG = "FileDownloader";
-//    private ProgressDialog pd;
+    //    private ProgressDialog pd;
     private String pathFile = "";
     private Context context;
     private OnFileDownloadListener onFileDownloadListener;
@@ -65,10 +67,10 @@ public class FileDownloader extends AsyncTask<Object, String, String> {
             String folderPathToCreate = "";
             String pathFolder = "";
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                pathFolder = context.getExternalFilesDir(null) + "/nazmenovin/";
+                pathFolder = context.getExternalFilesDir(null) + "/" + TildaChatApp._downloadFolder + "/";
                 folderPathToCreate = pathFolder + fileUrlDirectory;
             } else {
-                pathFolder = Environment.getExternalStorageDirectory() + "/nazmenovin/";
+                pathFolder = Environment.getExternalStorageDirectory() + "/" + TildaChatApp._downloadFolder + "/";
                 folderPathToCreate = pathFolder + fileUrlDirectory;
             }
             pathFile = pathFolder + "/" + filename;
@@ -136,9 +138,9 @@ public class FileDownloader extends AsyncTask<Object, String, String> {
     public static void openFile(Context context, String pathFile) {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                pathFile = context.getExternalFilesDir(null) + "/nazmenovin/" + pathFile;
+                pathFile = context.getExternalFilesDir(null) +  "/"+ TildaChatApp._downloadFolder +"/" + pathFile;
             } else {
-                pathFile = Environment.getExternalStorageDirectory() + "/nazmenovin/" + pathFile;
+                pathFile = Environment.getExternalStorageDirectory() +  "/"+TildaChatApp._downloadFolder+"/" + pathFile;
             }
             File file = new File(pathFile);
             Log.d(TAG, "openFile: " + pathFile);

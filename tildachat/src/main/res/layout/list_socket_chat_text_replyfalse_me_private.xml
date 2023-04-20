@@ -23,7 +23,7 @@
             android:background="@drawable/chat_bubble_send_me"
             android:orientation="vertical">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -56,14 +56,14 @@
                     android:tint="@color/colorWhite" />
 
                 <Space
-                    android:layout_width="@dimen/_8sdp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 
             </LinearLayout>
         </LinearLayout>
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
