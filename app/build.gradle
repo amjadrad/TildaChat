@@ -8,7 +8,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 33
         versionCode 1
-        versionName "0.6.8"
+        versionName "0.6.9"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -22,10 +22,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField("String", "CHAT_URL", "\"https://chat.nazmenovin.com\"")
+//            buildConfigField("String", "CHAT_URL", "\"https://chat.nazmenovin.com\"")
         }
         debug {
-            buildConfigField("String", "CHAT_URL", "\"https://chat.nazmenovin.com\"")
+//            buildConfigField("String", "CHAT_URL", "\"https://chat.nazmenovin.com\"")
         }
     }
     compileOptions {

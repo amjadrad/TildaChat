@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">nazmenovin.ir</domain>
-        <domain includeSubdomains="true">http://nazmenovin.ir</domain>
-        <domain includeSubdomains="true">https://nazmenovin.ir</domain>
-        <domain includeSubdomains="true">tildachat.nazmenovin.ir</domain>
-        <domain includeSubdomains="true">http://tildachat.nazmenovin.ir</domain>
-        <domain includeSubdomains="true">https://tildachat.nazmenovin.ir</domain>
-        <domain includeSubdomains="true">tildachat.nazmenovin.ir:1756</domain>
-        <domain includeSubdomains="true">http://tildachat.nazmenovin.ir:1756</domain>
-        <domain includeSubdomains="true">https://tildachat.nazmenovin.ir:1756</domain>
+        <domain includeSubdomains="true">nazmenovin.com</domain>
     </domain-config>
 </network-security-config>

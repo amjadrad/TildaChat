@@ -12,6 +12,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 
+import ir.tildaweb.tildachat.app.TildaChatApp;
+
 public class FileUtils {
 
     private static final String TAG = "FileUtils";
@@ -43,9 +45,9 @@ public class FileUtils {
     public static boolean isChatFileExists(Context context, String filename) {
         String pathFolder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            pathFolder = context.getExternalFilesDir(null) + "/nazmenovin/";
+            pathFolder = context.getExternalFilesDir(null) + "/" + TildaChatApp._downloadFolder + "/";
         } else {
-            pathFolder = Environment.getExternalStorageDirectory() + "/nazmenovin/";
+            pathFolder = Environment.getExternalStorageDirectory() + "/" + TildaChatApp._downloadFolder + "/";
         }
         String pathFile = pathFolder + filename;
         Log.d(TAG, "isChatFileExists: " + pathFile);
