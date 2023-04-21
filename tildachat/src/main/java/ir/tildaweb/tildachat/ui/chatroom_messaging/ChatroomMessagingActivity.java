@@ -292,16 +292,14 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                     join();
                     if (response.getAmIBlocked()) {
                         binding.tvUserStatus.setText("آخرین بازدید، خیلی وقت پیش");
-                        binding.linearChatBox.setVisibility(View.GONE);
-                    } else {
-                        binding.linearChatBox.setVisibility(View.VISIBLE);
                     }
                     if (response.getItBlocked()) {
                         binding.linearUnBlock.setVisibility(View.VISIBLE);
-                        binding.linearChatBox.setVisibility(View.GONE);
                     } else {
-                        binding.linearChatBox.setVisibility(View.VISIBLE);
                         binding.linearUnBlock.setVisibility(View.GONE);
+                    }
+                    if (response.getItBlocked() || response.getAmIBlocked()) {
+                        binding.linearChatBox.setVisibility(View.GONE);
                     }
                     break;
                 }
