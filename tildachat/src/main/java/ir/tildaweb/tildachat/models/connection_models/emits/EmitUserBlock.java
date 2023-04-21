@@ -8,6 +8,16 @@ public class EmitUserBlock {
     private Integer userId;
     @SerializedName("blocked_user_id")
     private Integer blockedUserId;
+    @SerializedName("room_id")
+    private String roomId;
+
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
+    }
 
     public Integer getBlockedUserId() {
         return blockedUserId;

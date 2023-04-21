@@ -751,6 +751,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         } else if (id == binding.linearUnBlock.getId()) {
             EmitUserBlock emitUserBlock = new EmitUserBlock();
             emitUserBlock.setUserId(userId);
+            emitUserBlock.setRoomId(roomId);
             emitUserBlock.setBlockedUserId(getChatroomSecondUserId());
             Log.d(TAG, "onClick: " + DataParser.toJson(emitUserBlock));
             TildaChatApp.getSocketRequestController().emitter().emitUserBlock(emitUserBlock);
