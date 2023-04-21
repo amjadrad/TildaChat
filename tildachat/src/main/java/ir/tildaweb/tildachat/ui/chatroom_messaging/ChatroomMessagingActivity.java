@@ -52,6 +52,7 @@ import ir.tildaweb.tildachat.models.connection_models.emits.EmitMessageDelete;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitMessageSeen;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitMessageStore;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitMessageUpdate;
+import ir.tildaweb.tildachat.models.connection_models.emits.EmitUserBlock;
 import ir.tildaweb.tildachat.models.connection_models.receives.ReceiveChatroomCheck;
 import ir.tildaweb.tildachat.models.connection_models.receives.ReceiveChatroomJoin;
 import ir.tildaweb.tildachat.models.connection_models.receives.ReceiveChatroomMessages;
@@ -59,13 +60,14 @@ import ir.tildaweb.tildachat.models.connection_models.receives.ReceiveMessageDel
 import ir.tildaweb.tildachat.models.connection_models.receives.ReceiveMessageSeen;
 import ir.tildaweb.tildachat.models.connection_models.receives.ReceiveMessageStore;
 import ir.tildaweb.tildachat.models.connection_models.receives.ReceiveMessageUpdate;
+import ir.tildaweb.tildachat.models.connection_models.receives.ReceiveUserBlock;
 import ir.tildaweb.tildachat.services.TildaFileUploaderForegroundService;
 import ir.tildaweb.tildachat.utils.MathUtils;
 
 public class ChatroomMessagingActivity extends AppCompatActivity implements View.OnClickListener, LoadMoreData, IChatUtils {
 
     private String TAG = this.getClass().getName();
-    private ActivityChatroomMessagingBinding activityChatroomMessagingBinding;
+    private ActivityChatroomMessagingBinding binding;
     private Integer userId;
     private String roomId;
     private String username;
@@ -111,8 +113,8 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         }
         gestureDetector = new GestureDetector(new SwipeDetector());
 
-        activityChatroomMessagingBinding = ActivityChatroomMessagingBinding.inflate(getLayoutInflater());
-        setContentView(activityChatroomMessagingBinding.getRoot());
+        binding = ActivityChatroomMessagingBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         filePermissionRequest =
                 registerForActivityResult(new ActivityResultContracts
@@ -125,7 +127,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                 );
 
         AXEmojiView emojiView = new AXEmojiView(ChatroomMessagingActivity.this);
-        emojiView.setEditText(activityChatroomMessagingBinding.etMessage);
+        emojiView.setEditText(binding.etMessage);
         emojiPopup = new AXEmojiPopup(emojiView);
         //Get intent info
         userId = getIntent().getIntExtra("user_id", -1);
@@ -147,24 +149,25 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         Log.d(TAG, "onCreate: " + roomId);
         Log.d(TAG, "onCreate: " + username);
 
-        activityChatroomMessagingBinding.imageViewMenu.setOnClickListener(this);
+        binding.imageViewMenu.setOnClickListener(this);
 
-        activityChatroomMessagingBinding.etMessage.setOnClickListener(this);
-        activityChatroomMessagingBinding.imageViewEmoji.setOnClickListener(this);
-        activityChatroomMessagingBinding.imageViewBack.setOnClickListener(this);
-        activityChatroomMessagingBinding.imageViewReplyClose.setOnClickListener(this);
-        activityChatroomMessagingBinding.imageViewUpdateClose.setOnClickListener(this);
-        activityChatroomMessagingBinding.linearChatroomDetails.setOnClickListener(this);
-        activityChatroomMessagingBinding.tvJoinChannel.setOnClickListener(this);
-        activityChatroomMessagingBinding.imageViewSend.setOnClickListener(this);
-        activityChatroomMessagingBinding.imageViewImage.setOnClickListener(this);
-        activityChatroomMessagingBinding.imageViewFile.setOnClickListener(this);
+        binding.etMessage.setOnClickListener(this);
+        binding.imageViewEmoji.setOnClickListener(this);
+        binding.imageViewBack.setOnClickListener(this);
+        binding.imageViewReplyClose.setOnClickListener(this);
+        binding.imageViewUpdateClose.setOnClickListener(this);
+        binding.linearChatroomDetails.setOnClickListener(this);
+        binding.tvJoinChannel.setOnClickListener(this);
+        binding.imageViewSend.setOnClickListener(this);
+        binding.imageViewImage.setOnClickListener(this);
+        binding.imageViewFile.setOnClickListener(this);
+        binding.linearUnBlock.setOnClickListener(this);
 
-        activityChatroomMessagingBinding.recyclerViewMessages.setLayoutManager(new LinearLayoutManager(this));
-        adapterPrivateChatMessages = new AdapterPrivateChatMessages(getApplicationContext(), ChatroomMessagingActivity.this, userId, FILE_URL, activityChatroomMessagingBinding.recyclerViewMessages, new ArrayList<>(), this, this);
-        activityChatroomMessagingBinding.recyclerViewMessages.setAdapter(adapterPrivateChatMessages);
+        binding.recyclerViewMessages.setLayoutManager(new LinearLayoutManager(this));
+        adapterPrivateChatMessages = new AdapterPrivateChatMessages(getApplicationContext(), ChatroomMessagingActivity.this, userId, FILE_URL, binding.recyclerViewMessages, new ArrayList<>(), this, this);
+        binding.recyclerViewMessages.setAdapter(adapterPrivateChatMessages);
 
-        activityChatroomMessagingBinding.etMessage.addTextChangedListener(new TextWatcher() {
+        binding.etMessage.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -173,15 +176,15 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.length() > 0) {
-                    activityChatroomMessagingBinding.imageViewFile.setVisibility(View.GONE);
-                    activityChatroomMessagingBinding.imageViewVoice.setVisibility(View.GONE);
-                    activityChatroomMessagingBinding.imageViewImage.setVisibility(View.GONE);
-                    activityChatroomMessagingBinding.imageViewSend.setVisibility(View.VISIBLE);
+                    binding.imageViewFile.setVisibility(View.GONE);
+                    binding.imageViewVoice.setVisibility(View.GONE);
+                    binding.imageViewImage.setVisibility(View.GONE);
+                    binding.imageViewSend.setVisibility(View.VISIBLE);
                 } else {
-                    activityChatroomMessagingBinding.imageViewFile.setVisibility(View.VISIBLE);
-                    activityChatroomMessagingBinding.imageViewVoice.setVisibility(View.VISIBLE);
-                    activityChatroomMessagingBinding.imageViewImage.setVisibility(View.VISIBLE);
-                    activityChatroomMessagingBinding.imageViewSend.setVisibility(View.GONE);
+                    binding.imageViewFile.setVisibility(View.VISIBLE);
+                    binding.imageViewVoice.setVisibility(View.VISIBLE);
+                    binding.imageViewImage.setVisibility(View.VISIBLE);
+                    binding.imageViewSend.setVisibility(View.GONE);
                 }
             }
 
@@ -205,18 +208,18 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     }
 
     private void setChatroomInfo() {
-        activityChatroomMessagingBinding.tvUserName.setText(String.valueOf(roomTitle));
+        binding.tvUserName.setText(String.valueOf(roomTitle));
         if (roomPicture != null) {
-            Glide.with(getApplicationContext()).load(FILE_URL + roomPicture).into(activityChatroomMessagingBinding.imageViewProfilePicture);
+            Glide.with(getApplicationContext()).load(FILE_URL + roomPicture).into(binding.imageViewProfilePicture);
         }
         if (roomType.equals("channel")) {
             if (isAdmin != null && isAdmin) {
                 Log.d(TAG, "setSocketListeners: is admin, show chat box");
-                activityChatroomMessagingBinding.linearChatBox.setVisibility(View.VISIBLE);
+                binding.linearChatBox.setVisibility(View.VISIBLE);
             } else {
-                activityChatroomMessagingBinding.linearChatBox.setVisibility(View.GONE);
+                binding.linearChatBox.setVisibility(View.GONE);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                activityChatroomMessagingBinding.recyclerViewMessages.setLayoutParams(layoutParams);
+                binding.recyclerViewMessages.setLayoutParams(layoutParams);
             }
         }
     }
@@ -250,9 +253,9 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                     roomType = response.getChatroom().getType();
                     chatroomId = response.getChatroom().getId();
                     roomId = response.getChatroom().getRoomId();
-                    activityChatroomMessagingBinding.linearChatBox.setVisibility(View.VISIBLE);
-                    activityChatroomMessagingBinding.tvUserStatus.setText(String.format("%s %s", MathUtils.convertNumberToKilo(response.getMemberCount()), "عضو"));
-                    activityChatroomMessagingBinding.linearJoinChannel.setVisibility(View.VISIBLE);
+                    binding.linearChatBox.setVisibility(View.VISIBLE);
+                    binding.tvUserStatus.setText(String.format("%s %s", MathUtils.convertNumberToKilo(response.getMemberCount()), "عضو"));
+                    binding.linearJoinChannel.setVisibility(View.VISIBLE);
                     setChatroomInfo();
                     break;
                 }
@@ -262,8 +265,8 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                     roomType = response.getChatroom().getType();
                     chatroomId = response.getChatroom().getId();
                     roomId = response.getChatroom().getRoomId();
-                    activityChatroomMessagingBinding.linearChatBox.setVisibility(View.VISIBLE);
-                    activityChatroomMessagingBinding.tvUserStatus.setText(String.format("%s %s", MathUtils.convertNumberToKilo(response.getMemberCount()), "عضو"));
+                    binding.linearChatBox.setVisibility(View.VISIBLE);
+                    binding.tvUserStatus.setText(String.format("%s %s", MathUtils.convertNumberToKilo(response.getMemberCount()), "عضو"));
                     setChatroomInfo();
                     join();
                     break;
@@ -287,11 +290,16 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                     roomId = response.getChatroom().getRoomId();
                     setChatroomInfo();
                     join();
-                    if (response.getBlocked()) {
-                        activityChatroomMessagingBinding.tvUserStatus.setText("آخرین بازدید، خیلی وقت پیش");
-                        activityChatroomMessagingBinding.linearChatBox.setVisibility(View.GONE);
+                    if (response.getAmIBlocked()) {
+                        binding.tvUserStatus.setText("آخرین بازدید، خیلی وقت پیش");
+                        binding.linearChatBox.setVisibility(View.GONE);
                     } else {
-                        activityChatroomMessagingBinding.linearChatBox.setVisibility(View.VISIBLE);
+                        binding.linearChatBox.setVisibility(View.VISIBLE);
+                    }
+                    if (response.getItBlocked()) {
+                        binding.linearUnBlock.setVisibility(View.VISIBLE);
+                    } else {
+                        binding.linearUnBlock.setVisibility(View.GONE);
                     }
                     break;
                 }
@@ -313,11 +321,11 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                     chatroomId = null;
                     roomId = null;
                     setChatroomInfo();
-                    if (response.getBlocked()) {
-                        activityChatroomMessagingBinding.tvUserStatus.setText("آخرین بازدید، خیلی وقت پیش");
-                        activityChatroomMessagingBinding.linearChatBox.setVisibility(View.GONE);
+                    if (response.getAmIBlocked()) {
+                        binding.tvUserStatus.setText("آخرین بازدید، خیلی وقت پیش");
+                        binding.linearChatBox.setVisibility(View.GONE);
                     } else {
-                        activityChatroomMessagingBinding.linearChatBox.setVisibility(View.VISIBLE);
+                        binding.linearChatBox.setVisibility(View.VISIBLE);
                     }
                     break;
                 }
@@ -333,8 +341,8 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                     roomType = response.getChatroom().getType();
                     chatroomId = response.getChatroom().getId();
                     roomId = response.getChatroom().getRoomId();
-                    activityChatroomMessagingBinding.linearChatBox.setVisibility(View.VISIBLE);
-                    activityChatroomMessagingBinding.tvUserStatus.setText(String.format("%s %s", MathUtils.convertNumberToKilo(response.getMemberCount()), "عضو"));
+                    binding.linearChatBox.setVisibility(View.VISIBLE);
+                    binding.tvUserStatus.setText(String.format("%s %s", MathUtils.convertNumberToKilo(response.getMemberCount()), "عضو"));
                     setChatroomInfo();
                     join();
                     break;
@@ -363,7 +371,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         TildaChatApp.getSocketRequestController().receiver().receiveChatroomMessages(this, ReceiveChatroomMessages.class, response -> {
             if (response.getRoomId().equals(roomId)) {
                 if (response.getStatus() == 200) {
-                    activityChatroomMessagingBinding.noItem.setVisibility(View.GONE);
+                    binding.noItem.setVisibility(View.GONE);
                     if (nextPage > lastPage) {
                         lastPage = nextPage;
                         adapterPrivateChatMessages.addItems(nextPage, response.getMessages());
@@ -373,7 +381,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                         }
                     }
                 } else if (response.getStatus() == 404 && adapterPrivateChatMessages.getItemCount() == 0) {
-                    activityChatroomMessagingBinding.noItem.setVisibility(View.VISIBLE);
+                    binding.noItem.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -391,8 +399,8 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                 }
                 if (response.getStatus() == 200) {
                     adapterPrivateChatMessages.addItem(response.getMessage());
-                    if (activityChatroomMessagingBinding.noItem.getVisibility() == View.VISIBLE) {
-                        activityChatroomMessagingBinding.noItem.setVisibility(View.GONE);
+                    if (binding.noItem.getVisibility() == View.VISIBLE) {
+                        binding.noItem.setVisibility(View.GONE);
                     }
                 }
             }
@@ -431,6 +439,28 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             }
         });
 
+        TildaChatApp.getSocketRequestController().receiver().receiveUserBlock(this, ReceiveUserBlock.class, response -> {
+            Log.d(TAG, "setSocketListeners: " + response);
+            if (response.getStatus() == 200 && response.getBlockerUserId().intValue() == userId && response.getBlockedUserId().intValue() == getChatroomSecondUserId()) {
+                receiveChatroomCheck.setItBlocked(response.getBlocked());
+                if (response.getBlocked()) {
+                    binding.linearUnBlock.setVisibility(View.VISIBLE);
+                    binding.linearChatBox.setVisibility(View.GONE);
+                } else {
+                    binding.linearChatBox.setVisibility(View.VISIBLE);
+                    binding.linearUnBlock.setVisibility(View.GONE);
+                }
+            } else if (response.getStatus() == 200 && response.getBlockedUserId().intValue() == userId && response.getBlockerUserId().intValue() == getChatroomSecondUserId()) {
+                if (response.getBlocked()) {
+                    binding.tvUserStatus.setText("آخرین بازدید، خیلی وقت پیش");
+                    binding.linearChatBox.setVisibility(View.GONE);
+                    finish();
+                } else {
+                    binding.tvUserStatus.setText("آنلاین");
+                    binding.linearChatBox.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 //        socket.on(SocketEndpoints.TAG_CLIENT_RECEIVE_ERROR, args -> runOnUiThread(() -> toast("خطایی رخ داد.")));
 //        socket.on(SocketEndpoints.TAG_CLIENT_RECEIVE_CHATROOM_CHANNEL_MEMBERSHIP, args -> runOnUiThread(new Runnable() {
 //            @Override
@@ -506,23 +536,23 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PICK_IMAGE_PERMISSION_CODE) {
-            activityChatroomMessagingBinding.imageViewImage.callOnClick();
+            binding.imageViewImage.callOnClick();
         }
         if (requestCode == PICK_FILE_PERMISSION_CODE) {
-            activityChatroomMessagingBinding.imageViewFile.callOnClick();
+            binding.imageViewFile.callOnClick();
         }
     }
 
     private void resetReply() {
-        activityChatroomMessagingBinding.tvReplyMessage.setText("");
-        activityChatroomMessagingBinding.linearReply.setVisibility(View.GONE);
+        binding.tvReplyMessage.setText("");
+        binding.linearReply.setVisibility(View.GONE);
         replyMessageId = null;
     }
 
     private void resetUpdate() {
-        activityChatroomMessagingBinding.tvUpdateMessage.setText("");
-        activityChatroomMessagingBinding.etMessage.setText("");
-        activityChatroomMessagingBinding.linearUpdate.setVisibility(View.GONE);
+        binding.tvUpdateMessage.setText("");
+        binding.etMessage.setText("");
+        binding.linearUpdate.setVisibility(View.GONE);
         isUpdate = false;
         updateMessageId = null;
     }
@@ -543,19 +573,19 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     @Override
     public void onReply(Message message) {
         if (message.getMessageType().equals("file")) {
-            activityChatroomMessagingBinding.tvReplyMessage.setText(String.format("%s: %s", "فایل", message.getMessage().substring(message.getMessage().indexOf("_nznv_") + 6)));
+            binding.tvReplyMessage.setText(String.format("%s: %s", "فایل", message.getMessage().substring(message.getMessage().indexOf("_nznv_") + 6)));
         } else {
-            activityChatroomMessagingBinding.tvReplyMessage.setText(String.format("%s", message.getMessage()));
+            binding.tvReplyMessage.setText(String.format("%s", message.getMessage()));
         }
-        activityChatroomMessagingBinding.linearReply.setVisibility(View.VISIBLE);
+        binding.linearReply.setVisibility(View.VISIBLE);
         replyMessageId = message.getId();
     }
 
     @Override
     public void onEdit(Message message) {
-        activityChatroomMessagingBinding.etMessage.setText(String.format("%s", message.getMessage()));
-        activityChatroomMessagingBinding.tvUpdateMessage.setText(String.format("%s", message.getMessage()));
-        activityChatroomMessagingBinding.linearUpdate.setVisibility(View.VISIBLE);
+        binding.etMessage.setText(String.format("%s", message.getMessage()));
+        binding.tvUpdateMessage.setText(String.format("%s", message.getMessage()));
+        binding.linearUpdate.setVisibility(View.VISIBLE);
         isUpdate = true;
         updateMessageId = message.getId();
     }
@@ -606,7 +636,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             onBackPressed();
         } else if (id == R.id.imageViewSend) {
             onSendClicked();
-            String message = activityChatroomMessagingBinding.etMessage.getText().toString();
+            String message = binding.etMessage.getText().toString();
             emojiPopup.dismiss();
             if (message.length() > 0) {
                 if (isUpdate) {
@@ -632,7 +662,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                     }
                     TildaChatApp.getSocketRequestController().emitter().emitMessageStore(emitMessageStore);
                     //Reset state
-                    activityChatroomMessagingBinding.etMessage.setText("");
+                    binding.etMessage.setText("");
                     resetReply();
                 }
             }
@@ -641,7 +671,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         } else if (id == R.id.imageViewUpdateClose) {
             resetUpdate();
         } else if (id == R.id.tvJoinChannel) {
-            activityChatroomMessagingBinding.linearJoinChannel.setVisibility(View.GONE);
+            binding.linearJoinChannel.setVisibility(View.GONE);
             join();
         } else if (id == R.id.imageViewImage) {
             onSelectPictureClicked();
@@ -696,7 +726,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         } else if (id == R.id.imageViewVoice) {
             onRecordVoiceClicked();
         } else if (id == R.id.linearChatroomDetails) {
-            if (!receiveChatroomCheck.getBlocked()) {
+            if (!receiveChatroomCheck.getAmIBlocked()) {
                 onChatDetailsClicked();
             }
 //            Intent intent = new Intent(ChatroomMessagingActivity.this, ChatroomDetailsActivity.class);
@@ -706,18 +736,24 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 //            startActivity(intent);
         } else if (id == R.id.imageViewEmoji) {
             if (emojiPopup.isShowing()) {
-                activityChatroomMessagingBinding.imageViewEmoji.setImageDrawable(ContextCompat.getDrawable(ChatroomMessagingActivity.this, R.drawable.ic_smile));
+                binding.imageViewEmoji.setImageDrawable(ContextCompat.getDrawable(ChatroomMessagingActivity.this, R.drawable.ic_smile));
             } else {
-                activityChatroomMessagingBinding.imageViewEmoji.setImageDrawable(ContextCompat.getDrawable(ChatroomMessagingActivity.this, R.drawable.ic_type));
+                binding.imageViewEmoji.setImageDrawable(ContextCompat.getDrawable(ChatroomMessagingActivity.this, R.drawable.ic_type));
             }
             emojiPopup.toggle();
         } else if (id == R.id.etMessage) {
             if (emojiPopup.isShowing()) {
-                activityChatroomMessagingBinding.imageViewEmoji.setImageDrawable(ContextCompat.getDrawable(ChatroomMessagingActivity.this, R.drawable.ic_smile));
+                binding.imageViewEmoji.setImageDrawable(ContextCompat.getDrawable(ChatroomMessagingActivity.this, R.drawable.ic_smile));
                 emojiPopup.dismiss();
             }
-        } else if (id == activityChatroomMessagingBinding.imageViewMenu.getId()) {
+        } else if (id == binding.imageViewMenu.getId()) {
             onMoreClicked();
+        } else if (id == binding.linearUnBlock.getId()) {
+            EmitUserBlock emitUserBlock = new EmitUserBlock();
+            emitUserBlock.setUserId(userId);
+            emitUserBlock.setBlockedUserId(getChatroomSecondUserId());
+            Log.d(TAG, "onClick: " + DataParser.toJson(emitUserBlock));
+            TildaChatApp.getSocketRequestController().emitter().emitUserBlock(emitUserBlock);
         }
     }
 

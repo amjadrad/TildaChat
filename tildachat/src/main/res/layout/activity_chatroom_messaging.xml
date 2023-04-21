@@ -3,15 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorLight1"
+    android:background="@color/colorWhite"
     android:layoutDirection="rtl">
 
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="@dimen/_48sdp"
             android:orientation="horizontal">
@@ -23,9 +23,9 @@
                 android:layout_gravity="center"
                 android:clickable="true"
                 android:focusable="true"
-                android:padding="@dimen/_15sdp"
-                android:src="@drawable/ic_back"
-                android:tint="@color/colorText" />
+                android:padding="@dimen/_16sdp"
+                app:srcCompat="@drawable/ic_back"
+                app:tint="@color/colorText" />
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/linearChatroomDetails"
@@ -38,12 +38,14 @@
                     android:id="@+id/imageViewProfilePicture"
                     android:layout_width="@dimen/_38sdp"
                     android:layout_height="@dimen/_38sdp"
-                    android:layout_gravity="center" />
+                    android:layout_gravity="center"
+                    android:src="@drawable/img_user" />
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|right"
+                    android:layout_marginLeft="@dimen/_3sdp"
                     android:layout_marginRight="@dimen/_3sdp"
                     android:orientation="vertical">
 
@@ -74,11 +76,10 @@
                 android:background="@drawable/bg_badge_transparent_curved"
                 android:clickable="true"
                 android:focusable="true"
-                android:padding="@dimen/_18sdp"
-                android:src="@drawable/ic_menu_threepoints"
-                android:tint="@color/colorText"
-                android:visibility="visible" />
-        </LinearLayout>
+                android:padding="@dimen/_16sdp"
+                app:srcCompat="@drawable/ic_more_vertical"
+                app:tint="@color/colorText" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
         <View
             android:layout_width="match_parent"
@@ -91,42 +92,40 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/_56sdp" />
 
-    </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/linearChatBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
         android:layout_margin="@dimen/_8sdp"
-        android:background="@drawable/bg_light_rounded_default"
+        android:background="@drawable/bg_chat_box"
         android:orientation="vertical"
         android:visibility="visible">
 
-        <LinearLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/linearReply"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:visibility="gone">
 
-
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="@dimen/_40sdp"
                 android:layout_height="@dimen/_48sdp"
                 android:padding="@dimen/_12sdp"
-                android:tint="@color/colorDark2"
-                app:srcCompat="@drawable/ic_reply" />
+                app:srcCompat="@drawable/ic_reply"
+                app:tint="@color/colorMutedText" />
 
-
-            <LinearLayout
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="right"
@@ -135,7 +134,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvReplyMessage"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -143,9 +142,9 @@
                     android:gravity="right"
                     android:maxLines="1"
                     android:text="پیام"
-                    android:textColor="@color/colorDark2"
+                    android:textColor="@color/colorMutedText"
                     android:textSize="@dimen/_12sdp" />
-            </LinearLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/imageViewReplyClose"
@@ -154,35 +153,33 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:padding="@dimen/_14sdp"
-                android:src="@drawable/ic_close"
-                android:tint="@color/colorDark2" />
+                app:srcCompat="@drawable/ic_close"
+                app:tint="@color/colorMutedText" />
 
-        </LinearLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <LinearLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/linearUpdate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:visibility="gone">
 
-
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="@dimen/_40sdp"
                 android:layout_height="@dimen/_48sdp"
                 android:padding="@dimen/_12sdp"
-                android:tint="@color/colorDark2"
-                app:srcCompat="@drawable/ic_edit" />
+                app:srcCompat="@drawable/ic_edit"
+                app:tint="@color/colorMutedText" />
 
-
-            <LinearLayout
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_4sdp"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="right"
@@ -191,7 +188,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvUpdateMessage"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -199,9 +196,9 @@
                     android:gravity="right"
                     android:maxLines="1"
                     android:text="ویرایش پیام"
-                    android:textColor="@color/colorDark2"
+                    android:textColor="@color/colorMutedText"
                     android:textSize="@dimen/_12sdp" />
-            </LinearLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/imageViewUpdateClose"
@@ -210,12 +207,11 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:padding="@dimen/_14sdp"
-                android:src="@drawable/ic_close"
-                android:tint="@color/colorDark2" />
+                app:srcCompat="@drawable/ic_close"
+                app:tint="@color/colorMutedText" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
-        </LinearLayout>
-
-        <LinearLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
@@ -225,35 +221,38 @@
                 android:layout_width="@dimen/_38sdp"
                 android:layout_height="@dimen/_48sdp"
                 android:padding="@dimen/_10sdp"
-                android:src="@drawable/ic_send"
-                android:tint="@color/colorAccent"
-                android:visibility="gone" />
+                android:rotation="45"
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_send"
+                app:tint="@color/colorAccent" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/imageViewVoice"
                 android:layout_width="@dimen/_38sdp"
                 android:layout_height="@dimen/_48sdp"
                 android:padding="@dimen/_10sdp"
-                android:src="@drawable/ic_mic"
-                android:tint="@color/colorDark2" />
+                app:srcCompat="@drawable/ic_mic"
+                app:tint="@color/colorMutedText" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/imageViewFile"
                 android:layout_width="@dimen/_38sdp"
                 android:layout_height="@dimen/_48sdp"
                 android:padding="@dimen/_10sdp"
-                android:src="@drawable/ic_file_plus"
-                android:tint="@color/colorDark2"
-                android:visibility="visible" />
+                android:tint="@color/colorMutedText"
+                android:visibility="visible"
+                app:srcCompat="@drawable/ic_file_plus"
+                app:tint="@color/colorMutedText" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/imageViewImage"
                 android:layout_width="@dimen/_38sdp"
                 android:layout_height="@dimen/_48sdp"
                 android:padding="@dimen/_10sdp"
-                android:tint="@color/colorDark2"
+                android:tint="@color/colorMutedText"
                 android:visibility="visible"
-                app:srcCompat="@drawable/ic_camera" />
+                app:srcCompat="@drawable/ic_camera"
+                app:tint="@color/colorMutedText" />
 
 
             <EditText
@@ -266,6 +265,8 @@
                 android:ems="10"
                 android:hint="پیام..."
                 android:inputType="textMultiLine|text"
+                android:textColor="@color/colorText"
+                android:textColorHint="@color/colorMutedText"
                 android:textSize="@dimen/_12sdp"
                 android:textStyle="bold" />
 
@@ -274,18 +275,19 @@
                 android:layout_width="@dimen/_48sdp"
                 android:layout_height="@dimen/_48sdp"
                 android:padding="@dimen/_14sdp"
-                android:src="@drawable/ic_smile"
-                android:tint="@color/colorDark2" />
-        </LinearLayout>
-    </LinearLayout>
+                android:tint="@color/colorMutedText"
+                app:srcCompat="@drawable/ic_smile"
+                app:tint="@color/colorMutedText" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/linearJoinChannel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
         android:layout_margin="@dimen/_8sdp"
-        android:background="@drawable/bg_info_rounded_default"
+        android:background="@drawable/bg_info_rounded_soft"
         android:orientation="vertical"
         android:visibility="gone">
 
@@ -297,11 +299,35 @@
             android:paddingTop="@dimen/_10sdp"
             android:paddingBottom="@dimen/_10sdp"
             android:text="عضویت در کانال"
-            android:textColor="@color/colorDark1"
-            android:textSize="@dimen/_14ssp"
+            android:textColor="@color/colorText"
+            android:textSize="@dimen/_12ssp"
             android:textStyle="bold" />
 
-    </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/linearUnBlock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_margin="@dimen/_8sdp"
+        android:background="@drawable/bg_danger_rounded_soft"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="@dimen/_10sdp"
+            android:paddingBottom="@dimen/_10sdp"
+            android:text="رفع بلاک"
+            android:textColor="@color/colorDanger"
+            android:textSize="@dimen/_12ssp"
+            android:textStyle="bold" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/noItem"
@@ -315,7 +341,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="@dimen/_16sdp"
-            android:background="@drawable/bg_primary_rounded_default"
+            android:background="@drawable/bg_primary_rounded_soft"
             android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -326,7 +352,7 @@
                 android:lineSpacingExtra="@dimen/_8sdp"
                 android:padding="@dimen/_10sdp"
                 android:text="@string/chatroom_privacy_note"
-                android:textColor="@color/colorWhite" />
+                android:textColor="@color/colorPrimary" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -336,8 +362,8 @@
             android:layout_marginTop="0dp"
             android:background="@drawable/bg_primary_pill_default"
             android:padding="@dimen/_10sdp"
-            android:tint="@color/colorWhite"
-            app:srcCompat="@drawable/ic_shield_secure" />
+            app:srcCompat="@drawable/ic_shield_secure"
+            app:tint="@color/colorWhite" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
