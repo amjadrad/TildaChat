@@ -93,7 +93,7 @@ public class Emitter implements SocketEmitInterface {
 
     @Override
     public void emitUserBlock(EmitUserBlock emit) {
-        TildaChatApp.getSocket().emit(SocketEndpoints.TAG_EMIT_USER_BLOCK, emit);
+        TildaChatApp.getSocket().emit(SocketEndpoints.TAG_EMIT_USER_BLOCK, DataParser.toJson(emit));
     }
 
 

@@ -456,6 +456,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         TildaChatApp.getSocket().off(SocketEndpoints.TAG_RECEIVE_CHATROOM_CHECK);
         TildaChatApp.getSocket().off(SocketEndpoints.TAG_RECEIVE_CHATROOM_JOIN);
         TildaChatApp.getSocket().off(SocketEndpoints.TAG_RECEIVE_CHATROOM_MESSAGES);
+        TildaChatApp.getSocket().off(SocketEndpoints.TAG_RECEIVE_USER_BLOCK);
         super.onBackPressed();
     }
 
