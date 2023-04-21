@@ -298,7 +298,9 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                     }
                     if (response.getItBlocked()) {
                         binding.linearUnBlock.setVisibility(View.VISIBLE);
+                        binding.linearChatBox.setVisibility(View.GONE);
                     } else {
+                        binding.linearChatBox.setVisibility(View.VISIBLE);
                         binding.linearUnBlock.setVisibility(View.GONE);
                     }
                     break;
