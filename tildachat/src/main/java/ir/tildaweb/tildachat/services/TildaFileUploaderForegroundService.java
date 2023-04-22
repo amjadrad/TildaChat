@@ -3,7 +3,6 @@ package ir.tildaweb.tildachat.services;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -11,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
@@ -19,6 +19,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 import com.google.gson.annotations.SerializedName;
@@ -35,7 +36,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
 
 import ir.tildaweb.tildachat.R;
 import ir.tildaweb.tildachat.app.DataParser;
@@ -46,16 +46,16 @@ public class TildaFileUploaderForegroundService extends Service {
 
     private final String TAG = this.getClass().getName();
     private Context context;
-    private NotificationCompat.Builder notificationBuilder;
     private Notification notification;
     private RemoteViews remoteViews;
     private NotificationManager manager;
-    private String channel;
+    private String channel = null;
     float totalBytesAvailable = 0;
     float totalBytesUploaded = 0;
     private Handler handlerTimeDigital;
     private Runnable runnableTimeDigital;
-    private int notificationId = -1;
+    private final int notificationId = 13;
+    private NotificationCompat.Builder notificationBuilder;
 
     //For send to chatroom
     private boolean isSendToChatroom = false;
@@ -76,7 +76,36 @@ public class TildaFileUploaderForegroundService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        Log.d(TAG, "onStartCommand: upload file service started.");
+        Log.d(TAG, "onStartCommand: ");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            channel = createNotificationChannel("TildaChatFileUploader", "TildaChatChannel_uploader");
+        } else {
+            channel = "TildaChatChannel_uploader";
+        }
+        manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        RemoteViews notificationLayout = new RemoteViews(getPackageName(), R.layout.tilda_file_uploader_service_layout);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            Notification.Builder notifBuilderO = new Notification.Builder(this, channel)
+                    .setOngoing(true)
+                    .setCustomContentView(notificationLayout)
+                    .setSmallIcon(R.drawable.ic_upload_cloud)
+                    .setOnlyAlertOnce(true);
+            notification = notifBuilderO.build();
+        } else {
+            notificationBuilder = new NotificationCompat.Builder(this, channel)
+                    .setOngoing(true)
+                    .setCategory(Notification.CATEGORY_SERVICE)
+                    .setSmallIcon(R.drawable.ic_upload_cloud)
+                    .setCustomContentView(notificationLayout)
+                    .setTicker("TildaChat")
+                    .setSound(null)
+                    .setOnlyAlertOnce(true);
+            notification = notificationBuilder.build();
+        }
+        startForeground(notificationId, notification);
+
+        //------------------------------------
         this.context = this;
         isSendToChatroom = intent.getBooleanExtra("is_send_to_chatroom", false);
         messageType = intent.getStringExtra("message_type");
@@ -95,24 +124,25 @@ public class TildaFileUploaderForegroundService extends Service {
         String filePath = intent.getStringExtra("file_path");
         String uploadRoute = TildaChatApp._uploadRoute;
 
-        channel = "TildaChatChannel_" + new Random().nextInt(100);
-        notificationId = new Random().nextInt(1000);
+        handlerTimeDigital = new Handler();
+        runnableTimeDigital = this::updateService;
         try {
             FileInputStream fileInputStream = new FileInputStream(filePath);
             totalBytesAvailable = fileInputStream.available();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        startForegroundNotification(filePath, uploadRoute);
-        handlerTimeDigital = new Handler();
-        runnableTimeDigital = this::updateService;
         updateService();
+        Log.d(TAG, "onStartCommand: 1");
+        //----------------------------------
+        doMyJob(filePath, uploadRoute);
+        //----------------------------------
         return Service.START_STICKY;
     }
 
-
-    private void startForegroundNotification(String filePath, String uploadRoute) {
+    private void doMyJob(String filePath, String uploadRoute) {
         totalBytesUploaded = 0;
+
         manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -122,12 +152,6 @@ public class TildaFileUploaderForegroundService extends Service {
             remoteViews = new RemoteViews(getPackageName(), R.layout.tilda_file_uploader_service_layout);
             remoteViews.setTextViewText(R.id.tvFileName, filePath.substring(filePath.lastIndexOf("/") + 1));
             remoteViews.setTextViewText(R.id.tvProgress, "0MB - 0MB");
-
-            Intent cancelIntent = new Intent(this, CancelUploaderReceiver.class);
-            cancelIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            PendingIntent pendingSwitchIntent = PendingIntent.getBroadcast(this, 0, cancelIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-            remoteViews.setOnClickPendingIntent(R.id.tvCancel, pendingSwitchIntent);
-
             notificationBuilder = new NotificationCompat.Builder(this,
                     channel)
                     .setOngoing(true)
@@ -137,12 +161,13 @@ public class TildaFileUploaderForegroundService extends Service {
             notificationBuilder.setOnlyAlertOnce(true);
             notification = notificationBuilder.build();
             startForeground(notificationId, notification);
-            fileUploader = new FileUploader();
-            fileUploader.execute(filePath, uploadRoute);
+
         } catch (Exception e) {
             e.printStackTrace();
-            onDestroy();
         }
+
+        fileUploader = new FileUploader();
+        fileUploader.execute(filePath, uploadRoute);
     }
 
     public static class CancelUploaderReceiver extends BroadcastReceiver {
@@ -352,7 +377,7 @@ public class TildaFileUploaderForegroundService extends Service {
         TildaChatApp.getSocketRequestController().emitter().emitMessageStore(emitMessageStore);
     }
 
-    public class UploadResponse {
+    public static class UploadResponse {
         @SerializedName("status")
         private Integer status;
         @SerializedName("uploaded_file_path")
@@ -373,5 +398,16 @@ public class TildaFileUploaderForegroundService extends Service {
         public void setUploadedFilePath(String uploadedFilePath) {
             this.uploadedFilePath = uploadedFilePath;
         }
+    }
+
+    //----------
+    @RequiresApi(Build.VERSION_CODES.O)
+    private String createNotificationChannel(String channelId, String channelName) {
+        NotificationChannel chan = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_NONE);
+        chan.setLightColor(Color.BLUE);
+        chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        NotificationManager service = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        service.createNotificationChannel(chan);
+        return channelId;
     }
 }

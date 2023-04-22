@@ -64,7 +64,7 @@ dependencies {
     //Persian Date Calendar
     implementation 'com.github.hamsaadev:Persian-Date-Picker-Dialog:V1.0'
     //Tilda file picker
-    implementation 'com.github.amjadrad:TildaFilePicker:1.5'
+    implementation 'com.github.amjadrad:TildaFilePicker:1.7'
     //Emoji
     implementation "io.github.aghajari:AXEmojiView:$emojiViewVersion"
     implementation "io.github.aghajari:AXEmojiView-$emojiViewProvider:$emojiViewVersion"
