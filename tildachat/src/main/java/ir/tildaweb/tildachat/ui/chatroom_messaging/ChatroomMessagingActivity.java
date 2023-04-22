@@ -672,7 +672,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                         intent.putExtra("second_user_id", secondUserId);
                         intent.putExtra("is_second_user", roomId == null);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            startForegroundService(intent);
+                            ContextCompat.startForegroundService(ChatroomMessagingActivity.this, intent);
                         } else {
                             startService(intent);
                         }
@@ -697,7 +697,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                         intent.putExtra("second_user_id", secondUserId);
                         intent.putExtra("is_second_user", roomId == null);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            startForegroundService(intent);
+                            ContextCompat.startForegroundService(ChatroomMessagingActivity.this, intent);
                         } else {
                             startService(intent);
                         }

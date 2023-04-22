@@ -188,7 +188,7 @@ public class TildaFileUploaderForegroundService extends Service {
         }
 
         public void uploadFile(String sourceFileUri, String uploadRoute) {
-            int serverResponseCode = 0;
+            int serverResponseCode;
             HttpURLConnection conn;
             DataOutputStream dos;
             String lineEnd = "\r\n";
