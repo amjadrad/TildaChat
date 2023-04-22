@@ -1,6 +1,7 @@
 package ir.tildaweb.tildachat.ui.chatroom_messaging;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -15,8 +16,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -101,7 +100,8 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     private static final int SWIPE_MAX_OFF_PATH = 250;
     private static final int SWIPE_THRESHOLD_VELOCITY = 200;
     private GestureDetector gestureDetector;
-    private ActivityResultLauncher<String[]> filePermissionRequest;
+
+    private EmitChatroomCheck emitChatroomCheck;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,16 +115,6 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 
         binding = ActivityChatroomMessagingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        filePermissionRequest =
-                registerForActivityResult(new ActivityResultContracts
-                                .RequestMultiplePermissions(), result -> {
-                            Boolean readPermission = result.get(
-                                    Manifest.permission.READ_EXTERNAL_STORAGE);
-                            Boolean writePermission = result.get(
-                                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                        }
-                );
 
         AXEmojiView emojiView = new AXEmojiView(ChatroomMessagingActivity.this);
         emojiView.setEditText(binding.etMessage);
@@ -195,7 +185,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         });
 
         setSocketListeners();
-        EmitChatroomCheck emitChatroomCheck = new EmitChatroomCheck();
+        emitChatroomCheck = new EmitChatroomCheck();
         emitChatroomCheck.setRoomId(roomId);
         emitChatroomCheck.setUsername(username);
         if (roomId == null && username != null) {
@@ -441,25 +431,29 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 
         TildaChatApp.getSocketRequestController().receiver().receiveUserBlock(this, ReceiveUserBlock.class, response -> {
             Log.d(TAG, "setSocketListeners: " + response);
-            if (response.getStatus() == 200 && response.getBlockerUserId().intValue() == userId && response.getBlockedUserId().intValue() == getChatroomSecondUserId()) {
-                receiveChatroomCheck.setItBlocked(response.getBlocked());
-                if (response.getBlocked()) {
-                    binding.linearUnBlock.setVisibility(View.VISIBLE);
-                    binding.linearChatBox.setVisibility(View.GONE);
-                } else {
-                    binding.linearChatBox.setVisibility(View.VISIBLE);
-                    binding.linearUnBlock.setVisibility(View.GONE);
-                }
-            } else if (response.getStatus() == 200 && response.getBlockedUserId().intValue() == userId && response.getBlockerUserId().intValue() == getChatroomSecondUserId()) {
-                if (response.getBlocked()) {
-                    binding.tvUserStatus.setText("آخرین بازدید، خیلی وقت پیش");
-                    binding.linearChatBox.setVisibility(View.GONE);
-                    finish();
-                } else {
-                    binding.tvUserStatus.setText("آنلاین");
-                    binding.linearChatBox.setVisibility(View.VISIBLE);
-                }
-            }
+            TildaChatApp.getSocketRequestController().emitter().emitChatroomCheck(emitChatroomCheck);
+
+//            if (response.getStatus() == 200 && response.getBlockerUserId().intValue() == userId && response.getBlockedUserId().intValue() == getChatroomSecondUserId()) {
+//                receiveChatroomCheck.setItBlocked(response.getBlocked());
+//                if (response.getBlocked()) {
+//                    binding.linearUnBlock.setVisibility(View.VISIBLE);
+//                    binding.linearChatBox.setVisibility(View.GONE);
+//                } else {
+//                    binding.linearChatBox.setVisibility(View.VISIBLE);
+//                    binding.linearUnBlock.setVisibility(View.GONE);
+//                }
+//            } else if (response.getStatus() == 200 && response.getBlockedUserId().intValue() == userId && response.getBlockerUserId().intValue() == getChatroomSecondUserId()) {
+//                if (response.getBlocked()) {
+//                    binding.tvUserStatus.setText("آخرین بازدید، خیلی وقت پیش");
+//                    binding.linearChatBox.setVisibility(View.GONE);
+//                    finish();
+//                } else {
+//                    binding.tvUserStatus.setText("آنلاین");
+//                    binding.linearChatBox.setVisibility(View.VISIBLE);
+//                }
+//            }
+
+
         });
 //        socket.on(SocketEndpoints.TAG_CLIENT_RECEIVE_ERROR, args -> runOnUiThread(() -> toast("خطایی رخ داد.")));
 //        socket.on(SocketEndpoints.TAG_CLIENT_RECEIVE_CHATROOM_CHANNEL_MEMBERSHIP, args -> runOnUiThread(new Runnable() {
@@ -529,18 +523,6 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 //                }
 //            }
 //        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PICK_IMAGE_PERMISSION_CODE) {
-            binding.imageViewImage.callOnClick();
-        }
-        if (requestCode == PICK_FILE_PERMISSION_CODE) {
-            binding.imageViewFile.callOnClick();
-        }
     }
 
     private void resetReply() {
@@ -675,7 +657,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             join();
         } else if (id == R.id.imageViewImage) {
             onSelectPictureClicked();
-            if (checkFilePermission()) {
+            if (checkImagesPermission(this, PICK_IMAGE_PERMISSION_CODE)) {
                 TildaFilePicker tildaFilePicker = new TildaFilePicker(ChatroomMessagingActivity.this, new FileType[]{FileType.FILE_TYPE_IMAGE});
                 tildaFilePicker.setSingleChoice();
                 tildaFilePicker.setOnTildaFileSelectListener(list -> {
@@ -700,7 +682,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             }
         } else if (id == R.id.imageViewFile) {
             onSelectFileClicked();
-            if (checkFilePermission()) {
+            if (checkFilesPermission(this, PICK_FILE_PERMISSION_CODE)) {
                 TildaFilePicker tildaFilePicker = new TildaFilePicker(ChatroomMessagingActivity.this);
                 tildaFilePicker.setSingleChoice();
                 tildaFilePicker.setOnTildaFileSelectListener(list -> {
@@ -797,21 +779,54 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         return receiveChatroomCheck;
     }
 
-    protected boolean checkFilePermission() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                || ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            requestFileAccessPermission();
-            return false;
+    protected boolean checkImagesPermission(Activity activity, int REQUEST_CODE) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, REQUEST_CODE);
+                return false;
+            } else {
+                return true;
+            }
         } else {
-            return true;
+            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE);
+                return false;
+            } else {
+                return true;
+            }
         }
     }
 
-    protected void requestFileAccessPermission() {
-        filePermissionRequest.launch(new String[]{
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        });
+    protected boolean checkFilesPermission(Activity activity, int REQUEST_CODE) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_MEDIA_VIDEO) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_MEDIA_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_AUDIO, Manifest.permission.READ_MEDIA_VIDEO}, REQUEST_CODE);
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE);
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults[0] == 0 && requestCode == PICK_IMAGE_PERMISSION_CODE) {
+            binding.imageViewImage.callOnClick();
+        }
+        if (grantResults[0] == 0 && requestCode == PICK_FILE_PERMISSION_CODE) {
+            binding.imageViewFile.callOnClick();
+        }
     }
 
     private class SwipeDetector extends GestureDetector.SimpleOnGestureListener {
