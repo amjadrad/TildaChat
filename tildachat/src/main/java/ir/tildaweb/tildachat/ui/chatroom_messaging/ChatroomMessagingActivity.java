@@ -235,112 +235,113 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                 } else if (response.getChatroom().getType().equals("group")) {
                     adapterPrivateChatMessages.setRoomType(ChatroomType.GROUP);
                 }
-            }
-            switch (response.getCode()) {
-                case 111: {
-                    roomTitle = response.getChatroom().getRoomTitle();
-                    roomPicture = response.getChatroom().getRoomPicture();
-                    roomType = response.getChatroom().getType();
-                    chatroomId = response.getChatroom().getId();
-                    roomId = response.getChatroom().getRoomId();
-                    binding.linearChatBox.setVisibility(View.VISIBLE);
-                    binding.tvUserStatus.setText(String.format("%s %s", MathUtils.convertNumberToKilo(response.getMemberCount()), "عضو"));
-                    binding.linearJoinChannel.setVisibility(View.VISIBLE);
-                    setChatroomInfo();
-                    break;
-                }
-                case 112: {
-                    roomTitle = response.getChatroom().getRoomTitle();
-                    roomPicture = response.getChatroom().getRoomPicture();
-                    roomType = response.getChatroom().getType();
-                    chatroomId = response.getChatroom().getId();
-                    roomId = response.getChatroom().getRoomId();
-                    binding.linearChatBox.setVisibility(View.VISIBLE);
-                    binding.tvUserStatus.setText(String.format("%s %s", MathUtils.convertNumberToKilo(response.getMemberCount()), "عضو"));
-                    setChatroomInfo();
-                    join();
-                    break;
-                }
-                case 121: {
-                    //Private chat info , users have chatroom
-                    if (isWorkWithFullname) {
-                        roomTitle = response.getSecondUser().getFullname();
-                    } else {
-                        if (response.getSecondUser().getFirstName() != null) {
-                            roomTitle = response.getSecondUser().getFirstName();
-                        }
-                        if (response.getSecondUser().getLastName() != null) {
-                            roomTitle += " " + response.getSecondUser().getLastName();
-                        }
-                    }
-                    roomPicture = response.getSecondUser().getPicture();
-                    roomType = "private";
-                    secondUserId = response.getSecondUser().getId();
-                    chatroomId = response.getChatroom().getId();
-                    roomId = response.getChatroom().getRoomId();
-                    setChatroomInfo();
-                    join();
-                    if (response.getAmIBlocked()) {
-                        binding.tvUserStatus.setText("آخرین بازدید، خیلی وقت پیش");
-                    }
-                    if (response.getItBlocked()) {
-                        binding.linearUnBlock.setVisibility(View.VISIBLE);
-                    } else {
-                        binding.linearUnBlock.setVisibility(View.GONE);
-                    }
-                    if (response.getItBlocked() || response.getAmIBlocked()) {
-                        binding.linearChatBox.setVisibility(View.GONE);
-                    }
-                    break;
-                }
-                case 122: {
-                    //Private chat info , users don't have chatroom
-                    if (isWorkWithFullname) {
-                        roomTitle = response.getSecondUser().getFullname();
-                    } else {
-                        if (response.getSecondUser().getFirstName() != null) {
-                            roomTitle = response.getSecondUser().getFirstName();
-                        }
-                        if (response.getSecondUser().getLastName() != null) {
-                            roomTitle += " " + response.getSecondUser().getLastName();
-                        }
-                    }
-                    roomPicture = response.getSecondUser().getPicture();
-                    secondUserId = response.getSecondUser().getId();
-                    roomType = "private";
-                    chatroomId = null;
-                    roomId = null;
-                    setChatroomInfo();
-                    if (response.getAmIBlocked()) {
-                        binding.tvUserStatus.setText("آخرین بازدید، خیلی وقت پیش");
-                        binding.linearChatBox.setVisibility(View.GONE);
-                    } else {
+
+                switch (response.getCode()) {
+                    case 111: {
+                        roomTitle = response.getChatroom().getRoomTitle();
+                        roomPicture = response.getChatroom().getRoomPicture();
+                        roomType = response.getChatroom().getType();
+                        chatroomId = response.getChatroom().getId();
+                        roomId = response.getChatroom().getRoomId();
                         binding.linearChatBox.setVisibility(View.VISIBLE);
+                        binding.tvUserStatus.setText(String.format("%s %s", MathUtils.convertNumberToKilo(response.getMemberCount()), "عضو"));
+                        binding.linearJoinChannel.setVisibility(View.VISIBLE);
+                        setChatroomInfo();
+                        break;
                     }
-                    break;
-                }
-                case 123: {
-                    Toast.makeText(this, "دسترسی به این چت وجود ندارد.", Toast.LENGTH_SHORT).show();
-                    finish();
-                    break;
-                }
-                case 131: {
-                    // Group info, user is joined to group
-                    roomTitle = response.getChatroom().getRoomTitle();
-                    roomPicture = response.getChatroom().getRoomPicture();
-                    roomType = response.getChatroom().getType();
-                    chatroomId = response.getChatroom().getId();
-                    roomId = response.getChatroom().getRoomId();
-                    binding.linearChatBox.setVisibility(View.VISIBLE);
-                    binding.tvUserStatus.setText(String.format("%s %s", MathUtils.convertNumberToKilo(response.getMemberCount()), "عضو"));
-                    setChatroomInfo();
-                    join();
-                    break;
-                }
-                case 132: {
-                    toast("دسترسی شما به این چت امکان پدیر نیست.");
-                    finish();
-                    break;
+                    case 112: {
+                        roomTitle = response.getChatroom().getRoomTitle();
+                        roomPicture = response.getChatroom().getRoomPicture();
+                        roomType = response.getChatroom().getType();
+                        chatroomId = response.getChatroom().getId();
+                        roomId = response.getChatroom().getRoomId();
+                        binding.linearChatBox.setVisibility(View.VISIBLE);
+                        binding.tvUserStatus.setText(String.format("%s %s", MathUtils.convertNumberToKilo(response.getMemberCount()), "عضو"));
+                        setChatroomInfo();
+                        join();
+                        break;
+                    }
+                    case 121: {
+                        //Private chat info , users have chatroom
+                        if (isWorkWithFullname) {
+                            roomTitle = response.getSecondUser().getFullname();
+                        } else {
+                            if (response.getSecondUser().getFirstName() != null) {
+                                roomTitle = response.getSecondUser().getFirstName();
+                            }
+                            if (response.getSecondUser().getLastName() != null) {
+                                roomTitle += " " + response.getSecondUser().getLastName();
+                            }
+                        }
+                        roomPicture = response.getSecondUser().getPicture();
+                        roomType = "private";
+                        secondUserId = response.getSecondUser().getId();
+                        chatroomId = response.getChatroom().getId();
+                        roomId = response.getChatroom().getRoomId();
+                        setChatroomInfo();
+                        join();
+                        if (response.getAmIBlocked()) {
+                            binding.tvUserStatus.setText("آخرین بازدید، خیلی وقت پیش");
+                        }
+                        if (response.getItBlocked()) {
+                            binding.linearUnBlock.setVisibility(View.VISIBLE);
+                        } else {
+                            binding.linearUnBlock.setVisibility(View.GONE);
+                        }
+                        if (response.getItBlocked() || response.getAmIBlocked()) {
+                            binding.linearChatBox.setVisibility(View.GONE);
+                        }
+                        break;
+                    }
+                    case 122: {
+                        //Private chat info , users don't have chatroom
+                        if (isWorkWithFullname) {
+                            roomTitle = response.getSecondUser().getFullname();
+                        } else {
+                            if (response.getSecondUser().getFirstName() != null) {
+                                roomTitle = response.getSecondUser().getFirstName();
+                            }
+                            if (response.getSecondUser().getLastName() != null) {
+                                roomTitle += " " + response.getSecondUser().getLastName();
+                            }
+                        }
+                        roomPicture = response.getSecondUser().getPicture();
+                        secondUserId = response.getSecondUser().getId();
+                        roomType = "private";
+                        chatroomId = null;
+                        roomId = null;
+                        setChatroomInfo();
+                        if (response.getAmIBlocked()) {
+                            binding.tvUserStatus.setText("آخرین بازدید، خیلی وقت پیش");
+                            binding.linearChatBox.setVisibility(View.GONE);
+                        } else {
+                            binding.linearChatBox.setVisibility(View.VISIBLE);
+                        }
+                        break;
+                    }
+                    case 123: {
+                        Toast.makeText(this, "دسترسی به این چت وجود ندارد.", Toast.LENGTH_SHORT).show();
+                        finish();
+                        break;
+                    }
+                    case 131: {
+                        // Group info, user is joined to group
+                        roomTitle = response.getChatroom().getRoomTitle();
+                        roomPicture = response.getChatroom().getRoomPicture();
+                        roomType = response.getChatroom().getType();
+                        chatroomId = response.getChatroom().getId();
+                        roomId = response.getChatroom().getRoomId();
+                        binding.linearChatBox.setVisibility(View.VISIBLE);
+                        binding.tvUserStatus.setText(String.format("%s %s", MathUtils.convertNumberToKilo(response.getMemberCount()), "عضو"));
+                        setChatroomInfo();
+                        join();
+                        break;
+                    }
+                    case 132: {
+                        toast("دسترسی شما به این چت امکان پدیر نیست.");
+                        finish();
+                        break;
+                    }
                 }
             }
         });
@@ -446,6 +447,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                         }
                     }
                 } else if (response.getBlockedUserId().intValue() == userId && response.getBlockerUserId().intValue() == getChatroomSecondUserId()) {
+                    receiveChatroomCheck.setAmIBlocked(response.getBlocked());
                     if (response.getBlocked()) {
                         binding.tvUserStatus.setText("آخرین بازدید، خیلی وقت پیش");
                         binding.linearChatBox.setVisibility(View.GONE);
@@ -624,7 +626,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             onBackPressed();
         } else if (id == R.id.imageViewSend) {
             onSendClicked();
-            String message = binding.etMessage.getText().toString();
+            String message = binding.etMessage.getText().toString().trim();
             emojiPopup.dismiss();
             if (message.length() > 0) {
                 if (isUpdate) {
@@ -771,7 +773,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     }
 
     protected Integer getChatroomSecondUserId() {
-        if (roomType.equals("private")) {
+        if (roomType != null && roomType.equals("private")) {
             return secondUserId;
         }
         return null;
