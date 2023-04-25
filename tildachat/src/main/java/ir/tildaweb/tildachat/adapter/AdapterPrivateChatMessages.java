@@ -2392,7 +2392,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
     public String getTime(DateUtils.DateObject dateObject) {
         if (TildaChatApp._isTime48) {
-            return getTime(dateObject);
+            return DateUtils.getTime48WithZero(dateObject.hour, dateObject.minute);
         } else {
             return DateUtils.getTimeWithZero(dateObject.hour, dateObject.minute);
         }
