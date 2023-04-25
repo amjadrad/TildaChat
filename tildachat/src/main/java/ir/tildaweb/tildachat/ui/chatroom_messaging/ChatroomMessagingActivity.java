@@ -235,9 +235,10 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                 } else if (response.getChatroom().getType().equals("group")) {
                     adapterPrivateChatMessages.setRoomType(ChatroomType.GROUP);
                 }
-
-                switch (response.getCode()) {
-                    case 111: {
+            }
+            switch (response.getCode()) {
+                case 111: {
+                    if(response.getChatroom()!=null) {
                         roomTitle = response.getChatroom().getRoomTitle();
                         roomPicture = response.getChatroom().getRoomPicture();
                         roomType = response.getChatroom().getType();
@@ -247,9 +248,11 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                         binding.tvUserStatus.setText(String.format("%s %s", MathUtils.convertNumberToKilo(response.getMemberCount()), "عضو"));
                         binding.linearJoinChannel.setVisibility(View.VISIBLE);
                         setChatroomInfo();
-                        break;
                     }
-                    case 112: {
+                    break;
+                }
+                case 112: {
+                    if(response.getChatroom()!=null) {
                         roomTitle = response.getChatroom().getRoomTitle();
                         roomPicture = response.getChatroom().getRoomPicture();
                         roomType = response.getChatroom().getType();
@@ -259,9 +262,11 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                         binding.tvUserStatus.setText(String.format("%s %s", MathUtils.convertNumberToKilo(response.getMemberCount()), "عضو"));
                         setChatroomInfo();
                         join();
-                        break;
                     }
-                    case 121: {
+                    break;
+                }
+                case 121: {
+                    if(response.getChatroom()!=null) {
                         //Private chat info , users have chatroom
                         if (isWorkWithFullname) {
                             roomTitle = response.getSecondUser().getFullname();
@@ -291,40 +296,42 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                         if (response.getItBlocked() || response.getAmIBlocked()) {
                             binding.linearChatBox.setVisibility(View.GONE);
                         }
-                        break;
                     }
-                    case 122: {
-                        //Private chat info , users don't have chatroom
-                        if (isWorkWithFullname) {
-                            roomTitle = response.getSecondUser().getFullname();
-                        } else {
-                            if (response.getSecondUser().getFirstName() != null) {
-                                roomTitle = response.getSecondUser().getFirstName();
-                            }
-                            if (response.getSecondUser().getLastName() != null) {
-                                roomTitle += " " + response.getSecondUser().getLastName();
-                            }
+                    break;
+                }
+                case 122: {
+                    //Private chat info , users don't have chatroom
+                    if (isWorkWithFullname) {
+                        roomTitle = response.getSecondUser().getFullname();
+                    } else {
+                        if (response.getSecondUser().getFirstName() != null) {
+                            roomTitle = response.getSecondUser().getFirstName();
                         }
-                        roomPicture = response.getSecondUser().getPicture();
-                        secondUserId = response.getSecondUser().getId();
-                        roomType = "private";
-                        chatroomId = null;
-                        roomId = null;
-                        setChatroomInfo();
-                        if (response.getAmIBlocked()) {
-                            binding.tvUserStatus.setText("آخرین بازدید، خیلی وقت پیش");
-                            binding.linearChatBox.setVisibility(View.GONE);
-                        } else {
-                            binding.linearChatBox.setVisibility(View.VISIBLE);
+                        if (response.getSecondUser().getLastName() != null) {
+                            roomTitle += " " + response.getSecondUser().getLastName();
                         }
-                        break;
                     }
-                    case 123: {
-                        Toast.makeText(this, "دسترسی به این چت وجود ندارد.", Toast.LENGTH_SHORT).show();
-                        finish();
-                        break;
+                    roomPicture = response.getSecondUser().getPicture();
+                    secondUserId = response.getSecondUser().getId();
+                    roomType = "private";
+                    chatroomId = null;
+                    roomId = null;
+                    setChatroomInfo();
+                    if (response.getAmIBlocked()) {
+                        binding.tvUserStatus.setText("آخرین بازدید، خیلی وقت پیش");
+                        binding.linearChatBox.setVisibility(View.GONE);
+                    } else {
+                        binding.linearChatBox.setVisibility(View.VISIBLE);
                     }
-                    case 131: {
+                    break;
+                }
+                case 123: {
+                    Toast.makeText(this, "دسترسی به این چت وجود ندارد.", Toast.LENGTH_SHORT).show();
+                    finish();
+                    break;
+                }
+                case 131: {
+                    if(response.getChatroom()!=null) {
                         // Group info, user is joined to group
                         roomTitle = response.getChatroom().getRoomTitle();
                         roomPicture = response.getChatroom().getRoomPicture();
@@ -335,15 +342,16 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                         binding.tvUserStatus.setText(String.format("%s %s", MathUtils.convertNumberToKilo(response.getMemberCount()), "عضو"));
                         setChatroomInfo();
                         join();
-                        break;
                     }
-                    case 132: {
-                        toast("دسترسی شما به این چت امکان پدیر نیست.");
-                        finish();
-                        break;
-                    }
+                    break;
+                }
+                case 132: {
+                    toast("دسترسی شما به این چت امکان پدیر نیست.");
+                    finish();
+                    break;
                 }
             }
+
         });
 
         TildaChatApp.getSocketRequestController().receiver().receiveChatroomJoin(this, ReceiveChatroomJoin.class, response -> {
