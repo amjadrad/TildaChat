@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -208,7 +209,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                 binding.linearChatBox.setVisibility(View.VISIBLE);
             } else {
                 binding.linearChatBox.setVisibility(View.GONE);
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                LinearLayoutCompat.LayoutParams layoutParams = new LinearLayoutCompat.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 binding.recyclerViewMessages.setLayoutParams(layoutParams);
             }
         }
@@ -729,7 +730,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         } else if (id == R.id.imageViewVoice) {
             onRecordVoiceClicked();
         } else if (id == R.id.linearChatroomDetails) {
-            if (!receiveChatroomCheck.getAmIBlocked()) {
+            if (roomType != null && roomType.equals("private") && receiveChatroomCheck.getAmIBlocked() != null && !receiveChatroomCheck.getAmIBlocked()) {
                 onChatDetailsClicked();
             }
 //            Intent intent = new Intent(ChatroomMessagingActivity.this, ChatroomDetailsActivity.class);
