@@ -730,9 +730,15 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         } else if (id == R.id.imageViewVoice) {
             onRecordVoiceClicked();
         } else if (id == R.id.linearChatroomDetails) {
-            if (roomType != null && roomType.equals("private") && receiveChatroomCheck.getAmIBlocked() != null && !receiveChatroomCheck.getAmIBlocked()) {
+            if (roomType != null && roomType.equals("private")) {
+                if (receiveChatroomCheck.getAmIBlocked() != null && !receiveChatroomCheck.getAmIBlocked()) {
+                    onChatDetailsClicked();
+                }
+            } else {
                 onChatDetailsClicked();
             }
+
+
 //            Intent intent = new Intent(ChatroomMessagingActivity.this, ChatroomDetailsActivity.class);
 //            intent.putExtra("room_id", chatroomId);
 //            intent.putExtra("room_name", roomId);
