@@ -1761,7 +1761,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                             FileDownloader.openFile(context, chatMessage.getMessage());
                         } else {
-                            fileDownloaderNew.execute(chatMessage.getMessage());
+                            fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
 //                            FileDownloader fileDownloader = new FileDownloader();
 //                            fileDownloader.setOnFileDownloadListener(() -> {
 //                                FileDownloader.openFile(context, chatMessage.getMessage());
@@ -1820,7 +1820,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                         FileDownloader.openFile(context, chatMessage.getMessage());
                     } else {
-                        fileDownloaderNew.execute(chatMessage.getMessage());
+                        fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
 //                        FileDownloader fileDownloader = new FileDownloader();
 //                        fileDownloader.setOnFileDownloadListener(() -> {
 //                            FileDownloader.openFile(context, chatMessage.getMessage());
@@ -1873,7 +1873,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                             FileDownloader.openFile(context, chatMessage.getMessage());
                         } else {
-                            fileDownloaderNew.execute(chatMessage.getMessage());
+                            fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
 
 //                            FileDownloader fileDownloader = new FileDownloader();
 //                            fileDownloader.setOnFileDownloadListener(() -> {
@@ -1924,7 +1924,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                             FileDownloader.openFile(context, chatMessage.getMessage());
                         } else {
-                            fileDownloaderNew.execute(chatMessage.getMessage());
+                            fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
 
 //                            FileDownloader fileDownloader = new FileDownloader();
 //                            fileDownloader.setOnFileDownloadListener(() -> {
@@ -1955,7 +1955,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                             if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                                 FileDownloader.openFile(context, chatMessage.getMessage());
                             } else {
-                                fileDownloaderNew.execute(chatMessage.getMessage());
+                                fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
 
 //                                FileDownloader fileDownloader = new FileDownloader();
 //                                fileDownloader.setOnFileDownloadListener(() -> {
@@ -2005,7 +2005,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                             FileDownloader.openFile(context, chatMessage.getMessage());
                         } else {
-                            fileDownloaderNew.execute(chatMessage.getMessage());
+                            fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
 
 //                            FileDownloader fileDownloader = new FileDownloader();
 //                            fileDownloader.setOnFileDownloadListener(() -> {
@@ -2104,7 +2104,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                             FileDownloader.openFile(context, chatMessage.getMessage());
                         } else {
-                            fileDownloaderNew.execute(chatMessage.getMessage());
+                            fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
 
 //                            FileDownloader fileDownloader = new FileDownloader();
 //                            fileDownloader.setOnFileDownloadListener(() -> {
@@ -2187,7 +2187,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                             FileDownloader.openFile(context, chatMessage.getMessage());
                         } else {
-                            fileDownloaderNew.execute(chatMessage.getMessage());
+                            fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
 
 //                            FileDownloader fileDownloader = new FileDownloader();
 //                            fileDownloader.setOnFileDownloadListener(() -> {
@@ -2249,7 +2249,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                             FileDownloader.openFile(context, chatMessage.getMessage());
                         } else {
-                            fileDownloaderNew.execute(chatMessage.getMessage());
+                            fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
 
 //                            FileDownloader fileDownloader = new FileDownloader();
 //                            fileDownloader.setOnFileDownloadListener(() -> {
@@ -2325,7 +2325,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                             FileDownloader.openFile(context, chatMessage.getMessage());
                         } else {
-                            fileDownloaderNew.execute(chatMessage.getMessage());
+                            fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
 
 //                            FileDownloader fileDownloader = new FileDownloader();
 //                            fileDownloader.setOnFileDownloadListener(() -> {
