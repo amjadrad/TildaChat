@@ -28,6 +28,17 @@ public class Message {
     private Message reply;
     @SerializedName("seen_count")
     private Integer seenCount;
+    //Local
+    @SerializedName("progress")
+    private Integer progress;
+
+    public Integer getProgress() {
+        return progress;
+    }
+
+    public void setProgress(Integer progress) {
+        this.progress = progress;
+    }
 
     public Message getReply() {
         return reply;

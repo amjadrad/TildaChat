@@ -1,12 +1,17 @@
 package ir.tildaweb.tildachat.adapter;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.DownloadManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.Log;
@@ -20,6 +25,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.cardview.widget.CardView;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -32,6 +38,8 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import ir.tildaweb.tildachat.R;
@@ -43,7 +51,6 @@ import ir.tildaweb.tildachat.interfaces.LoadMoreData;
 import ir.tildaweb.tildachat.models.base_models.Message;
 import ir.tildaweb.tildachat.ui.values.MessageTypeUtil;
 import ir.tildaweb.tildachat.utils.DateUtils;
-import ir.tildaweb.tildachat.utils.FileDownloader;
 import ir.tildaweb.tildachat.utils.FileDownloaderNew;
 import ir.tildaweb.tildachat.utils.OnSwipeTouchListener;
 
@@ -70,6 +77,8 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
     private boolean loading = true;
     private final LoadMoreData loadMoreData;
     private final IChatUtils iChatUtils;
+    private DownloadManager downloadManager;
+    private boolean isDownloadingFile = false;
 
     public AdapterPrivateChatMessages(Context context, Activity activity, int userId, String FILE_URL, RecyclerView recyclerView, ArrayList<Message> chatMessages, LoadMoreData loadMoreData, IChatUtils iChatUtils) {
         this.chatMessages = chatMessages;
@@ -80,6 +89,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         this.recyclerView = recyclerView;
         this.loadMoreData = loadMoreData;
         this.dateHelper = new DateUtils();
+        this.downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         if (FILE_URL.endsWith("/")) {
             this.FILE_URL = FILE_URL;
         } else {
@@ -108,7 +118,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             });
         }
     }
-
 
     public static class Holder extends RecyclerView.ViewHolder {
         public Holder(View view) {
@@ -431,7 +440,8 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
     //File
     public static class ChatHolder_File_ReplyFalse_Me_Private extends Holder {
-        private final TextView tvTime;
+        private final AppCompatTextView tvTime;
+        private final AppCompatTextView tvProgress;
         private final TextView tvMessage;
         private final ImageView imageViewSeen;
         private final CoordinatorLayout coordinatorDownloadFile;
@@ -440,6 +450,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         public ChatHolder_File_ReplyFalse_Me_Private(View view) {
             super(view);
             this.tvMessage = view.findViewById(R.id.tvMessage);
+            this.tvProgress = view.findViewById(R.id.tvProgress);
             this.tvTime = view.findViewById(R.id.tvTime);
             this.imageViewSeen = view.findViewById(R.id.imageViewSeen);
             this.coordinatorDownloadFile = view.findViewById(R.id.coordinatorDownloadFile);
@@ -448,7 +459,8 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
     }
 
     public static class ChatHolder_File_ReplyFalse_Me_Group extends Holder {
-        public TextView tvTime;
+        private final AppCompatTextView tvTime;
+        private final AppCompatTextView tvProgress;
         public TextView tvMessage;
         public ImageView imageViewSeen;
         public LinearLayout linearMessage;
@@ -457,6 +469,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
         public ChatHolder_File_ReplyFalse_Me_Group(View view) {
             super(view);
+            this.tvProgress = view.findViewById(R.id.tvProgress);
             this.tvMessage = view.findViewById(R.id.tvMessage);
             this.tvTime = view.findViewById(R.id.tvTime);
             this.imageViewSeen = view.findViewById(R.id.imageViewSeen);
@@ -467,7 +480,8 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
     }
 
     public static class ChatHolder_File_ReplyFalse_Other_Private extends Holder {
-        public TextView tvTime;
+        private final AppCompatTextView tvTime;
+        private final AppCompatTextView tvProgress;
         public TextView tvMessage;
         private final CoordinatorLayout coordinatorDownloadFile;
         private final CoordinatorLayout coordinatorDownloadedFile;
@@ -476,13 +490,16 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             super(view);
             this.tvMessage = view.findViewById(R.id.tvMessage);
             this.tvTime = view.findViewById(R.id.tvTime);
+            this.tvProgress = view.findViewById(R.id.tvProgress);
             this.coordinatorDownloadFile = view.findViewById(R.id.coordinatorDownloadFile);
             this.coordinatorDownloadedFile = view.findViewById(R.id.coordinatorDownloadedFile);
         }
     }
 
     public static class ChatHolder_File_ReplyTrue_Me_Private extends Holder {
-        public TextView tvTime, tvReply;
+        public TextView tvReply;
+        private final AppCompatTextView tvTime;
+        private final AppCompatTextView tvProgress;
         public TextView tvMessage;
         public ImageView imageViewSeen;
         public LinearLayout linearLayoutReply;
@@ -497,6 +514,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             this.tvTime = view.findViewById(R.id.tvTime);
             this.imageViewSeen = view.findViewById(R.id.imageViewSeen);
             this.tvReply = view.findViewById(R.id.tvReplyMessage);
+            this.tvProgress = view.findViewById(R.id.tvProgress);
             this.tvMessage = view.findViewById(R.id.tvMessage);
             this.linearLayoutReply = view.findViewById(R.id.linearLayoutReply);
             this.imageViewReplyMessage = view.findViewById(R.id.imageViewReplyMessage);
@@ -508,7 +526,9 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
     }
 
     public static class ChatHolder_File_ReplyTrue_Me_Group extends Holder {
-        public TextView tvTime, tvReply;
+        public TextView tvReply;
+        private final AppCompatTextView tvTime;
+        private final AppCompatTextView tvProgress;
         public TextView tvMessage;
         public ImageView imageViewSeen;
         public LinearLayout linearLayoutReply;
@@ -523,6 +543,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             this.tvTime = view.findViewById(R.id.tvTime);
             this.imageViewSeen = view.findViewById(R.id.imageViewSeen);
             this.tvReply = view.findViewById(R.id.tvReplyMessage);
+            this.tvProgress = view.findViewById(R.id.tvProgress);
             this.tvMessage = view.findViewById(R.id.tvMessage);
             this.linearLayoutReply = view.findViewById(R.id.linearLayoutReply);
             this.imageViewReplyMessage = view.findViewById(R.id.imageViewReplyMessage);
@@ -534,8 +555,10 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
     }
 
     public static class ChatHolder_File_ReplyTrue_Other_Private extends Holder {
-        public TextView tvTime, tvReply;
+        public TextView tvReply;
         public TextView tvMessage;
+        private final AppCompatTextView tvTime;
+        private final AppCompatTextView tvProgress;
         public LinearLayout linearLayoutReply;
         public AppCompatImageView imageViewReplyMessage;
         public CardView cardViewReplyPicture;
@@ -547,6 +570,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             super(view);
             this.tvTime = view.findViewById(R.id.tvTime);
             this.tvReply = view.findViewById(R.id.tvReplyMessage);
+            this.tvProgress = view.findViewById(R.id.tvProgress);
             this.tvMessage = view.findViewById(R.id.tvMessage);
             this.linearLayoutReply = view.findViewById(R.id.linearLayoutReply);
             this.imageViewReplyMessage = view.findViewById(R.id.imageViewReplyMessage);
@@ -557,7 +581,8 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
     }
 
     public static class ChatHolder_File_ReplyFalse_Other_Group extends Holder {
-        public TextView tvTime;
+        private final AppCompatTextView tvTime;
+        private final AppCompatTextView tvProgress;
         public TextView tvMessage;
         public TextView tvUserName;
         public CircleImageView imageViewProfile;
@@ -569,6 +594,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             super(view);
             this.tvMessage = view.findViewById(R.id.tvMessage);
             this.tvTime = view.findViewById(R.id.tvTime);
+            this.tvProgress = view.findViewById(R.id.tvProgress);
             this.tvUserName = view.findViewById(R.id.tvUserName);
             this.imageViewProfile = view.findViewById(R.id.imageViewProfile);
             this.coordinatorDownloadFile = view.findViewById(R.id.coordinatorDownloadFile);
@@ -577,7 +603,8 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
     }
 
     public static class ChatHolder_File_ReplyTrue_Other_Group extends Holder {
-        public TextView tvTime;
+        private final AppCompatTextView tvTime;
+        private final AppCompatTextView tvProgress;
         public TextView tvMessage;
         public TextView tvReply;
         public TextView tvUserName;
@@ -593,6 +620,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             super(view);
             this.tvMessage = view.findViewById(R.id.tvMessage);
             this.tvTime = view.findViewById(R.id.tvTime);
+            this.tvProgress = view.findViewById(R.id.tvProgress);
             this.tvUserName = view.findViewById(R.id.tvUserName);
             this.imageViewProfile = view.findViewById(R.id.imageViewProfile);
             this.tvReply = view.findViewById(R.id.tvReplyMessage);
@@ -609,7 +637,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
     public int getItemViewType(int position) {
         Message chatMessage = chatMessages.get(position);
         int type = MessageTypeUtil.getType(chatMessage, userId, roomType);
-        Log.d(TAG, "getItemViewType: " + type + " _ " + chatMessage.getMessage() + " _ " + chatMessage.getUserId());
+//        Log.d(TAG, "getItemViewType: " + type + " _ " + chatMessage.getMessage() + " _ " + chatMessage.getUserId());
         return type;
     }
 
@@ -726,15 +754,15 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
         viewHolder.itemView.setOnTouchListener(new OnSwipeTouchListener(context) {
             public void onSwipeTop() {
-                Log.d(TAG, "onSwipeTop: ");
+//                Log.d(TAG, "onSwipeTop: ");
             }
 
             public void onSwipeRight() {
-                Log.d(TAG, "onSwipeRight: ");
+//                Log.d(TAG, "onSwipeRight: ");
             }
 
             public void onSwipeLeft() {
-                Log.d(TAG, "onSwipeLeft: ");
+//                Log.d(TAG, "onSwipeLeft: ");
                 Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     v.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE));
@@ -746,7 +774,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             }
 
             public void onSwipeBottom() {
-                Log.d(TAG, "onSwipeBottom: ");
+//                Log.d(TAG, "onSwipeBottom: ");
             }
 
         });
@@ -1315,7 +1343,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     });
                 });
 
-                Log.d(TAG, "onBindViewHolder: " + FILE_URL + chatMessage.getMessage());
+//                Log.d(TAG, "onBindViewHolder: " + FILE_URL + chatMessage.getMessage());
                 Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.imageView);
                 holder.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
                 break;
@@ -1731,6 +1759,16 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 ChatHolder_File_ReplyFalse_Me_Private holder = (ChatHolder_File_ReplyFalse_Me_Private) viewHolder;
 
                 holder.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
+                if (chatMessage.getProgress() != null) {
+                    if (chatMessage.getProgress() == -1 || chatMessage.getProgress() == 100) {
+                        holder.tvProgress.setVisibility(View.GONE);
+                    } else {
+                        holder.tvProgress.setVisibility(View.VISIBLE);
+                        holder.tvProgress.setText(String.format("در حال دانلود... %s%s کامل شده", chatMessage.getProgress(), "%"));
+                    }
+                } else {
+                    holder.tvProgress.setVisibility(View.GONE);
+                }
 
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
@@ -1757,9 +1795,8 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
                             FileDownloaderNew.openFile(context, chatMessage.getMessage());
                         } else {
-                            FileDownloaderNew fileDownloaderNew = new FileDownloaderNew(context, TildaChatApp._downloadFolder);
-                            fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
-
+                            //Download file
+                            downloadFile(chatMessage);
 //                            FileDownloader fileDownloader = new FileDownloader();
 //                            fileDownloader.setOnFileDownloadListener(() -> {
 //                                FileDownloaderNew.openFile(context, chatMessage.getMessage());
@@ -1793,6 +1830,16 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 ChatHolder_File_ReplyFalse_Me_Group holder = (ChatHolder_File_ReplyFalse_Me_Group) viewHolder;
 
                 holder.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
+                if (chatMessage.getProgress() != null) {
+                    if (chatMessage.getProgress() == -1 || chatMessage.getProgress() == 100) {
+                        holder.tvProgress.setVisibility(View.GONE);
+                    } else {
+                        holder.tvProgress.setVisibility(View.VISIBLE);
+                        holder.tvProgress.setText(String.format("در حال دانلود... %s%s کامل شده", chatMessage.getProgress(), "%"));
+                    }
+                } else {
+                    holder.tvProgress.setVisibility(View.GONE);
+                }
 
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
@@ -1818,9 +1865,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
                         FileDownloaderNew.openFile(context, chatMessage.getMessage());
                     } else {
-                        FileDownloaderNew fileDownloaderNew = new FileDownloaderNew(context, TildaChatApp._downloadFolder);
-                        fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
-
+                        downloadFile(chatMessage);
 //                        FileDownloader fileDownloader = new FileDownloader();
 //                        fileDownloader.setOnFileDownloadListener(() -> {
 //                            FileDownloaderNew.openFile(context, chatMessage.getMessage());
@@ -1851,6 +1896,16 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             case 31211: {
                 ChatHolder_File_ReplyFalse_Other_Private holder = (ChatHolder_File_ReplyFalse_Other_Private) viewHolder;
                 holder.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
+                if (chatMessage.getProgress() != null) {
+                    if (chatMessage.getProgress() == -1 || chatMessage.getProgress() == 100) {
+                        holder.tvProgress.setVisibility(View.GONE);
+                    } else {
+                        holder.tvProgress.setVisibility(View.VISIBLE);
+                        holder.tvProgress.setText(String.format("در حال دانلود... %s%s کامل شده", chatMessage.getProgress(), "%"));
+                    }
+                } else {
+                    holder.tvProgress.setVisibility(View.GONE);
+                }
 
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
@@ -1873,9 +1928,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
                             FileDownloaderNew.openFile(context, chatMessage.getMessage());
                         } else {
-                            FileDownloaderNew fileDownloaderNew = new FileDownloaderNew(context, TildaChatApp._downloadFolder);
-                            fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
-
+                            downloadFile(chatMessage);
 
 //                            FileDownloader fileDownloader = new FileDownloader();
 //                            fileDownloader.setOnFileDownloadListener(() -> {
@@ -1907,6 +1960,17 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             case 31221: {
                 ChatHolder_File_ReplyFalse_Other_Private holder = (ChatHolder_File_ReplyFalse_Other_Private) viewHolder;
                 holder.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
+                if (chatMessage.getProgress() != null) {
+                    if (chatMessage.getProgress() == -1 || chatMessage.getProgress() == 100) {
+                        holder.tvProgress.setVisibility(View.GONE);
+                    } else {
+                        holder.tvProgress.setVisibility(View.VISIBLE);
+                        holder.tvProgress.setText(String.format("در حال دانلود... %s%s کامل شده", chatMessage.getProgress(), "%"));
+                    }
+                } else {
+                    holder.tvProgress.setVisibility(View.GONE);
+                }
+
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
@@ -1926,9 +1990,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
                             FileDownloaderNew.openFile(context, chatMessage.getMessage());
                         } else {
-                            FileDownloaderNew fileDownloaderNew = new FileDownloaderNew(context, TildaChatApp._downloadFolder);
-                            fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
-
+                            downloadFile(chatMessage);
 
 //                            FileDownloader fileDownloader = new FileDownloader();
 //                            fileDownloader.setOnFileDownloadListener(() -> {
@@ -1959,9 +2021,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                             if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
                                 FileDownloaderNew.openFile(context, chatMessage.getMessage());
                             } else {
-                                FileDownloaderNew fileDownloaderNew = new FileDownloaderNew(context, TildaChatApp._downloadFolder);
-                                fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
-
+                                downloadFile(chatMessage);
 
 //                                FileDownloader fileDownloader = new FileDownloader();
 //                                fileDownloader.setOnFileDownloadListener(() -> {
@@ -1979,6 +2039,16 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             case 31231: {
                 ChatHolder_File_ReplyFalse_Other_Group holder = (ChatHolder_File_ReplyFalse_Other_Group) viewHolder;
                 holder.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
+                if (chatMessage.getProgress() != null) {
+                    if (chatMessage.getProgress() == -1 || chatMessage.getProgress() == 100) {
+                        holder.tvProgress.setVisibility(View.GONE);
+                    } else {
+                        holder.tvProgress.setVisibility(View.VISIBLE);
+                        holder.tvProgress.setText(String.format("در حال دانلود... %s%s کامل شده", chatMessage.getProgress(), "%"));
+                    }
+                } else {
+                    holder.tvProgress.setVisibility(View.GONE);
+                }
 
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
@@ -2011,9 +2081,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
                             FileDownloaderNew.openFile(context, chatMessage.getMessage());
                         } else {
-                            FileDownloaderNew fileDownloaderNew = new FileDownloaderNew(context, TildaChatApp._downloadFolder);
-                            fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
-
+                            downloadFile(chatMessage);
 
 //                            FileDownloader fileDownloader = new FileDownloader();
 //                            fileDownloader.setOnFileDownloadListener(() -> {
@@ -2047,6 +2115,17 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             case 32111: {
                 ChatHolder_File_ReplyTrue_Me_Private holder = (ChatHolder_File_ReplyTrue_Me_Private) viewHolder;
                 holder.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
+                if (chatMessage.getProgress() != null) {
+                    if (chatMessage.getProgress() == -1 || chatMessage.getProgress() == 100) {
+                        holder.tvProgress.setVisibility(View.GONE);
+                    } else {
+                        holder.tvProgress.setVisibility(View.VISIBLE);
+                        holder.tvProgress.setText(String.format("در حال دانلود... %s%s کامل شده", chatMessage.getProgress(), "%"));
+                    }
+                } else {
+                    holder.tvProgress.setVisibility(View.GONE);
+                }
+
                 switch (chatMessage.getReply().getMessageType()) {
                     case "text":
                         holder.tvReply.setVisibility(View.VISIBLE);
@@ -2112,9 +2191,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
                             FileDownloaderNew.openFile(context, chatMessage.getMessage());
                         } else {
-                            FileDownloaderNew fileDownloaderNew = new FileDownloaderNew(context, TildaChatApp._downloadFolder);
-                            fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
-
+                            downloadFile(chatMessage);
 
 //                            FileDownloader fileDownloader = new FileDownloader();
 //                            fileDownloader.setOnFileDownloadListener(() -> {
@@ -2132,6 +2209,17 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             case 32131: {
                 ChatHolder_File_ReplyTrue_Me_Group holder = (ChatHolder_File_ReplyTrue_Me_Group) viewHolder;
                 holder.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
+                if (chatMessage.getProgress() != null) {
+                    if (chatMessage.getProgress() == -1 || chatMessage.getProgress() == 100) {
+                        holder.tvProgress.setVisibility(View.GONE);
+                    } else {
+                        holder.tvProgress.setVisibility(View.VISIBLE);
+                        holder.tvProgress.setText(String.format("در حال دانلود... %s%s کامل شده", chatMessage.getProgress(), "%"));
+                    }
+                } else {
+                    holder.tvProgress.setVisibility(View.GONE);
+                }
+
                 switch (chatMessage.getReply().getMessageType()) {
                     case "text":
                         holder.tvReply.setVisibility(View.VISIBLE);
@@ -2197,9 +2285,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
                             FileDownloaderNew.openFile(context, chatMessage.getMessage());
                         } else {
-                            FileDownloaderNew fileDownloaderNew = new FileDownloaderNew(context, TildaChatApp._downloadFolder);
-                            fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
-
+                            downloadFile(chatMessage);
 
 //                            FileDownloader fileDownloader = new FileDownloader();
 //                            fileDownloader.setOnFileDownloadListener(() -> {
@@ -2219,6 +2305,17 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             case 32211: {
                 ChatHolder_File_ReplyTrue_Other_Private holder = (ChatHolder_File_ReplyTrue_Other_Private) viewHolder;
                 holder.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
+                if (chatMessage.getProgress() != null) {
+                    if (chatMessage.getProgress() == -1 || chatMessage.getProgress() == 100) {
+                        holder.tvProgress.setVisibility(View.GONE);
+                    } else {
+                        holder.tvProgress.setVisibility(View.VISIBLE);
+                        holder.tvProgress.setText(String.format("در حال دانلود... %s%s کامل شده", chatMessage.getProgress(), "%"));
+                    }
+                } else {
+                    holder.tvProgress.setVisibility(View.GONE);
+                }
+
                 if (chatMessage.getReply().getMessageType().equals("text")) {
                     holder.tvReply.setVisibility(View.VISIBLE);
                     holder.cardViewReplyPicture.setVisibility(View.GONE);
@@ -2261,14 +2358,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
                             FileDownloaderNew.openFile(context, chatMessage.getMessage());
                         } else {
-                            FileDownloaderNew fileDownloaderNew = new FileDownloaderNew(context, TildaChatApp._downloadFolder);
-                            fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
-//                            FileDownloader fileDownloader = new FileDownloader();
-//                            fileDownloader.setOnFileDownloadListener(() -> {
-//                                FileDownloaderNew.openFile(context, chatMessage.getMessage());
-//                                notifyItemChanged(position);
-//                            });
-//                            fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
+                            downloadFile(chatMessage);
                         }
                     }
                 });
@@ -2289,8 +2379,17 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             }
             case 32231: {
                 ChatHolder_File_ReplyTrue_Other_Group holder = (ChatHolder_File_ReplyTrue_Other_Group) viewHolder;
-
                 holder.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
+                if (chatMessage.getProgress() != null) {
+                    if (chatMessage.getProgress() == -1 || chatMessage.getProgress() == 100) {
+                        holder.tvProgress.setVisibility(View.GONE);
+                    } else {
+                        holder.tvProgress.setVisibility(View.VISIBLE);
+                        holder.tvProgress.setText(String.format("در حال دانلود... %s%s کامل شده", chatMessage.getProgress(), "%"));
+                    }
+                } else {
+                    holder.tvProgress.setVisibility(View.GONE);
+                }
                 switch (chatMessage.getReply().getMessageType()) {
                     case "text":
                         holder.tvReply.setVisibility(View.VISIBLE);
@@ -2337,10 +2436,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
                             FileDownloaderNew.openFile(context, chatMessage.getMessage());
                         } else {
-                            FileDownloaderNew fileDownloaderNew = new FileDownloaderNew(context, TildaChatApp._downloadFolder);
-                            fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
-
-
+                            downloadFile(chatMessage);
 //                            FileDownloader fileDownloader = new FileDownloader();
 //                            fileDownloader.setOnFileDownloadListener(() -> {
 //                                FileDownloaderNew.openFile(context, chatMessage.getMessage());
@@ -2404,6 +2500,18 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         for (Message item : chatMessages) {
             if (item.getId().equals(message.getId())) {
                 item.setMessage(message.getMessage());
+                notifyItemChanged(i);
+                break;
+            }
+            i++;
+        }
+    }
+
+    public void updateFileItemProgress(int id, int progress) {
+        int i = 0;
+        for (Message item : chatMessages) {
+            if (item.getId().equals(id)) {
+                item.setProgress(progress);
                 notifyItemChanged(i);
                 break;
             }
@@ -2477,14 +2585,14 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
     }
 
     protected boolean checkReadExternalPermission(Activity activity) {
-        Log.d(TAG, "checkReadExternalPermission: 11");
+//        Log.d(TAG, "checkReadExternalPermission: 11");
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "checkReadExternalPermission: 22");
             ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 10001);
             return false;
         } else {
-            Log.d(TAG, "checkReadExternalPermission: 33");
+//            Log.d(TAG, "checkReadExternalPermission: 33");
             return true;
         }
     }
@@ -2500,8 +2608,112 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
     }
 
     @Override
-    public void onFileDownloaded(Integer downloadId) {
+    public void onFileDownloaded(Long downloadId) {
 
     }
 
+    private void downloadFile(Message chatMessage) {
+        if (isDownloadingFile) {
+
+        } else {
+            isDownloadingFile = true;
+            android.os.Message message = android.os.Message.obtain();
+            message.what = UPDATE_DOWNLOAD_PROGRESS;
+            message.arg1 = 0;
+            message.arg2 = chatMessage.getId();
+            mainHandler.sendMessage(message);
+            FileDownloaderNew fileDownloaderNew = new FileDownloaderNew(context, TildaChatApp._downloadFolder);
+            fileDownloaderNew.setOnFileDownloadListener(new FileDownloaderNew.OnFileDownloadListener() {
+                @Override
+                public void onFileDownloaded(String path) {
+
+                }
+
+                @Override
+                public void onFileDownloaded(Long downloadId) {
+
+                    // Run a task in a background thread to check download progress
+                    if (executor == null || executor.isShutdown()) {
+                        executor = Executors.newFixedThreadPool(1);
+                        executor.execute(() -> {
+                            int progress = 0;
+                            boolean isDownloadFinished = false;
+                            while (!isDownloadFinished) {
+                                try {
+                                    Cursor cursor = downloadManager.query(new DownloadManager.Query().setFilterById(downloadId));
+                                    if (cursor != null && cursor.moveToFirst()) {
+                                        @SuppressLint("Range") int downloadStatus = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS));
+                                        switch (downloadStatus) {
+                                            case DownloadManager.STATUS_RUNNING:
+                                                @SuppressLint("Range") long totalBytes = cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+                                                if (totalBytes > 0) {
+                                                    @SuppressLint("Range") long downloadedBytes = cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
+                                                    progress = (int) (downloadedBytes * 100 / totalBytes);
+                                                }
+
+                                                break;
+                                            case DownloadManager.STATUS_SUCCESSFUL:
+                                                progress = 100;
+                                                isDownloadFinished = true;
+                                                break;
+                                            case DownloadManager.STATUS_PAUSED:
+                                            case DownloadManager.STATUS_PENDING:
+                                                break;
+                                            case DownloadManager.STATUS_FAILED:
+                                                progress = 0;
+                                                isDownloadFinished = true;
+                                                break;
+                                        }
+                                        cursor.close();
+                                        android.os.Message message = android.os.Message.obtain();
+                                        message.what = UPDATE_DOWNLOAD_PROGRESS;
+                                        message.arg1 = progress;
+                                        message.arg2 = chatMessage.getId();
+                                        mainHandler.sendMessage(message);
+                                    } else {
+                                        isDownloadFinished = true;
+                                        progress = 0;
+                                        android.os.Message message = android.os.Message.obtain();
+                                        message.what = UPDATE_DOWNLOAD_PROGRESS;
+                                        message.arg1 = progress;
+                                        message.arg2 = chatMessage.getId();
+                                        mainHandler.sendMessage(message);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+            fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
+        }
+    }
+
+    // Indicate that we would like to update download progress
+    private static final int UPDATE_DOWNLOAD_PROGRESS = 1;
+    // Use a background thread to check the progress of downloading
+    private ExecutorService executor;
+    // Use a handler to update progress bar on the main thread
+    private final Handler mainHandler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
+        @Override
+        public boolean handleMessage(@NonNull android.os.Message msg) {
+            if (msg.what == UPDATE_DOWNLOAD_PROGRESS) {
+                int downloadProgress = msg.arg1;
+                if (downloadProgress % 4 == 0) {
+                    updateFileItemProgress(msg.arg2, downloadProgress);
+                }
+                if (downloadProgress == 100 || downloadProgress == -1) {
+                    updateFileItemProgress(msg.arg2, 100);
+                    executor.shutdown();
+                    mainHandler.removeCallbacksAndMessages(null);
+                }
+                // Update your progress bar here.
+
+//                progressBar.setProgress(downloadProgress);
+            }
+            return true;
+        }
+    });
 }

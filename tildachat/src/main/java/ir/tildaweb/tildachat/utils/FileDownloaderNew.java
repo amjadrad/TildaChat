@@ -1,23 +1,24 @@
 package ir.tildaweb.tildachat.utils;
 
+import android.annotation.SuppressLint;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import ir.tildaweb.tildachat.app.TildaChatApp;
 
@@ -27,10 +28,13 @@ public class FileDownloaderNew extends AsyncTask<String, String, String> {
     private String filePath, folderName;
     private Context context;
     private OnFileDownloadListener onFileDownloadListener;
+    private DownloadManager downloadManager;
+
 
     public FileDownloaderNew(Context context, String folderName) {
         this.context = context;
         this.folderName = folderName;
+        this.downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
     }
 
     public void setOnFileDownloadListener(OnFileDownloadListener onFileDownloadListener) {
@@ -40,7 +44,7 @@ public class FileDownloaderNew extends AsyncTask<String, String, String> {
     public interface OnFileDownloadListener {
         void onFileDownloaded(String path);
 
-        void onFileDownloaded(Integer downloadId);
+        void onFileDownloaded(Long downloadId);
     }
 
     @Override
@@ -73,14 +77,13 @@ public class FileDownloaderNew extends AsyncTask<String, String, String> {
 //                e.printStackTrace();
 //            }
 //        } else {
-        DownloadManager downloadmanager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         Uri uri = Uri.parse(filePath);
         String fileName = filePath.substring(filePath.lastIndexOf("/") + 1);
         DownloadManager.Request request = new DownloadManager.Request(uri);
         request.setTitle(fileName);
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, folderName + "/" + fileName);
-        return "download_manager_" + downloadmanager.enqueue(request);
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, folderName + "/chats/" + fileName);
+        return "download_manager_" + downloadManager.enqueue(request);
 //        }
 //        return null;
     }
@@ -95,16 +98,20 @@ public class FileDownloaderNew extends AsyncTask<String, String, String> {
         Log.d(TAG, "onPostExecute: " + downloadedFile);
         if (downloadedFile.startsWith("download_manager_")) {
             //DownloadManager
+
             try {
                 long downloadID = Long.parseLong(downloadedFile.substring(17));
                 Log.d(TAG, "onPostExecute: " + downloadID);
                 Intent intent = new Intent(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
                 intent.putExtra("downloadId", downloadID + "");
                 context.sendBroadcast(intent);
-                onFileDownloadListener.onFileDownloaded(String.valueOf(downloadID));
+                onFileDownloadListener.onFileDownloaded(downloadID);
+
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
+
+
         } else {
             onFileDownloadListener.onFileDownloaded(downloadedFile);
         }
@@ -114,13 +121,16 @@ public class FileDownloaderNew extends AsyncTask<String, String, String> {
         //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 //            pathFolder = context.getExternalFilesDir(null) + "/" + TildaChatApp._downloadFolder + "/";
 //        } else {
-        String pathFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + TildaChatApp._downloadFolder + "/";
-//        }
-        String fullPath = pathFolder + filePath;
-        Log.d(TAG, "isFileExists: " + fullPath);
-        File file = new File(fullPath);
-        Log.d(TAG, "isFileExists: " + file.exists());
-        return file.exists();
+        try {
+            String pathFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + TildaChatApp._downloadFolder + "/";
+            String fullPath = pathFolder + filePath;
+            Log.d(TAG, "isFileExists: " + fullPath);
+            File file = new File(fullPath);
+            Log.d(TAG, "isFileExists: " + file.exists());
+            return file.exists();
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public static void openFile(Context context, String filePath) {
@@ -128,11 +138,11 @@ public class FileDownloaderNew extends AsyncTask<String, String, String> {
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 //                pathFile = context.getExternalFilesDir(null) +  "/"+ TildaChatApp._downloadFolder +"/" + pathFile;
 //            } else {
-            filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) +  "/"+TildaChatApp._downloadFolder+"/" + filePath;
+            filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + TildaChatApp._downloadFolder + "/" + filePath;
 //            }
             File file = new File(filePath);
             Log.d(TAG, "openFile: " + filePath);
-            String auth = context.getApplicationContext().getPackageName();
+            String auth = context.getApplicationContext().getPackageName() + ".myprovider";
             Uri fileURI = FileProvider.getUriForFile(context, auth, file);
 //            context.grantUriPermission(context.getPackageName(), fileURI, Intent.FLAG_GRANT_READ_URI_PERMISSION);
             final Intent intent = new Intent(Intent.ACTION_VIEW)

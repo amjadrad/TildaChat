@@ -7,14 +7,14 @@ import tildachatapp.BuildConfig;
 
 public class App extends Application {
 
-    public static int userId = 2;
+    public static int userId = 3;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
         String query = "user_id=" + userId;
-        TildaChatApp.setUp("https://ipomchat.nazmenovin.com", query, userId);
+        TildaChatApp.setUp("https://chat.nazmenovin.com", query, userId);
         TildaChatApp.setConstantsUp("https://nazmenovin.com/uploaded_files/", "tildachat", "https://nazmenovin.com/api/chat_uploader");
         TildaChatApp.setUpEmojis(this);
     }
