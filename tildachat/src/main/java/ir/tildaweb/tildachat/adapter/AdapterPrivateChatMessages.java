@@ -44,11 +44,12 @@ import ir.tildaweb.tildachat.models.base_models.Message;
 import ir.tildaweb.tildachat.ui.values.MessageTypeUtil;
 import ir.tildaweb.tildachat.utils.DateUtils;
 import ir.tildaweb.tildachat.utils.FileDownloader;
+import ir.tildaweb.tildachat.utils.FileDownloaderNew;
 import ir.tildaweb.tildachat.utils.FileUtils;
 import ir.tildaweb.tildachat.utils.OnSwipeTouchListener;
 
 
-public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements FileDownloaderNew.OnFileDownloadListener {
 
     public enum SearchType {
         REPLY,
@@ -69,8 +70,8 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
     private int firstVisibleItem;
     private boolean loading = true;
     private final LoadMoreData loadMoreData;
-
     private final IChatUtils iChatUtils;
+    private FileDownloaderNew fileDownloaderNew;
 
 
     public AdapterPrivateChatMessages(Context context, Activity activity, int userId, String FILE_URL, RecyclerView recyclerView, ArrayList<Message> chatMessages, LoadMoreData loadMoreData, IChatUtils iChatUtils) {
@@ -87,6 +88,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         } else {
             this.FILE_URL = FILE_URL.concat("/");
         }
+        fileDownloaderNew = new FileDownloaderNew(context, TildaChatApp._downloadFolder);
         setScrollListener();
     }
 
@@ -1759,12 +1761,13 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                             FileDownloader.openFile(context, chatMessage.getMessage());
                         } else {
-                            FileDownloader fileDownloader = new FileDownloader();
-                            fileDownloader.setOnFileDownloadListener(() -> {
-                                FileDownloader.openFile(context, chatMessage.getMessage());
-                                notifyItemChanged(position);
-                            });
-                            fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
+                            fileDownloaderNew.execute(chatMessage.getMessage());
+//                            FileDownloader fileDownloader = new FileDownloader();
+//                            fileDownloader.setOnFileDownloadListener(() -> {
+//                                FileDownloader.openFile(context, chatMessage.getMessage());
+//                                notifyItemChanged(position);
+//                            });
+//                            fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
                         }
                     }
                 });
@@ -1817,12 +1820,13 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                         FileDownloader.openFile(context, chatMessage.getMessage());
                     } else {
-                        FileDownloader fileDownloader = new FileDownloader();
-                        fileDownloader.setOnFileDownloadListener(() -> {
-                            FileDownloader.openFile(context, chatMessage.getMessage());
-                            notifyItemChanged(position);
-                        });
-                        fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
+                        fileDownloaderNew.execute(chatMessage.getMessage());
+//                        FileDownloader fileDownloader = new FileDownloader();
+//                        fileDownloader.setOnFileDownloadListener(() -> {
+//                            FileDownloader.openFile(context, chatMessage.getMessage());
+//                            notifyItemChanged(position);
+//                        });
+//                        fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
                     }
                 });
 
@@ -1869,12 +1873,14 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                             FileDownloader.openFile(context, chatMessage.getMessage());
                         } else {
-                            FileDownloader fileDownloader = new FileDownloader();
-                            fileDownloader.setOnFileDownloadListener(() -> {
-                                FileDownloader.openFile(context, chatMessage.getMessage());
-                                notifyItemChanged(position);
-                            });
-                            fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
+                            fileDownloaderNew.execute(chatMessage.getMessage());
+
+//                            FileDownloader fileDownloader = new FileDownloader();
+//                            fileDownloader.setOnFileDownloadListener(() -> {
+//                                FileDownloader.openFile(context, chatMessage.getMessage());
+//                                notifyItemChanged(position);
+//                            });
+//                            fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
                         }
                     }
                 });
@@ -1918,12 +1924,14 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                             FileDownloader.openFile(context, chatMessage.getMessage());
                         } else {
-                            FileDownloader fileDownloader = new FileDownloader();
-                            fileDownloader.setOnFileDownloadListener(() -> {
-                                FileDownloader.openFile(context, chatMessage.getMessage());
-                                notifyItemChanged(position);
-                            });
-                            fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
+                            fileDownloaderNew.execute(chatMessage.getMessage());
+
+//                            FileDownloader fileDownloader = new FileDownloader();
+//                            fileDownloader.setOnFileDownloadListener(() -> {
+//                                FileDownloader.openFile(context, chatMessage.getMessage());
+//                                notifyItemChanged(position);
+//                            });
+//                            fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
                         }
                     }
                 });
@@ -1947,12 +1955,14 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                             if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                                 FileDownloader.openFile(context, chatMessage.getMessage());
                             } else {
-                                FileDownloader fileDownloader = new FileDownloader();
-                                fileDownloader.setOnFileDownloadListener(() -> {
-                                    FileDownloader.openFile(context, chatMessage.getMessage());
-                                    notifyItemChanged(position);
-                                });
-                                fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
+                                fileDownloaderNew.execute(chatMessage.getMessage());
+
+//                                FileDownloader fileDownloader = new FileDownloader();
+//                                fileDownloader.setOnFileDownloadListener(() -> {
+//                                    FileDownloader.openFile(context, chatMessage.getMessage());
+//                                    notifyItemChanged(position);
+//                                });
+//                                fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
                             }
                         }
                     }
@@ -1995,12 +2005,14 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                             FileDownloader.openFile(context, chatMessage.getMessage());
                         } else {
-                            FileDownloader fileDownloader = new FileDownloader();
-                            fileDownloader.setOnFileDownloadListener(() -> {
-                                FileDownloader.openFile(context, chatMessage.getMessage());
-                                notifyItemChanged(position);
-                            });
-                            fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
+                            fileDownloaderNew.execute(chatMessage.getMessage());
+
+//                            FileDownloader fileDownloader = new FileDownloader();
+//                            fileDownloader.setOnFileDownloadListener(() -> {
+//                                FileDownloader.openFile(context, chatMessage.getMessage());
+//                                notifyItemChanged(position);
+//                            });
+//                            fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
                         }
                     }
                 });
@@ -2092,12 +2104,14 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                             FileDownloader.openFile(context, chatMessage.getMessage());
                         } else {
-                            FileDownloader fileDownloader = new FileDownloader();
-                            fileDownloader.setOnFileDownloadListener(() -> {
-                                FileDownloader.openFile(context, chatMessage.getMessage());
-                                notifyItemChanged(position);
-                            });
-                            fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
+                            fileDownloaderNew.execute(chatMessage.getMessage());
+
+//                            FileDownloader fileDownloader = new FileDownloader();
+//                            fileDownloader.setOnFileDownloadListener(() -> {
+//                                FileDownloader.openFile(context, chatMessage.getMessage());
+//                                notifyItemChanged(position);
+//                            });
+//                            fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
                         }
                     }
                 });
@@ -2173,12 +2187,14 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                             FileDownloader.openFile(context, chatMessage.getMessage());
                         } else {
-                            FileDownloader fileDownloader = new FileDownloader();
-                            fileDownloader.setOnFileDownloadListener(() -> {
-                                FileDownloader.openFile(context, chatMessage.getMessage());
-                                notifyItemChanged(position);
-                            });
-                            fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
+                            fileDownloaderNew.execute(chatMessage.getMessage());
+
+//                            FileDownloader fileDownloader = new FileDownloader();
+//                            fileDownloader.setOnFileDownloadListener(() -> {
+//                                FileDownloader.openFile(context, chatMessage.getMessage());
+//                                notifyItemChanged(position);
+//                            });
+//                            fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
                         }
                     }
                 });
@@ -2233,12 +2249,14 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                             FileDownloader.openFile(context, chatMessage.getMessage());
                         } else {
-                            FileDownloader fileDownloader = new FileDownloader();
-                            fileDownloader.setOnFileDownloadListener(() -> {
-                                FileDownloader.openFile(context, chatMessage.getMessage());
-                                notifyItemChanged(position);
-                            });
-                            fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
+                            fileDownloaderNew.execute(chatMessage.getMessage());
+
+//                            FileDownloader fileDownloader = new FileDownloader();
+//                            fileDownloader.setOnFileDownloadListener(() -> {
+//                                FileDownloader.openFile(context, chatMessage.getMessage());
+//                                notifyItemChanged(position);
+//                            });
+//                            fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
                         }
                     }
                 });
@@ -2307,12 +2325,14 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
                             FileDownloader.openFile(context, chatMessage.getMessage());
                         } else {
-                            FileDownloader fileDownloader = new FileDownloader();
-                            fileDownloader.setOnFileDownloadListener(() -> {
-                                FileDownloader.openFile(context, chatMessage.getMessage());
-                                notifyItemChanged(position);
-                            });
-                            fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
+                            fileDownloaderNew.execute(chatMessage.getMessage());
+
+//                            FileDownloader fileDownloader = new FileDownloader();
+//                            fileDownloader.setOnFileDownloadListener(() -> {
+//                                FileDownloader.openFile(context, chatMessage.getMessage());
+//                                notifyItemChanged(position);
+//                            });
+//                            fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
                         }
                     }
                 });
@@ -2458,6 +2478,16 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
     public void clearAll() {
         this.chatMessages.clear();
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void onFileDownloaded(String path) {
+
+    }
+
+    @Override
+    public void onFileDownloaded(Integer downloadId) {
+
     }
 
 }
