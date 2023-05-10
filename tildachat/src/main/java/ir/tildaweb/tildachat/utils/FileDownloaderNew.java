@@ -110,17 +110,29 @@ public class FileDownloaderNew extends AsyncTask<String, String, String> {
         }
     }
 
+    public static boolean isFileExists(Context context, String filePath) {
+        //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//            pathFolder = context.getExternalFilesDir(null) + "/" + TildaChatApp._downloadFolder + "/";
+//        } else {
+        String pathFolder = Environment.getExternalStorageDirectory() + "/" + TildaChatApp._downloadFolder + "/";
+//        }
+        String fullPath = pathFolder + filePath;
+        Log.d(TAG, "isFileExists: " + fullPath);
+        File file = new File(fullPath);
+        Log.d(TAG, "isFileExists: " + file.exists());
+        return file.exists();
+    }
 
-    public static void openFile(Context context, String pathFile) {
+    public static void openFile(Context context, String filePath) {
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                pathFile = context.getExternalFilesDir(null) + "/" + TildaChatApp._downloadFolder + "/" + pathFile;
-            } else {
-                pathFile = Environment.getExternalStorageDirectory() + "/" + TildaChatApp._downloadFolder + "/" + pathFile;
-            }
-            File file = new File(pathFile);
-            Log.d(TAG, "openFile: " + pathFile);
-            String auth = context.getApplicationContext().getPackageName() + ".myprovider";
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//                pathFile = context.getExternalFilesDir(null) +  "/"+ TildaChatApp._downloadFolder +"/" + pathFile;
+//            } else {
+            filePath = Environment.getExternalStorageDirectory() +  "/"+TildaChatApp._downloadFolder+"/" + filePath;
+//            }
+            File file = new File(filePath);
+            Log.d(TAG, "openFile: " + filePath);
+            String auth = context.getApplicationContext().getPackageName();
             Uri fileURI = FileProvider.getUriForFile(context, auth, file);
 //            context.grantUriPermission(context.getPackageName(), fileURI, Intent.FLAG_GRANT_READ_URI_PERMISSION);
             final Intent intent = new Intent(Intent.ACTION_VIEW)
@@ -134,7 +146,6 @@ public class FileDownloaderNew extends AsyncTask<String, String, String> {
         }
 
     }
-
 
 }
 

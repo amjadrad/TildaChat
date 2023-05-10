@@ -45,7 +45,6 @@ import ir.tildaweb.tildachat.ui.values.MessageTypeUtil;
 import ir.tildaweb.tildachat.utils.DateUtils;
 import ir.tildaweb.tildachat.utils.FileDownloader;
 import ir.tildaweb.tildachat.utils.FileDownloaderNew;
-import ir.tildaweb.tildachat.utils.FileUtils;
 import ir.tildaweb.tildachat.utils.OnSwipeTouchListener;
 
 
@@ -71,8 +70,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
     private boolean loading = true;
     private final LoadMoreData loadMoreData;
     private final IChatUtils iChatUtils;
-    private FileDownloaderNew fileDownloaderNew;
-
 
     public AdapterPrivateChatMessages(Context context, Activity activity, int userId, String FILE_URL, RecyclerView recyclerView, ArrayList<Message> chatMessages, LoadMoreData loadMoreData, IChatUtils iChatUtils) {
         this.chatMessages = chatMessages;
@@ -88,7 +85,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         } else {
             this.FILE_URL = FILE_URL.concat("/");
         }
-        fileDownloaderNew = new FileDownloaderNew(context, TildaChatApp._downloadFolder);
         setScrollListener();
     }
 
@@ -1751,20 +1747,22 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
                 }
 
-                if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
+                if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
                     holder.coordinatorDownloadedFile.setVisibility(View.GONE);
                 } else {
                     holder.coordinatorDownloadedFile.setVisibility(View.VISIBLE);
                 }
                 holder.coordinatorDownloadFile.setOnClickListener(v -> {
                     if (checkReadExternalPermission(activity)) {
-                        if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
-                            FileDownloader.openFile(context, chatMessage.getMessage());
+                        if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
+                            FileDownloaderNew.openFile(context, chatMessage.getMessage());
                         } else {
+                            FileDownloaderNew fileDownloaderNew = new FileDownloaderNew(context, TildaChatApp._downloadFolder);
                             fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
+
 //                            FileDownloader fileDownloader = new FileDownloader();
 //                            fileDownloader.setOnFileDownloadListener(() -> {
-//                                FileDownloader.openFile(context, chatMessage.getMessage());
+//                                FileDownloaderNew.openFile(context, chatMessage.getMessage());
 //                                notifyItemChanged(position);
 //                            });
 //                            fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
@@ -1811,19 +1809,21 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
                 }
 
-                if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
+                if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
                     holder.coordinatorDownloadedFile.setVisibility(View.GONE);
                 } else {
                     holder.coordinatorDownloadedFile.setVisibility(View.VISIBLE);
                 }
                 holder.coordinatorDownloadFile.setOnClickListener(v -> {
-                    if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
-                        FileDownloader.openFile(context, chatMessage.getMessage());
+                    if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
+                        FileDownloaderNew.openFile(context, chatMessage.getMessage());
                     } else {
+                        FileDownloaderNew fileDownloaderNew = new FileDownloaderNew(context, TildaChatApp._downloadFolder);
                         fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
+
 //                        FileDownloader fileDownloader = new FileDownloader();
 //                        fileDownloader.setOnFileDownloadListener(() -> {
-//                            FileDownloader.openFile(context, chatMessage.getMessage());
+//                            FileDownloaderNew.openFile(context, chatMessage.getMessage());
 //                            notifyItemChanged(position);
 //                        });
 //                        fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
@@ -1862,7 +1862,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     holder.tvTime.setText(getTime(dateObject));
                 }
 
-                if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
+                if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
                     holder.coordinatorDownloadedFile.setVisibility(View.GONE);
                 } else {
                     holder.coordinatorDownloadedFile.setVisibility(View.VISIBLE);
@@ -1870,14 +1870,16 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 holder.coordinatorDownloadFile.setOnClickListener(v -> {
 
                     if (checkReadExternalPermission(activity)) {
-                        if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
-                            FileDownloader.openFile(context, chatMessage.getMessage());
+                        if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
+                            FileDownloaderNew.openFile(context, chatMessage.getMessage());
                         } else {
+                            FileDownloaderNew fileDownloaderNew = new FileDownloaderNew(context, TildaChatApp._downloadFolder);
                             fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
+
 
 //                            FileDownloader fileDownloader = new FileDownloader();
 //                            fileDownloader.setOnFileDownloadListener(() -> {
-//                                FileDownloader.openFile(context, chatMessage.getMessage());
+//                                FileDownloaderNew.openFile(context, chatMessage.getMessage());
 //                                notifyItemChanged(position);
 //                            });
 //                            fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
@@ -1914,21 +1916,23 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
                     holder.tvTime.setText(getTime(dateObject));
                 }
-                if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
+                if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
                     holder.coordinatorDownloadedFile.setVisibility(View.GONE);
                 } else {
                     holder.coordinatorDownloadedFile.setVisibility(View.VISIBLE);
                 }
                 holder.coordinatorDownloadFile.setOnClickListener(v -> {
                     if (checkReadExternalPermission(activity)) {
-                        if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
-                            FileDownloader.openFile(context, chatMessage.getMessage());
+                        if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
+                            FileDownloaderNew.openFile(context, chatMessage.getMessage());
                         } else {
+                            FileDownloaderNew fileDownloaderNew = new FileDownloaderNew(context, TildaChatApp._downloadFolder);
                             fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
+
 
 //                            FileDownloader fileDownloader = new FileDownloader();
 //                            fileDownloader.setOnFileDownloadListener(() -> {
-//                                FileDownloader.openFile(context, chatMessage.getMessage());
+//                                FileDownloaderNew.openFile(context, chatMessage.getMessage());
 //                                notifyItemChanged(position);
 //                            });
 //                            fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
@@ -1952,14 +1956,16 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         });
                     } else {
                         if (checkReadExternalPermission(activity)) {
-                            if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
-                                FileDownloader.openFile(context, chatMessage.getMessage());
+                            if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
+                                FileDownloaderNew.openFile(context, chatMessage.getMessage());
                             } else {
+                                FileDownloaderNew fileDownloaderNew = new FileDownloaderNew(context, TildaChatApp._downloadFolder);
                                 fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
+
 
 //                                FileDownloader fileDownloader = new FileDownloader();
 //                                fileDownloader.setOnFileDownloadListener(() -> {
-//                                    FileDownloader.openFile(context, chatMessage.getMessage());
+//                                    FileDownloaderNew.openFile(context, chatMessage.getMessage());
 //                                    notifyItemChanged(position);
 //                                });
 //                                fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
@@ -1995,21 +2001,23 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 Glide.with(context).load(FILE_URL + chatMessage.getUser().getPicture()).placeholder(ContextCompat.getDrawable(context, R.drawable.ic_user_circle)).into(holder.imageViewProfile);
 
-                if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
+                if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
                     holder.coordinatorDownloadedFile.setVisibility(View.GONE);
                 } else {
                     holder.coordinatorDownloadedFile.setVisibility(View.VISIBLE);
                 }
                 holder.coordinatorDownloadFile.setOnClickListener(v -> {
                     if (checkReadExternalPermission(activity)) {
-                        if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
-                            FileDownloader.openFile(context, chatMessage.getMessage());
+                        if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
+                            FileDownloaderNew.openFile(context, chatMessage.getMessage());
                         } else {
+                            FileDownloaderNew fileDownloaderNew = new FileDownloaderNew(context, TildaChatApp._downloadFolder);
                             fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
+
 
 //                            FileDownloader fileDownloader = new FileDownloader();
 //                            fileDownloader.setOnFileDownloadListener(() -> {
-//                                FileDownloader.openFile(context, chatMessage.getMessage());
+//                                FileDownloaderNew.openFile(context, chatMessage.getMessage());
 //                                notifyItemChanged(position);
 //                            });
 //                            fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
@@ -2094,21 +2102,23 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     });
                 });
 
-                if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
+                if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
                     holder.coordinatorDownloadedFile.setVisibility(View.GONE);
                 } else {
                     holder.coordinatorDownloadedFile.setVisibility(View.VISIBLE);
                 }
                 holder.coordinatorDownloadFile.setOnClickListener(v -> {
                     if (checkReadExternalPermission(activity)) {
-                        if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
-                            FileDownloader.openFile(context, chatMessage.getMessage());
+                        if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
+                            FileDownloaderNew.openFile(context, chatMessage.getMessage());
                         } else {
+                            FileDownloaderNew fileDownloaderNew = new FileDownloaderNew(context, TildaChatApp._downloadFolder);
                             fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
+
 
 //                            FileDownloader fileDownloader = new FileDownloader();
 //                            fileDownloader.setOnFileDownloadListener(() -> {
-//                                FileDownloader.openFile(context, chatMessage.getMessage());
+//                                FileDownloaderNew.openFile(context, chatMessage.getMessage());
 //                                notifyItemChanged(position);
 //                            });
 //                            fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
@@ -2177,21 +2187,23 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     });
                 });
 
-                if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
+                if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
                     holder.coordinatorDownloadedFile.setVisibility(View.GONE);
                 } else {
                     holder.coordinatorDownloadedFile.setVisibility(View.VISIBLE);
                 }
                 holder.coordinatorDownloadFile.setOnClickListener(v -> {
                     if (checkReadExternalPermission(activity)) {
-                        if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
-                            FileDownloader.openFile(context, chatMessage.getMessage());
+                        if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
+                            FileDownloaderNew.openFile(context, chatMessage.getMessage());
                         } else {
+                            FileDownloaderNew fileDownloaderNew = new FileDownloaderNew(context, TildaChatApp._downloadFolder);
                             fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
+
 
 //                            FileDownloader fileDownloader = new FileDownloader();
 //                            fileDownloader.setOnFileDownloadListener(() -> {
-//                                FileDownloader.openFile(context, chatMessage.getMessage());
+//                                FileDownloaderNew.openFile(context, chatMessage.getMessage());
 //                                notifyItemChanged(position);
 //                            });
 //                            fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
@@ -2239,21 +2251,21 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 holder.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
 
-                if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
+                if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
                     holder.coordinatorDownloadedFile.setVisibility(View.GONE);
                 } else {
                     holder.coordinatorDownloadedFile.setVisibility(View.VISIBLE);
                 }
                 holder.coordinatorDownloadFile.setOnClickListener(v -> {
                     if (checkReadExternalPermission(activity)) {
-                        if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
-                            FileDownloader.openFile(context, chatMessage.getMessage());
+                        if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
+                            FileDownloaderNew.openFile(context, chatMessage.getMessage());
                         } else {
+                            FileDownloaderNew fileDownloaderNew = new FileDownloaderNew(context, TildaChatApp._downloadFolder);
                             fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
-
 //                            FileDownloader fileDownloader = new FileDownloader();
 //                            fileDownloader.setOnFileDownloadListener(() -> {
-//                                FileDownloader.openFile(context, chatMessage.getMessage());
+//                                FileDownloaderNew.openFile(context, chatMessage.getMessage());
 //                                notifyItemChanged(position);
 //                            });
 //                            fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
@@ -2315,21 +2327,23 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 holder.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
 
-                if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
+                if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
                     holder.coordinatorDownloadedFile.setVisibility(View.GONE);
                 } else {
                     holder.coordinatorDownloadedFile.setVisibility(View.VISIBLE);
                 }
                 holder.coordinatorDownloadFile.setOnClickListener(v -> {
                     if (checkReadExternalPermission(activity)) {
-                        if (FileUtils.isChatFileExists(context, chatMessage.getMessage())) {
-                            FileDownloader.openFile(context, chatMessage.getMessage());
+                        if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
+                            FileDownloaderNew.openFile(context, chatMessage.getMessage());
                         } else {
+                            FileDownloaderNew fileDownloaderNew = new FileDownloaderNew(context, TildaChatApp._downloadFolder);
                             fileDownloaderNew.execute(FILE_URL + chatMessage.getMessage());
+
 
 //                            FileDownloader fileDownloader = new FileDownloader();
 //                            fileDownloader.setOnFileDownloadListener(() -> {
-//                                FileDownloader.openFile(context, chatMessage.getMessage());
+//                                FileDownloaderNew.openFile(context, chatMessage.getMessage());
 //                                notifyItemChanged(position);
 //                            });
 //                            fileDownloader.execute(chatMessage.getMessage(), context, FILE_URL);
