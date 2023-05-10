@@ -2586,15 +2586,34 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
     protected boolean checkReadExternalPermission(Activity activity) {
 //        Log.d(TAG, "checkReadExternalPermission: 11");
-        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                || ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            Log.d(TAG, "checkReadExternalPermission: 22");
-            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 10001);
-            return false;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_VIDEO) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_AUDIO, Manifest.permission.READ_MEDIA_VIDEO}, 1);
+                return false;
+            } else {
+                return true;
+            }
         } else {
-//            Log.d(TAG, "checkReadExternalPermission: 33");
-            return true;
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                return false;
+            } else {
+                return true;
+            }
         }
+
+//        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+//                || ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+//            Log.d(TAG, "checkReadExternalPermission: 22");
+//            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 10001);
+//            return false;
+//        } else {
+////            Log.d(TAG, "checkReadExternalPermission: 33");
+//            return true;
+//        }
     }
 
     public void clearAll() {
@@ -2655,6 +2674,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                                             case DownloadManager.STATUS_SUCCESSFUL:
                                                 progress = 100;
                                                 isDownloadFinished = true;
+                                                isDownloadingFile = false;
                                                 break;
                                             case DownloadManager.STATUS_PAUSED:
                                             case DownloadManager.STATUS_PENDING:
@@ -2662,6 +2682,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                                             case DownloadManager.STATUS_FAILED:
                                                 progress = 0;
                                                 isDownloadFinished = true;
+                                                isDownloadingFile = false;
                                                 break;
                                         }
                                         cursor.close();
@@ -2671,6 +2692,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                                         message.arg2 = chatMessage.getId();
                                         mainHandler.sendMessage(message);
                                     } else {
+                                        isDownloadingFile = false;
                                         isDownloadFinished = true;
                                         progress = 0;
                                         android.os.Message message = android.os.Message.obtain();

@@ -731,7 +731,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             onRecordVoiceClicked();
         } else if (id == R.id.linearChatroomDetails) {
             if (roomType != null && roomType.equals("private")) {
-                if (receiveChatroomCheck.getAmIBlocked() != null && !receiveChatroomCheck.getAmIBlocked()) {
+                if (receiveChatroomCheck != null && receiveChatroomCheck.getAmIBlocked() != null && !receiveChatroomCheck.getAmIBlocked()) {
                     onChatDetailsClicked();
                 }
             } else {
