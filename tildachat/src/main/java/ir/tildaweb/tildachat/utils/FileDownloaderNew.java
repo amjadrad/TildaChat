@@ -114,7 +114,7 @@ public class FileDownloaderNew extends AsyncTask<String, String, String> {
         //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 //            pathFolder = context.getExternalFilesDir(null) + "/" + TildaChatApp._downloadFolder + "/";
 //        } else {
-        String pathFolder = Environment.getExternalStorageDirectory() + "/" + TildaChatApp._downloadFolder + "/";
+        String pathFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + TildaChatApp._downloadFolder + "/";
 //        }
         String fullPath = pathFolder + filePath;
         Log.d(TAG, "isFileExists: " + fullPath);
@@ -128,7 +128,7 @@ public class FileDownloaderNew extends AsyncTask<String, String, String> {
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 //                pathFile = context.getExternalFilesDir(null) +  "/"+ TildaChatApp._downloadFolder +"/" + pathFile;
 //            } else {
-            filePath = Environment.getExternalStorageDirectory() +  "/"+TildaChatApp._downloadFolder+"/" + filePath;
+            filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) +  "/"+TildaChatApp._downloadFolder+"/" + filePath;
 //            }
             File file = new File(filePath);
             Log.d(TAG, "openFile: " + filePath);
