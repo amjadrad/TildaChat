@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
@@ -2585,8 +2586,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
     }
 
     protected boolean checkReadExternalPermission(Activity activity) {
-//        Log.d(TAG, "checkReadExternalPermission: 11");
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED ||
                     ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_VIDEO) != PackageManager.PERMISSION_GRANTED ||
@@ -2604,16 +2603,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 return true;
             }
         }
-
-//        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-//                || ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-//            Log.d(TAG, "checkReadExternalPermission: 22");
-//            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 10001);
-//            return false;
-//        } else {
-////            Log.d(TAG, "checkReadExternalPermission: 33");
-//            return true;
-//        }
     }
 
     public void clearAll() {

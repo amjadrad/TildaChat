@@ -586,6 +586,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     @Override
     public void onEdit(Message message) {
         binding.etMessage.setText(String.format("%s", message.getMessage()));
+        binding.etMessage.setSelection(message.getMessage().length());
         binding.tvUpdateMessage.setText(String.format("%s", message.getMessage()));
         binding.linearUpdate.setVisibility(View.VISIBLE);
         isUpdate = true;
