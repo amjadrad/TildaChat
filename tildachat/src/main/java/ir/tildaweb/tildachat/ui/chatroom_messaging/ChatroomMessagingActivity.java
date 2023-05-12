@@ -850,10 +850,10 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (grantResults[0] == 0 && requestCode == PICK_IMAGE_PERMISSION_CODE) {
+        if (requestCode == PICK_IMAGE_PERMISSION_CODE) {
             binding.imageViewImage.callOnClick();
         }
-        if (grantResults[0] == 0 && requestCode == PICK_FILE_PERMISSION_CODE) {
+        if (requestCode == PICK_FILE_PERMISSION_CODE) {
             binding.imageViewFile.callOnClick();
         }
     }
