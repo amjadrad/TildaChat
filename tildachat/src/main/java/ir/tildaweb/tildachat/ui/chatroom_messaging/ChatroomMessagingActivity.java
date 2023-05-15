@@ -156,6 +156,10 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 
         binding.recyclerViewMessages.setLayoutManager(new LinearLayoutManager(this));
         adapterPrivateChatMessages = new AdapterPrivateChatMessages(getApplicationContext(), ChatroomMessagingActivity.this, userId, FILE_URL, binding.recyclerViewMessages, new ArrayList<>(), this, this);
+        if (isWorkWithFullname) {
+            adapterPrivateChatMessages.setWorkWithFullname();
+        }
+
         binding.recyclerViewMessages.setAdapter(adapterPrivateChatMessages);
 
         binding.etMessage.addTextChangedListener(new TextWatcher() {
@@ -633,6 +637,11 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     }
 
     @Override
+    public void onMessageItemUserInfoClick(Message message) {
+        onChatroomMessageItemUserInfoClick(message);
+    }
+
+    @Override
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.imageViewBack) {
@@ -792,6 +801,11 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     protected void onSendClicked() {
 
     }
+
+    protected void onChatroomMessageItemUserInfoClick(Message message) {
+
+    }
+
 
     protected Integer getChatroomSecondUserId() {
         if (roomType != null && roomType.equals("private")) {

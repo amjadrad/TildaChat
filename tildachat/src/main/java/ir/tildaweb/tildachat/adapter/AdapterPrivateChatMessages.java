@@ -14,22 +14,13 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.PopupMenu;
-import androidx.cardview.widget.CardView;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -42,9 +33,32 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import ir.tildaweb.tildachat.R;
 import ir.tildaweb.tildachat.app.TildaChatApp;
+import ir.tildaweb.tildachat.databinding.ListSocketChatFileReplyfalseMeGroupBinding;
+import ir.tildaweb.tildachat.databinding.ListSocketChatFileReplyfalseMePrivateBinding;
+import ir.tildaweb.tildachat.databinding.ListSocketChatFileReplyfalseOtherGroupBinding;
+import ir.tildaweb.tildachat.databinding.ListSocketChatFileReplyfalseOtherPrivateBinding;
+import ir.tildaweb.tildachat.databinding.ListSocketChatFileReplytrueMeGroupBinding;
+import ir.tildaweb.tildachat.databinding.ListSocketChatFileReplytrueMePrivateBinding;
+import ir.tildaweb.tildachat.databinding.ListSocketChatFileReplytrueOtherGroupBinding;
+import ir.tildaweb.tildachat.databinding.ListSocketChatFileReplytrueOtherPrivateBinding;
+import ir.tildaweb.tildachat.databinding.ListSocketChatPictureReplyfalseMeGroupBinding;
+import ir.tildaweb.tildachat.databinding.ListSocketChatPictureReplyfalseMePrivateBinding;
+import ir.tildaweb.tildachat.databinding.ListSocketChatPictureReplyfalseOtherGroupBinding;
+import ir.tildaweb.tildachat.databinding.ListSocketChatPictureReplyfalseOtherPrivateBinding;
+import ir.tildaweb.tildachat.databinding.ListSocketChatPictureReplytrueMeGroupBinding;
+import ir.tildaweb.tildachat.databinding.ListSocketChatPictureReplytrueMePrivateBinding;
+import ir.tildaweb.tildachat.databinding.ListSocketChatPictureReplytrueOtherGroupBinding;
+import ir.tildaweb.tildachat.databinding.ListSocketChatPictureReplytrueOtherPrivateBinding;
+import ir.tildaweb.tildachat.databinding.ListSocketChatTextReplyfalseMeGroupBinding;
+import ir.tildaweb.tildachat.databinding.ListSocketChatTextReplyfalseMePrivateBinding;
+import ir.tildaweb.tildachat.databinding.ListSocketChatTextReplyfalseOtherGroupBinding;
+import ir.tildaweb.tildachat.databinding.ListSocketChatTextReplyfalseOtherPrivateBinding;
+import ir.tildaweb.tildachat.databinding.ListSocketChatTextReplytrueMeGroupBinding;
+import ir.tildaweb.tildachat.databinding.ListSocketChatTextReplytrueMePrivateBinding;
+import ir.tildaweb.tildachat.databinding.ListSocketChatTextReplytrueOtherGroupBinding;
+import ir.tildaweb.tildachat.databinding.ListSocketChatTextReplytrueOtherPrivateBinding;
 import ir.tildaweb.tildachat.dialogs.DialogShowPicture;
 import ir.tildaweb.tildachat.enums.ChatroomType;
 import ir.tildaweb.tildachat.interfaces.IChatUtils;
@@ -78,8 +92,9 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
     private boolean loading = true;
     private final LoadMoreData loadMoreData;
     private final IChatUtils iChatUtils;
-    private DownloadManager downloadManager;
+    private final DownloadManager downloadManager;
     private boolean isDownloadingFile = false;
+    private boolean isWorkWithFullname = false;
 
     public AdapterPrivateChatMessages(Context context, Activity activity, int userId, String FILE_URL, RecyclerView recyclerView, ArrayList<Message> chatMessages, LoadMoreData loadMoreData, IChatUtils iChatUtils) {
         this.chatMessages = chatMessages;
@@ -97,6 +112,10 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             this.FILE_URL = FILE_URL.concat("/");
         }
         setScrollListener();
+    }
+
+    public void setWorkWithFullname() {
+        this.isWorkWithFullname = true;
     }
 
     private void setScrollListener() {
@@ -126,520 +145,237 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         }
     }
 
-    //Upload
-    public static class ChatHolder_Upload extends Holder {
-//        private final TextView tvPercent;
-//        private final TextView tvMessage;
-
-        public ChatHolder_Upload(View view) {
-            super(view);
-//            this.tvMessage = view.findViewById(R.id.tvMessage);
-//            this.tvPercent = view.findViewById(R.id.tvPercent);
-        }
-    }
-
     //Text
     public static class ChatHolder_Text_ReplyFalse_Me_Private extends Holder {
-        public TextView tvTime;
-        public TextView tvMessage;
-        public ImageView imageViewSeen;
-        public LinearLayout linearMessage;
+        private final ListSocketChatTextReplyfalseMePrivateBinding binding;
 
-        public ChatHolder_Text_ReplyFalse_Me_Private(View view) {
-            super(view);
-            this.tvMessage = view.findViewById(R.id.tvMessage);
-            this.tvTime = view.findViewById(R.id.tvTime);
-            this.imageViewSeen = view.findViewById(R.id.imageViewSeen);
-            this.linearMessage = view.findViewById(R.id.linearChatMessage);
+        public ChatHolder_Text_ReplyFalse_Me_Private(ListSocketChatTextReplyfalseMePrivateBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 
     public static class ChatHolder_Text_ReplyFalse_Me_Group extends Holder {
-        public TextView tvTime;
-        public TextView tvMessage;
-        public ImageView imageViewSeen;
-        public LinearLayout linearMessage;
 
-        public ChatHolder_Text_ReplyFalse_Me_Group(View view) {
-            super(view);
-            this.tvMessage = view.findViewById(R.id.tvMessage);
-            this.tvTime = view.findViewById(R.id.tvTime);
-            this.imageViewSeen = view.findViewById(R.id.imageViewSeen);
-            this.linearMessage = view.findViewById(R.id.linearChatMessage);
+        private final ListSocketChatTextReplyfalseMeGroupBinding binding;
+
+        public ChatHolder_Text_ReplyFalse_Me_Group(ListSocketChatTextReplyfalseMeGroupBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 
     public static class ChatHolder_Text_ReplyFalse_Other_Private extends Holder {
-        public TextView tvTime;
-        public TextView tvMessage;
+        private final ListSocketChatTextReplyfalseOtherPrivateBinding binding;
 
-        public ChatHolder_Text_ReplyFalse_Other_Private(View view) {
-            super(view);
-            this.tvMessage = view.findViewById(R.id.tvMessage);
-            this.tvTime = view.findViewById(R.id.tvTime);
+        public ChatHolder_Text_ReplyFalse_Other_Private(ListSocketChatTextReplyfalseOtherPrivateBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 
     public static class ChatHolder_Text_ReplyTrue_Me_Private extends Holder {
-        public TextView tvTime, tvReply;
-        public TextView tvMessage;
-        public ImageView imageViewSeen;
-        public LinearLayout linearLayoutReply;
-        public AppCompatImageView imageViewReplyMessage;
-        public CardView cardViewReplyPicture;
+        private final ListSocketChatTextReplytrueMePrivateBinding binding;
 
-
-        public ChatHolder_Text_ReplyTrue_Me_Private(View view) {
-            super(view);
-            this.tvTime = view.findViewById(R.id.tvTime);
-            this.imageViewSeen = view.findViewById(R.id.imageViewSeen);
-            this.tvReply = view.findViewById(R.id.tvReplyMessage);
-            this.tvMessage = view.findViewById(R.id.tvMessage);
-            this.linearLayoutReply = view.findViewById(R.id.linearLayoutReply);
-            this.imageViewReplyMessage = view.findViewById(R.id.imageViewReplyMessage);
-            this.cardViewReplyPicture = view.findViewById(R.id.cardViewReplyPicture);
-
+        public ChatHolder_Text_ReplyTrue_Me_Private(ListSocketChatTextReplytrueMePrivateBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 
     public static class ChatHolder_Text_ReplyTrue_Me_Group extends Holder {
-        public TextView tvTime, tvReply;
-        public TextView tvMessage;
-        public ImageView imageViewSeen;
-        public LinearLayout linearLayoutReply;
-        public AppCompatImageView imageViewReplyMessage;
-        public CardView cardViewReplyPicture;
+        private final ListSocketChatTextReplytrueMeGroupBinding binding;
 
-
-        public ChatHolder_Text_ReplyTrue_Me_Group(View view) {
-            super(view);
-            this.tvTime = view.findViewById(R.id.tvTime);
-            this.imageViewSeen = view.findViewById(R.id.imageViewSeen);
-            this.tvReply = view.findViewById(R.id.tvReplyMessage);
-            this.tvMessage = view.findViewById(R.id.tvMessage);
-            this.linearLayoutReply = view.findViewById(R.id.linearLayoutReply);
-            this.imageViewReplyMessage = view.findViewById(R.id.imageViewReplyMessage);
-            this.cardViewReplyPicture = view.findViewById(R.id.cardViewReplyPicture);
-
+        public ChatHolder_Text_ReplyTrue_Me_Group(ListSocketChatTextReplytrueMeGroupBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 
     public static class ChatHolder_Text_ReplyTrue_Other_Private extends Holder {
-        public TextView tvTime, tvReply;
-        public TextView tvMessage;
-        public LinearLayout linearLayoutReply;
-        public AppCompatImageView imageViewReplyMessage;
-        public CardView cardViewReplyPicture;
+        private final ListSocketChatTextReplytrueOtherPrivateBinding binding;
 
 
-        public ChatHolder_Text_ReplyTrue_Other_Private(View view) {
-            super(view);
-            this.tvTime = view.findViewById(R.id.tvTime);
-            this.tvReply = view.findViewById(R.id.tvReplyMessage);
-            this.tvMessage = view.findViewById(R.id.tvMessage);
-            this.linearLayoutReply = view.findViewById(R.id.linearLayoutReply);
-            this.imageViewReplyMessage = view.findViewById(R.id.imageViewReplyMessage);
-            this.cardViewReplyPicture = view.findViewById(R.id.cardViewReplyPicture);
+        public ChatHolder_Text_ReplyTrue_Other_Private(ListSocketChatTextReplytrueOtherPrivateBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 
     public static class ChatHolder_Text_ReplyFalse_Other_Group extends Holder {
-        public TextView tvTime;
-        public TextView tvMessage;
-        public TextView tvUserName;
-        public CircleImageView imageViewProfile;
+        private final ListSocketChatTextReplyfalseOtherGroupBinding binding;
 
-
-        public ChatHolder_Text_ReplyFalse_Other_Group(View view) {
-            super(view);
-            this.tvMessage = view.findViewById(R.id.tvMessage);
-            this.tvTime = view.findViewById(R.id.tvTime);
-            this.tvUserName = view.findViewById(R.id.tvUserName);
-            this.imageViewProfile = view.findViewById(R.id.imageViewProfile);
+        public ChatHolder_Text_ReplyFalse_Other_Group(ListSocketChatTextReplyfalseOtherGroupBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 
     public static class ChatHolder_Text_ReplyTrue_Other_Group extends Holder {
-        public TextView tvTime;
-        public TextView tvMessage;
-        public TextView tvReply;
-        public TextView tvUserName;
-        public CircleImageView imageViewProfile;
-        public LinearLayout linearLayoutReply;
-        public AppCompatImageView imageViewReplyMessage;
-        public CardView cardViewReplyPicture;
+        private final ListSocketChatTextReplytrueOtherGroupBinding binding;
 
-
-        public ChatHolder_Text_ReplyTrue_Other_Group(View view) {
-            super(view);
-            this.tvMessage = view.findViewById(R.id.tvMessage);
-            this.tvTime = view.findViewById(R.id.tvTime);
-            this.tvUserName = view.findViewById(R.id.tvUserName);
-            this.imageViewProfile = view.findViewById(R.id.imageViewProfile);
-            this.tvReply = view.findViewById(R.id.tvReplyMessage);
-            this.linearLayoutReply = view.findViewById(R.id.linearLayoutReply);
-            this.imageViewReplyMessage = view.findViewById(R.id.imageViewReplyMessage);
-            this.cardViewReplyPicture = view.findViewById(R.id.cardViewReplyPicture);
+        public ChatHolder_Text_ReplyTrue_Other_Group(ListSocketChatTextReplytrueOtherGroupBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 
 
     //Picture
     public static class ChatHolder_Picture_ReplyFalse_Me_Private extends Holder {
-        public TextView tvTime;
-        public ImageView imageViewSeen;
-        public ImageView imageView;
-        public LinearLayout linearMessage;
+        private final ListSocketChatPictureReplyfalseMePrivateBinding binding;
 
-        public ChatHolder_Picture_ReplyFalse_Me_Private(View view) {
-            super(view);
-            this.tvTime = view.findViewById(R.id.tvTime);
-            this.imageViewSeen = view.findViewById(R.id.imageViewSeen);
-            this.imageView = view.findViewById(R.id.imageView);
-            this.linearMessage = view.findViewById(R.id.linearChatMessage);
+        public ChatHolder_Picture_ReplyFalse_Me_Private(ListSocketChatPictureReplyfalseMePrivateBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 
     public static class ChatHolder_Picture_ReplyTrue_Me_Private extends Holder {
-        public TextView tvTime;
-        public ImageView imageViewSeen;
-        public ImageView imageView;
-        public LinearLayout linearMessage;
-        public TextView tvReply;
-        public LinearLayout linearLayoutReply;
-        public AppCompatImageView imageViewReplyMessage;
-        public CardView cardViewReplyPicture;
+        private final ListSocketChatPictureReplytrueMePrivateBinding binding;
 
-        public ChatHolder_Picture_ReplyTrue_Me_Private(View view) {
-            super(view);
-            this.tvTime = view.findViewById(R.id.tvTime);
-            this.imageViewSeen = view.findViewById(R.id.imageViewSeen);
-            this.imageView = view.findViewById(R.id.imageView);
-            this.linearMessage = view.findViewById(R.id.linearChatMessage);
-            this.tvReply = view.findViewById(R.id.tvReplyMessage);
-            this.linearLayoutReply = view.findViewById(R.id.linearLayoutReply);
-            this.imageViewReplyMessage = view.findViewById(R.id.imageViewReplyMessage);
-            this.cardViewReplyPicture = view.findViewById(R.id.cardViewReplyPicture);
+        public ChatHolder_Picture_ReplyTrue_Me_Private(ListSocketChatPictureReplytrueMePrivateBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 
     public static class ChatHolder_Picture_ReplyFalse_Me_Group extends Holder {
-        public TextView tvTime;
-        public ImageView imageViewSeen;
-        public ImageView imageView;
-        public LinearLayout linearMessage;
+        private final ListSocketChatPictureReplyfalseMeGroupBinding binding;
 
-        public ChatHolder_Picture_ReplyFalse_Me_Group(View view) {
-            super(view);
-            this.tvTime = view.findViewById(R.id.tvTime);
-            this.imageViewSeen = view.findViewById(R.id.imageViewSeen);
-            this.imageView = view.findViewById(R.id.imageView);
-            this.linearMessage = view.findViewById(R.id.linearChatMessage);
+        public ChatHolder_Picture_ReplyFalse_Me_Group(ListSocketChatPictureReplyfalseMeGroupBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 
     public static class ChatHolder_Picture_ReplyTrue_Me_Group extends Holder {
-        public TextView tvTime;
-        public ImageView imageViewSeen;
-        public ImageView imageView;
-        public LinearLayout linearMessage;
-        public TextView tvReply;
-        public LinearLayout linearLayoutReply;
-        public AppCompatImageView imageViewReplyMessage;
-        public CardView cardViewReplyPicture;
+        private final ListSocketChatPictureReplytrueMeGroupBinding binding;
 
-        public ChatHolder_Picture_ReplyTrue_Me_Group(View view) {
-            super(view);
-            this.tvTime = view.findViewById(R.id.tvTime);
-            this.imageViewSeen = view.findViewById(R.id.imageViewSeen);
-            this.imageView = view.findViewById(R.id.imageView);
-            this.linearMessage = view.findViewById(R.id.linearChatMessage);
-            this.tvReply = view.findViewById(R.id.tvReplyMessage);
-            this.linearLayoutReply = view.findViewById(R.id.linearLayoutReply);
-            this.imageViewReplyMessage = view.findViewById(R.id.imageViewReplyMessage);
-            this.cardViewReplyPicture = view.findViewById(R.id.cardViewReplyPicture);
+        public ChatHolder_Picture_ReplyTrue_Me_Group(ListSocketChatPictureReplytrueMeGroupBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 
     public static class ChatHolder_Picture_ReplyFalse_Other_Private extends Holder {
-        public TextView tvTime;
-        public ImageView imageView;
-        public LinearLayout linearMessage;
+        private final ListSocketChatPictureReplyfalseOtherPrivateBinding binding;
 
-        public ChatHolder_Picture_ReplyFalse_Other_Private(View view) {
-            super(view);
-            this.tvTime = view.findViewById(R.id.tvTime);
-            this.imageView = view.findViewById(R.id.imageView);
-            this.linearMessage = view.findViewById(R.id.linearChatMessage);
+        public ChatHolder_Picture_ReplyFalse_Other_Private(ListSocketChatPictureReplyfalseOtherPrivateBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 
     public static class ChatHolder_Picture_ReplyFalse_Other_Group extends Holder {
-        public TextView tvTime;
-        public ImageView imageView;
-        public LinearLayout linearMessage;
-        public TextView tvUserName;
-        public CircleImageView imageViewProfile;
+        private final ListSocketChatPictureReplyfalseOtherGroupBinding binding;
 
 
-        public ChatHolder_Picture_ReplyFalse_Other_Group(View view) {
-            super(view);
-            this.tvTime = view.findViewById(R.id.tvTime);
-            this.imageView = view.findViewById(R.id.imageView);
-            this.linearMessage = view.findViewById(R.id.linearChatMessage);
-            this.tvUserName = view.findViewById(R.id.tvUserName);
-            this.imageViewProfile = view.findViewById(R.id.imageViewProfile);
+        public ChatHolder_Picture_ReplyFalse_Other_Group(ListSocketChatPictureReplyfalseOtherGroupBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 
     public static class ChatHolder_Picture_ReplyTrue_Other_Private extends Holder {
-        public TextView tvTime;
-        public ImageView imageView;
-        public LinearLayout linearMessage;
-        public TextView tvReply;
-        public LinearLayout linearLayoutReply;
-        public AppCompatImageView imageViewReplyMessage;
-        public CardView cardViewReplyPicture;
+        private final ListSocketChatPictureReplytrueOtherPrivateBinding binding;
 
-        public ChatHolder_Picture_ReplyTrue_Other_Private(View view) {
-            super(view);
-            this.tvTime = view.findViewById(R.id.tvTime);
-            this.imageView = view.findViewById(R.id.imageView);
-            this.linearMessage = view.findViewById(R.id.linearChatMessage);
-            this.tvReply = view.findViewById(R.id.tvReplyMessage);
-            this.linearLayoutReply = view.findViewById(R.id.linearLayoutReply);
-            this.imageViewReplyMessage = view.findViewById(R.id.imageViewReplyMessage);
-            this.cardViewReplyPicture = view.findViewById(R.id.cardViewReplyPicture);
+        public ChatHolder_Picture_ReplyTrue_Other_Private(ListSocketChatPictureReplytrueOtherPrivateBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 
     public static class ChatHolder_Picture_ReplyTrue_Other_Group extends Holder {
-        public TextView tvTime;
-        public ImageView imageView;
-        public LinearLayout linearMessage;
-        public TextView tvReply;
-        public LinearLayout linearLayoutReply;
-        public TextView tvUserName;
-        public CircleImageView imageViewProfile;
-        public AppCompatImageView imageViewReplyMessage;
-        public CardView cardViewReplyPicture;
+        private final ListSocketChatPictureReplytrueOtherGroupBinding binding;
 
-        public ChatHolder_Picture_ReplyTrue_Other_Group(View view) {
-            super(view);
-            this.tvTime = view.findViewById(R.id.tvTime);
-            this.imageView = view.findViewById(R.id.imageView);
-            this.linearMessage = view.findViewById(R.id.linearChatMessage);
-            this.tvReply = view.findViewById(R.id.tvReplyMessage);
-            this.linearLayoutReply = view.findViewById(R.id.linearLayoutReply);
-            this.tvUserName = view.findViewById(R.id.tvUserName);
-            this.imageViewProfile = view.findViewById(R.id.imageViewProfile);
-            this.imageViewReplyMessage = view.findViewById(R.id.imageViewReplyMessage);
-            this.cardViewReplyPicture = view.findViewById(R.id.cardViewReplyPicture);
+        public ChatHolder_Picture_ReplyTrue_Other_Group(ListSocketChatPictureReplytrueOtherGroupBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 
-
     //File
     public static class ChatHolder_File_ReplyFalse_Me_Private extends Holder {
-        private final AppCompatTextView tvTime;
-        private final AppCompatTextView tvProgress;
-        private final TextView tvMessage;
-        private final ImageView imageViewSeen;
-        private final CoordinatorLayout coordinatorDownloadFile;
-        private final CoordinatorLayout coordinatorDownloadedFile;
+        private final ListSocketChatFileReplyfalseMePrivateBinding binding;
 
-        public ChatHolder_File_ReplyFalse_Me_Private(View view) {
-            super(view);
-            this.tvMessage = view.findViewById(R.id.tvMessage);
-            this.tvProgress = view.findViewById(R.id.tvProgress);
-            this.tvTime = view.findViewById(R.id.tvTime);
-            this.imageViewSeen = view.findViewById(R.id.imageViewSeen);
-            this.coordinatorDownloadFile = view.findViewById(R.id.coordinatorDownloadFile);
-            this.coordinatorDownloadedFile = view.findViewById(R.id.coordinatorDownloadedFile);
+        public ChatHolder_File_ReplyFalse_Me_Private(ListSocketChatFileReplyfalseMePrivateBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 
     public static class ChatHolder_File_ReplyFalse_Me_Group extends Holder {
-        private final AppCompatTextView tvTime;
-        private final AppCompatTextView tvProgress;
-        public TextView tvMessage;
-        public ImageView imageViewSeen;
-        public LinearLayout linearMessage;
-        private final CoordinatorLayout coordinatorDownloadFile;
-        private final CoordinatorLayout coordinatorDownloadedFile;
+        private final ListSocketChatFileReplyfalseMeGroupBinding binding;
 
-        public ChatHolder_File_ReplyFalse_Me_Group(View view) {
-            super(view);
-            this.tvProgress = view.findViewById(R.id.tvProgress);
-            this.tvMessage = view.findViewById(R.id.tvMessage);
-            this.tvTime = view.findViewById(R.id.tvTime);
-            this.imageViewSeen = view.findViewById(R.id.imageViewSeen);
-            this.linearMessage = view.findViewById(R.id.linearChatMessage);
-            this.coordinatorDownloadFile = view.findViewById(R.id.coordinatorDownloadFile);
-            this.coordinatorDownloadedFile = view.findViewById(R.id.coordinatorDownloadedFile);
+        public ChatHolder_File_ReplyFalse_Me_Group(ListSocketChatFileReplyfalseMeGroupBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 
     public static class ChatHolder_File_ReplyFalse_Other_Private extends Holder {
-        private final AppCompatTextView tvTime;
-        private final AppCompatTextView tvProgress;
-        public TextView tvMessage;
-        private final CoordinatorLayout coordinatorDownloadFile;
-        private final CoordinatorLayout coordinatorDownloadedFile;
+        private final ListSocketChatFileReplyfalseOtherPrivateBinding binding;
 
-        public ChatHolder_File_ReplyFalse_Other_Private(View view) {
-            super(view);
-            this.tvMessage = view.findViewById(R.id.tvMessage);
-            this.tvTime = view.findViewById(R.id.tvTime);
-            this.tvProgress = view.findViewById(R.id.tvProgress);
-            this.coordinatorDownloadFile = view.findViewById(R.id.coordinatorDownloadFile);
-            this.coordinatorDownloadedFile = view.findViewById(R.id.coordinatorDownloadedFile);
+        public ChatHolder_File_ReplyFalse_Other_Private(ListSocketChatFileReplyfalseOtherPrivateBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 
     public static class ChatHolder_File_ReplyTrue_Me_Private extends Holder {
-        public TextView tvReply;
-        private final AppCompatTextView tvTime;
-        private final AppCompatTextView tvProgress;
-        public TextView tvMessage;
-        public ImageView imageViewSeen;
-        public LinearLayout linearLayoutReply;
-        public AppCompatImageView imageViewReplyMessage;
-        public CardView cardViewReplyPicture;
-        private final CoordinatorLayout coordinatorDownloadFile;
-        private final CoordinatorLayout coordinatorDownloadedFile;
+        private final ListSocketChatFileReplytrueMePrivateBinding binding;
 
-
-        public ChatHolder_File_ReplyTrue_Me_Private(View view) {
-            super(view);
-            this.tvTime = view.findViewById(R.id.tvTime);
-            this.imageViewSeen = view.findViewById(R.id.imageViewSeen);
-            this.tvReply = view.findViewById(R.id.tvReplyMessage);
-            this.tvProgress = view.findViewById(R.id.tvProgress);
-            this.tvMessage = view.findViewById(R.id.tvMessage);
-            this.linearLayoutReply = view.findViewById(R.id.linearLayoutReply);
-            this.imageViewReplyMessage = view.findViewById(R.id.imageViewReplyMessage);
-            this.cardViewReplyPicture = view.findViewById(R.id.cardViewReplyPicture);
-            this.coordinatorDownloadFile = view.findViewById(R.id.coordinatorDownloadFile);
-            this.coordinatorDownloadedFile = view.findViewById(R.id.coordinatorDownloadedFile);
-
+        public ChatHolder_File_ReplyTrue_Me_Private(ListSocketChatFileReplytrueMePrivateBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 
     public static class ChatHolder_File_ReplyTrue_Me_Group extends Holder {
-        public TextView tvReply;
-        private final AppCompatTextView tvTime;
-        private final AppCompatTextView tvProgress;
-        public TextView tvMessage;
-        public ImageView imageViewSeen;
-        public LinearLayout linearLayoutReply;
-        public AppCompatImageView imageViewReplyMessage;
-        public CardView cardViewReplyPicture;
-        private final CoordinatorLayout coordinatorDownloadFile;
-        private final CoordinatorLayout coordinatorDownloadedFile;
+        private final ListSocketChatFileReplytrueMeGroupBinding binding;
 
-
-        public ChatHolder_File_ReplyTrue_Me_Group(View view) {
-            super(view);
-            this.tvTime = view.findViewById(R.id.tvTime);
-            this.imageViewSeen = view.findViewById(R.id.imageViewSeen);
-            this.tvReply = view.findViewById(R.id.tvReplyMessage);
-            this.tvProgress = view.findViewById(R.id.tvProgress);
-            this.tvMessage = view.findViewById(R.id.tvMessage);
-            this.linearLayoutReply = view.findViewById(R.id.linearLayoutReply);
-            this.imageViewReplyMessage = view.findViewById(R.id.imageViewReplyMessage);
-            this.cardViewReplyPicture = view.findViewById(R.id.cardViewReplyPicture);
-            this.coordinatorDownloadFile = view.findViewById(R.id.coordinatorDownloadFile);
-            this.coordinatorDownloadedFile = view.findViewById(R.id.coordinatorDownloadedFile);
+        public ChatHolder_File_ReplyTrue_Me_Group(ListSocketChatFileReplytrueMeGroupBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
 
         }
     }
 
     public static class ChatHolder_File_ReplyTrue_Other_Private extends Holder {
-        public TextView tvReply;
-        public TextView tvMessage;
-        private final AppCompatTextView tvTime;
-        private final AppCompatTextView tvProgress;
-        public LinearLayout linearLayoutReply;
-        public AppCompatImageView imageViewReplyMessage;
-        public CardView cardViewReplyPicture;
-        private final CoordinatorLayout coordinatorDownloadFile;
-        private final CoordinatorLayout coordinatorDownloadedFile;
+        private final ListSocketChatFileReplytrueOtherPrivateBinding binding;
 
 
-        public ChatHolder_File_ReplyTrue_Other_Private(View view) {
-            super(view);
-            this.tvTime = view.findViewById(R.id.tvTime);
-            this.tvReply = view.findViewById(R.id.tvReplyMessage);
-            this.tvProgress = view.findViewById(R.id.tvProgress);
-            this.tvMessage = view.findViewById(R.id.tvMessage);
-            this.linearLayoutReply = view.findViewById(R.id.linearLayoutReply);
-            this.imageViewReplyMessage = view.findViewById(R.id.imageViewReplyMessage);
-            this.cardViewReplyPicture = view.findViewById(R.id.cardViewReplyPicture);
-            this.coordinatorDownloadFile = view.findViewById(R.id.coordinatorDownloadFile);
-            this.coordinatorDownloadedFile = view.findViewById(R.id.coordinatorDownloadedFile);
+        public ChatHolder_File_ReplyTrue_Other_Private(ListSocketChatFileReplytrueOtherPrivateBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 
     public static class ChatHolder_File_ReplyFalse_Other_Group extends Holder {
-        private final AppCompatTextView tvTime;
-        private final AppCompatTextView tvProgress;
-        public TextView tvMessage;
-        public TextView tvUserName;
-        public CircleImageView imageViewProfile;
-        private final CoordinatorLayout coordinatorDownloadFile;
-        private final CoordinatorLayout coordinatorDownloadedFile;
+        private final ListSocketChatFileReplyfalseOtherGroupBinding binding;
 
-
-        public ChatHolder_File_ReplyFalse_Other_Group(View view) {
-            super(view);
-            this.tvMessage = view.findViewById(R.id.tvMessage);
-            this.tvTime = view.findViewById(R.id.tvTime);
-            this.tvProgress = view.findViewById(R.id.tvProgress);
-            this.tvUserName = view.findViewById(R.id.tvUserName);
-            this.imageViewProfile = view.findViewById(R.id.imageViewProfile);
-            this.coordinatorDownloadFile = view.findViewById(R.id.coordinatorDownloadFile);
-            this.coordinatorDownloadedFile = view.findViewById(R.id.coordinatorDownloadedFile);
+        public ChatHolder_File_ReplyFalse_Other_Group(ListSocketChatFileReplyfalseOtherGroupBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 
     public static class ChatHolder_File_ReplyTrue_Other_Group extends Holder {
-        private final AppCompatTextView tvTime;
-        private final AppCompatTextView tvProgress;
-        public TextView tvMessage;
-        public TextView tvReply;
-        public TextView tvUserName;
-        public CircleImageView imageViewProfile;
-        public LinearLayout linearLayoutReply;
-        public AppCompatImageView imageViewReplyMessage;
-        public CardView cardViewReplyPicture;
-        private final CoordinatorLayout coordinatorDownloadFile;
-        private final CoordinatorLayout coordinatorDownloadedFile;
+        private final ListSocketChatFileReplytrueOtherGroupBinding binding;
 
 
-        public ChatHolder_File_ReplyTrue_Other_Group(View view) {
-            super(view);
-            this.tvMessage = view.findViewById(R.id.tvMessage);
-            this.tvTime = view.findViewById(R.id.tvTime);
-            this.tvProgress = view.findViewById(R.id.tvProgress);
-            this.tvUserName = view.findViewById(R.id.tvUserName);
-            this.imageViewProfile = view.findViewById(R.id.imageViewProfile);
-            this.tvReply = view.findViewById(R.id.tvReplyMessage);
-            this.linearLayoutReply = view.findViewById(R.id.linearLayoutReply);
-            this.imageViewReplyMessage = view.findViewById(R.id.imageViewReplyMessage);
-            this.cardViewReplyPicture = view.findViewById(R.id.cardViewReplyPicture);
-            this.coordinatorDownloadFile = view.findViewById(R.id.coordinatorDownloadFile);
-            this.coordinatorDownloadedFile = view.findViewById(R.id.coordinatorDownloadedFile);
+        public ChatHolder_File_ReplyTrue_Other_Group(ListSocketChatFileReplytrueOtherGroupBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
-
 
     @Override
     public int getItemViewType(int position) {
         Message chatMessage = chatMessages.get(position);
-        int type = MessageTypeUtil.getType(chatMessage, userId, roomType);
-//        Log.d(TAG, "getItemViewType: " + type + " _ " + chatMessage.getMessage() + " _ " + chatMessage.getUserId());
-        return type;
+        //        Log.d(TAG, "getItemViewType: " + type + " _ " + chatMessage.getMessage() + " _ " + chatMessage.getUserId());
+        return MessageTypeUtil.getType(chatMessage, userId, roomType);
     }
 
 
@@ -664,82 +400,80 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         //MRUC0(4,2,2,3,0)
 
         switch (viewType) {
-            case 1:
-                return new ChatHolder_Upload(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_file_upload, parent, false));
             case 11111:
-                return new ChatHolder_Text_ReplyFalse_Me_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_text_replyfalse_me_private, parent, false));
+                return new ChatHolder_Text_ReplyFalse_Me_Private(ListSocketChatTextReplyfalseMePrivateBinding.inflate(LayoutInflater.from(context), parent, false));
 //            case 11121:
 //                return null;
             case 11131:
-                return new ChatHolder_Text_ReplyFalse_Me_Group(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_text_replyfalse_me_group, parent, false));
+                return new ChatHolder_Text_ReplyFalse_Me_Group(ListSocketChatTextReplyfalseMeGroupBinding.inflate(LayoutInflater.from(context), parent, false));
             case 11211:
-                return new ChatHolder_Text_ReplyFalse_Other_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_text_replyfalse_other_private, parent, false));
+                return new ChatHolder_Text_ReplyFalse_Other_Private(ListSocketChatTextReplyfalseOtherPrivateBinding.inflate(LayoutInflater.from(context), parent, false));
             case 11221://Channel,todo
-                return new ChatHolder_Text_ReplyFalse_Other_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_text_replyfalse_other_private, parent, false));
+                return new ChatHolder_Text_ReplyFalse_Other_Private(ListSocketChatTextReplyfalseOtherPrivateBinding.inflate(LayoutInflater.from(context), parent, false));
             case 11231:
-                return new ChatHolder_Text_ReplyFalse_Other_Group(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_text_replyfalse_other_group, parent, false));
+                return new ChatHolder_Text_ReplyFalse_Other_Group(ListSocketChatTextReplyfalseOtherGroupBinding.inflate(LayoutInflater.from(context), parent, false));
             case 12111:
-                return new ChatHolder_Text_ReplyTrue_Me_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_text_replytrue_me_private, parent, false));
+                return new ChatHolder_Text_ReplyTrue_Me_Private(ListSocketChatTextReplytrueMePrivateBinding.inflate(LayoutInflater.from(context), parent, false));
 //            case 12121://Channel
 //                return new ChatHolder_Text_ReplyFalse_Me_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_text_replyfalse_me_private, parent, false));
             case 12131:
-                return new ChatHolder_Text_ReplyTrue_Me_Group(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_text_replytrue_me_group, parent, false));
+                return new ChatHolder_Text_ReplyTrue_Me_Group(ListSocketChatTextReplytrueMeGroupBinding.inflate(LayoutInflater.from(context), parent, false));
             case 12211:
-                return new ChatHolder_Text_ReplyTrue_Other_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_text_replytrue_other_private, parent, false));
+                return new ChatHolder_Text_ReplyTrue_Other_Private(ListSocketChatTextReplytrueOtherPrivateBinding.inflate(LayoutInflater.from(context), parent, false));
 //            case 12221:
 //                return new ChatHolder_Text_ReplyFalse_Me_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_text_replyfalse_me_private, parent, false));
             case 12231:
-                return new ChatHolder_Text_ReplyTrue_Other_Group(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_text_replytrue_other_group, parent, false));
+                return new ChatHolder_Text_ReplyTrue_Other_Group(ListSocketChatTextReplytrueOtherGroupBinding.inflate(LayoutInflater.from(context), parent, false));
 
             case 21111:
-                return new ChatHolder_Picture_ReplyFalse_Me_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_picture_replyfalse_me_private, parent, false));
+                return new ChatHolder_Picture_ReplyFalse_Me_Private(ListSocketChatPictureReplyfalseMePrivateBinding.inflate(LayoutInflater.from(context), parent, false));
 //            case 21121:
 //                return new ChatHolder_Text_ReplyFalse_Me_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_text_replyfalse_me_private, parent, false));
             case 21131:
-                return new ChatHolder_Picture_ReplyFalse_Me_Group(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_picture_replyfalse_me_group, parent, false));
+                return new ChatHolder_Picture_ReplyFalse_Me_Group(ListSocketChatPictureReplyfalseMeGroupBinding.inflate(LayoutInflater.from(context), parent, false));
             case 21211:
-                return new ChatHolder_Picture_ReplyFalse_Other_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_picture_replyfalse_other_private, parent, false));
+                return new ChatHolder_Picture_ReplyFalse_Other_Private(ListSocketChatPictureReplyfalseOtherPrivateBinding.inflate(LayoutInflater.from(context), parent, false));
             case 21221://channel todo
-                return new ChatHolder_Picture_ReplyFalse_Other_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_picture_replyfalse_other_private, parent, false));
+                return new ChatHolder_Picture_ReplyFalse_Other_Private(ListSocketChatPictureReplyfalseOtherPrivateBinding.inflate(LayoutInflater.from(context), parent, false));
             case 21231:
-                return new ChatHolder_Picture_ReplyFalse_Other_Group(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_picture_replyfalse_other_group, parent, false));
+                return new ChatHolder_Picture_ReplyFalse_Other_Group(ListSocketChatPictureReplyfalseOtherGroupBinding.inflate(LayoutInflater.from(context), parent, false));
             case 22111:
-                return new ChatHolder_Picture_ReplyTrue_Me_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_picture_replytrue_me_private, parent, false));
+                return new ChatHolder_Picture_ReplyTrue_Me_Private(ListSocketChatPictureReplytrueMePrivateBinding.inflate(LayoutInflater.from(context), parent, false));
 ////            case 22121:
 ////                return new ChatHolder_Text_ReplyFalse_Me_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_text_replyfalse_me_private, parent, false));
             case 22131:
-                return new ChatHolder_Picture_ReplyTrue_Me_Group(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_picture_replytrue_me_group, parent, false));
+                return new ChatHolder_Picture_ReplyTrue_Me_Group(ListSocketChatPictureReplytrueMeGroupBinding.inflate(LayoutInflater.from(context), parent, false));
             case 22211:
-                return new ChatHolder_Picture_ReplyTrue_Other_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_picture_replytrue_other_private, parent, false));
+                return new ChatHolder_Picture_ReplyTrue_Other_Private(ListSocketChatPictureReplytrueOtherPrivateBinding.inflate(LayoutInflater.from(context), parent, false));
 ////            case 22221:
 ////                return new ChatHolder_Text_ReplyFalse_Me_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_text_replyfalse_me_private, parent, false));
             case 22231:
-                return new ChatHolder_Picture_ReplyTrue_Other_Group(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_picture_replytrue_other_group, parent, false));
+                return new ChatHolder_Picture_ReplyTrue_Other_Group(ListSocketChatPictureReplytrueOtherGroupBinding.inflate(LayoutInflater.from(context), parent, false));
 
             //File
 
             case 31111:
-                return new ChatHolder_File_ReplyFalse_Me_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_file_replyfalse_me_private, parent, false));
+                return new ChatHolder_File_ReplyFalse_Me_Private(ListSocketChatFileReplyfalseMePrivateBinding.inflate(LayoutInflater.from(context), parent, false));
             case 31131:
-                return new ChatHolder_File_ReplyFalse_Me_Group(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_file_replyfalse_me_group, parent, false));
+                return new ChatHolder_File_ReplyFalse_Me_Group(ListSocketChatFileReplyfalseMeGroupBinding.inflate(LayoutInflater.from(context), parent, false));
             case 31211:
-                return new ChatHolder_File_ReplyFalse_Other_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_file_replyfalse_other_private, parent, false));
+                return new ChatHolder_File_ReplyFalse_Other_Private(ListSocketChatFileReplyfalseOtherPrivateBinding.inflate(LayoutInflater.from(context), parent, false));
             case 31231:
-                return new ChatHolder_File_ReplyFalse_Other_Group(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_file_replyfalse_other_group, parent, false));
+                return new ChatHolder_File_ReplyFalse_Other_Group(ListSocketChatFileReplyfalseOtherGroupBinding.inflate(LayoutInflater.from(context), parent, false));
             case 32111:
-                return new ChatHolder_File_ReplyTrue_Me_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_file_replytrue_me_private, parent, false));
+                return new ChatHolder_File_ReplyTrue_Me_Private(ListSocketChatFileReplytrueMePrivateBinding.inflate(LayoutInflater.from(context), parent, false));
             case 32131:
-                return new ChatHolder_File_ReplyTrue_Me_Group(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_file_replytrue_me_group, parent, false));
+                return new ChatHolder_File_ReplyTrue_Me_Group(ListSocketChatFileReplytrueMeGroupBinding.inflate(LayoutInflater.from(context), parent, false));
             case 32211:
-                return new ChatHolder_File_ReplyTrue_Other_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_file_replytrue_other_private, parent, false));
+                return new ChatHolder_File_ReplyTrue_Other_Private(ListSocketChatFileReplytrueOtherPrivateBinding.inflate(LayoutInflater.from(context), parent, false));
             case 32231:
-                return new ChatHolder_File_ReplyTrue_Other_Group(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_file_replytrue_other_group, parent, false));
+                return new ChatHolder_File_ReplyTrue_Other_Group(ListSocketChatFileReplytrueOtherGroupBinding.inflate(LayoutInflater.from(context), parent, false));
             case 31221://channel todo
-                return new ChatHolder_File_ReplyFalse_Other_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_file_replyfalse_other_private, parent, false));
+                return new ChatHolder_File_ReplyFalse_Other_Private(ListSocketChatFileReplyfalseOtherPrivateBinding.inflate(LayoutInflater.from(context), parent, false));
 
         }
 
-        return new ChatHolder_Text_ReplyFalse_Me_Private(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_socket_chat_text_replyfalse_me_private, parent, false));
+        return new ChatHolder_Text_ReplyFalse_Me_Private(ListSocketChatTextReplyfalseMePrivateBinding.inflate(LayoutInflater.from(context), parent, false));
     }
 
     public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, final int position) {
@@ -792,27 +526,27 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             case 11111: {
                 ChatHolder_Text_ReplyFalse_Me_Private holder = (ChatHolder_Text_ReplyFalse_Me_Private) viewHolder;
 
-                holder.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
+                holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
 
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 }
                 if (chatMessage.getSeenCount() != 0) {
-                    holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
                 } else {
-                    holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
                 }
 
                 holder.itemView.setOnClickListener(view -> {
 
                     // copy , reply , delete
-                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.binding.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_me_text, popup.getMenu());
                     popup.show();
@@ -820,7 +554,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         int itemId = item.getItemId();
                         if (itemId == R.id.copy) {
                             ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                            ClipData clip = ClipData.newPlainText("متن", holder.tvMessage.getText().toString());
+                            ClipData clip = ClipData.newPlainText("متن", holder.binding.tvMessage.getText().toString());
                             clipboard.setPrimaryClip(clip);
                             iChatUtils.onCopy();
                         } else if (itemId == R.id.reply) {
@@ -843,27 +577,27 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             case 11131: {
                 ChatHolder_Text_ReplyFalse_Me_Group holder = (ChatHolder_Text_ReplyFalse_Me_Group) viewHolder;
 
-                holder.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
+                holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
 
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 }
                 if (chatMessage.getSeenCount() != 0) {
-                    holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
                 } else {
-                    holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
                 }
 
                 holder.itemView.setOnClickListener(view -> {
 
                     // copy , reply , delete
-                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.binding.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_me_text, popup.getMenu());
                     popup.show();
@@ -871,7 +605,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         int itemId = item.getItemId();
                         if (itemId == R.id.copy) {
                             ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                            ClipData clip = ClipData.newPlainText("متن", holder.tvMessage.getText().toString());
+                            ClipData clip = ClipData.newPlainText("متن", holder.binding.tvMessage.getText().toString());
                             clipboard.setPrimaryClip(clip);
                             iChatUtils.onCopy();
                         } else if (itemId == R.id.reply) {
@@ -893,21 +627,21 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 //            ChatHolder_Text_ReplyFalse_Other_Private
             case 11211: {
                 ChatHolder_Text_ReplyFalse_Other_Private holder = (ChatHolder_Text_ReplyFalse_Other_Private) viewHolder;
-                holder.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
+                holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
 
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 }
 
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.binding.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_other_text, popup.getMenu());
                     popup.show();
@@ -915,7 +649,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         int itemId = item.getItemId();
                         if (itemId == R.id.copy) {
                             ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                            ClipData clip = ClipData.newPlainText("متن", holder.tvMessage.getText().toString());
+                            ClipData clip = ClipData.newPlainText("متن", holder.binding.tvMessage.getText().toString());
                             clipboard.setPrimaryClip(clip);
                             iChatUtils.onCopy();
                         } else if (itemId == R.id.reply) {
@@ -933,18 +667,18 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             //Channel text
             case 11221: {
                 ChatHolder_Text_ReplyFalse_Other_Private holder = (ChatHolder_Text_ReplyFalse_Other_Private) viewHolder;
-                holder.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
+                holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 }
                 holder.itemView.setOnClickListener(view -> {
-                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.binding.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     if (isAdmin) {
                         inflater.inflate(R.menu.popup_menu_chat_click_message_me_text, popup.getMenu());
@@ -956,7 +690,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         int itemId = item.getItemId();
                         if (itemId == R.id.copy) {
                             ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                            ClipData clip = ClipData.newPlainText("متن", holder.tvMessage.getText().toString());
+                            ClipData clip = ClipData.newPlainText("متن", holder.binding.tvMessage.getText().toString());
                             clipboard.setPrimaryClip(clip);
                             iChatUtils.onCopy();
                         } else if (itemId == R.id.reply) {
@@ -977,31 +711,35 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 //            ChatHolder_Text_ReplyFalse_Other_Group
             case 11231: {
                 ChatHolder_Text_ReplyFalse_Other_Group holder = (ChatHolder_Text_ReplyFalse_Other_Group) viewHolder;
-                holder.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
+                holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
 
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 }
 
                 String name = "";
-                if (chatMessage.getUser().getFirstName() != null) {
-                    name = chatMessage.getUser().getFirstName();
+                if (isWorkWithFullname) {
+                    name = chatMessage.getUser().getFullname();
+                } else {
+                    if (chatMessage.getUser().getFirstName() != null) {
+                        name = chatMessage.getUser().getFirstName();
+                    }
+                    if (chatMessage.getUser().getLastName() != null) {
+                        name += " " + chatMessage.getUser().getLastName();
+                    }
                 }
-                if (chatMessage.getUser().getLastName() != null) {
-                    name += " " + chatMessage.getUser().getLastName();
-                }
-                holder.tvUserName.setText(String.format("%s", name));
+                holder.binding.tvUserName.setText(String.format("%s", name));
 
-                Glide.with(context).load(FILE_URL + chatMessage.getUser().getPicture()).placeholder(ContextCompat.getDrawable(context, R.drawable.ic_user_circle)).into(holder.imageViewProfile);
+                Glide.with(context).load(FILE_URL + chatMessage.getUser().getPicture()).placeholder(ContextCompat.getDrawable(context, R.drawable.ic_user_circle)).into(holder.binding.imageViewProfile);
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.binding.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_other_text, popup.getMenu());
                     popup.show();
@@ -1009,7 +747,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         int itemId = item.getItemId();
                         if (itemId == R.id.copy) {
                             ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                            ClipData clip = ClipData.newPlainText("متن", holder.tvMessage.getText().toString());
+                            ClipData clip = ClipData.newPlainText("متن", holder.binding.tvMessage.getText().toString());
                             clipboard.setPrimaryClip(clip);
                             iChatUtils.onCopy();
                         } else if (itemId == R.id.reply) {
@@ -1020,53 +758,54 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
 
                 });
+                holder.binding.linearLayoutUserInfo.setOnClickListener(view -> iChatUtils.onMessageItemUserInfoClick(chatMessage));
                 break;
             }
 //            ChatHolder_Text_ReplyTrue_Me_Private
             case 12111: {
                 ChatHolder_Text_ReplyTrue_Me_Private holder = (ChatHolder_Text_ReplyTrue_Me_Private) viewHolder;
-                holder.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
+                holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
                 switch (chatMessage.getReply().getMessageType()) {
                     case "text":
-                        holder.tvReply.setVisibility(View.VISIBLE);
-                        holder.cardViewReplyPicture.setVisibility(View.GONE);
+                        holder.binding.tvReplyMessage.setVisibility(View.VISIBLE);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.GONE);
                         break;
                     case "picture":
-                        holder.cardViewReplyPicture.setVisibility(View.VISIBLE);
-                        holder.tvReply.setVisibility(View.GONE);
-                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.imageViewReplyMessage);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.VISIBLE);
+                        holder.binding.tvReplyMessage.setVisibility(View.GONE);
+                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.binding.imageViewReplyMessage);
                         break;
                     case "file":
-                        holder.cardViewReplyPicture.setVisibility(View.GONE);
-                        holder.tvReply.setVisibility(View.VISIBLE);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.GONE);
+                        holder.binding.tvReplyMessage.setVisibility(View.VISIBLE);
                         break;
                 }
                 if (chatMessage.getReply().getMessageType().equals("file")) {
                     if (chatMessage.getReply().getMessage().contains("_nznv_")) {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
+                        holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
                     } else {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
+                        holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage()));
                     }
                 } else {
-                    holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
+                    holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage()));
                 }
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 }
                 if (chatMessage.getSeenCount() != 0) {
-                    holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
                 } else {
-                    holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
                 }
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.binding.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     if (chatMessage.getMessageType().equals("text")) {
                         inflater.inflate(R.menu.popup_menu_chat_click_message_me_text, popup.getMenu());
@@ -1078,7 +817,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         int itemId = item.getItemId();
                         if (itemId == R.id.copy) {
                             ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                            ClipData clip = ClipData.newPlainText("متن", holder.tvMessage.getText().toString());
+                            ClipData clip = ClipData.newPlainText("متن", holder.binding.tvMessage.getText().toString());
                             clipboard.setPrimaryClip(clip);
                             iChatUtils.onCopy();
                         } else if (itemId == R.id.reply) {
@@ -1093,7 +832,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
 
                 });
-                holder.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
+                holder.binding.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
                 break;
             }
 //            case 12121:
@@ -1101,48 +840,48 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 //            ChatHolder_Text_ReplyTrue_Me_Group
             case 12131: {
                 ChatHolder_Text_ReplyTrue_Me_Group holder = (ChatHolder_Text_ReplyTrue_Me_Group) viewHolder;
-                holder.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
+                holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
                 switch (chatMessage.getReply().getMessageType()) {
                     case "text":
-                        holder.tvReply.setVisibility(View.VISIBLE);
-                        holder.cardViewReplyPicture.setVisibility(View.GONE);
+                        holder.binding.tvReplyMessage.setVisibility(View.VISIBLE);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.GONE);
                         break;
                     case "picture":
-                        holder.cardViewReplyPicture.setVisibility(View.VISIBLE);
-                        holder.tvReply.setVisibility(View.GONE);
-                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.imageViewReplyMessage);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.VISIBLE);
+                        holder.binding.tvReplyMessage.setVisibility(View.GONE);
+                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.binding.imageViewReplyMessage);
                         break;
                     case "file":
-                        holder.cardViewReplyPicture.setVisibility(View.GONE);
-                        holder.tvReply.setVisibility(View.VISIBLE);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.GONE);
+                        holder.binding.tvReplyMessage.setVisibility(View.VISIBLE);
                         break;
                 }
                 if (chatMessage.getReply().getMessageType().equals("file")) {
                     if (chatMessage.getReply().getMessage().contains("_nznv_")) {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
+                        holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
                     } else {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
+                        holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage()));
                     }
                 } else {
-                    holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
+                    holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage()));
                 }
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 }
                 if (chatMessage.getSeenCount() != 0) {
-                    holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
                 } else {
-                    holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
                 }
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.binding.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     if (chatMessage.getMessageType().equals("text")) {
                         inflater.inflate(R.menu.popup_menu_chat_click_message_me_text, popup.getMenu());
@@ -1154,7 +893,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         int itemId = item.getItemId();
                         if (itemId == R.id.copy) {
                             ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                            ClipData clip = ClipData.newPlainText("متن", holder.tvMessage.getText().toString());
+                            ClipData clip = ClipData.newPlainText("متن", holder.binding.tvMessage.getText().toString());
                             clipboard.setPrimaryClip(clip);
                             iChatUtils.onCopy();
                         } else if (itemId == R.id.reply) {
@@ -1169,52 +908,52 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
 
                 });
-                holder.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
+                holder.binding.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
                 break;
             }
 
 //            ChatHolder_Text_ReplyTrue_Other_Private
             case 12211: {
                 ChatHolder_Text_ReplyTrue_Other_Private holder = (ChatHolder_Text_ReplyTrue_Other_Private) viewHolder;
-                holder.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
+                holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
                 switch (chatMessage.getReply().getMessageType()) {
                     case "text":
-                        holder.tvReply.setVisibility(View.VISIBLE);
-                        holder.cardViewReplyPicture.setVisibility(View.GONE);
+                        holder.binding.tvReplyMessage.setVisibility(View.VISIBLE);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.GONE);
                         break;
                     case "picture":
-                        holder.cardViewReplyPicture.setVisibility(View.VISIBLE);
-                        holder.tvReply.setVisibility(View.GONE);
-                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.imageViewReplyMessage);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.VISIBLE);
+                        holder.binding.tvReplyMessage.setVisibility(View.GONE);
+                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.binding.imageViewReplyMessage);
                         break;
                     case "file":
-                        holder.cardViewReplyPicture.setVisibility(View.GONE);
-                        holder.tvReply.setVisibility(View.VISIBLE);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.GONE);
+                        holder.binding.tvReplyMessage.setVisibility(View.VISIBLE);
                         break;
                 }
                 if (chatMessage.getReply().getMessageType().equals("file")) {
                     if (chatMessage.getReply().getMessage().contains("_nznv_")) {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
+                        holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
                     } else {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
+                        holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage()));
                     }
                 } else {
-                    holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
+                    holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage()));
                 }
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 }
 
-                holder.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
+                holder.binding.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
 
                 holder.itemView.setOnClickListener(view -> {
-                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.binding.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     if (chatMessage.getMessageType().equals("text")) {
                         inflater.inflate(R.menu.popup_menu_chat_click_message_other_text, popup.getMenu());
@@ -1226,7 +965,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         int itemId = item.getItemId();
                         if (itemId == R.id.copy) {
                             ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                            ClipData clip = ClipData.newPlainText("متن", holder.tvMessage.getText().toString());
+                            ClipData clip = ClipData.newPlainText("متن", holder.binding.tvMessage.getText().toString());
                             clipboard.setPrimaryClip(clip);
                             iChatUtils.onCopy();
                         } else if (itemId == R.id.reply) {
@@ -1245,55 +984,59 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 //            ChatHolder_Text_ReplyTrue_Other_Group
             case 12231: {
                 ChatHolder_Text_ReplyTrue_Other_Group holder = (ChatHolder_Text_ReplyTrue_Other_Group) viewHolder;
-                holder.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
+                holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
                 switch (chatMessage.getReply().getMessageType()) {
                     case "text":
-                        holder.tvReply.setVisibility(View.VISIBLE);
-                        holder.cardViewReplyPicture.setVisibility(View.GONE);
+                        holder.binding.tvReplyMessage.setVisibility(View.VISIBLE);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.GONE);
                         break;
                     case "picture":
-                        holder.cardViewReplyPicture.setVisibility(View.VISIBLE);
-                        holder.tvReply.setVisibility(View.GONE);
-                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.imageViewReplyMessage);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.VISIBLE);
+                        holder.binding.tvReplyMessage.setVisibility(View.GONE);
+                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.binding.imageViewReplyMessage);
                         break;
                     case "file":
-                        holder.cardViewReplyPicture.setVisibility(View.GONE);
-                        holder.tvReply.setVisibility(View.VISIBLE);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.GONE);
+                        holder.binding.tvReplyMessage.setVisibility(View.VISIBLE);
                         break;
                 }
                 if (chatMessage.getReply().getMessageType().equals("file")) {
                     if (chatMessage.getReply().getMessage().contains("_nznv_")) {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
+                        holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
                     } else {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
+                        holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage()));
                     }
                 } else {
-                    holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
+                    holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage()));
                 }
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 }
 
                 String name = "";
-                if (chatMessage.getUser().getFirstName() != null) {
-                    name = chatMessage.getUser().getFirstName();
+                if (isWorkWithFullname) {
+                    name = chatMessage.getUser().getFullname();
+                } else {
+                    if (chatMessage.getUser().getFirstName() != null) {
+                        name = chatMessage.getUser().getFirstName();
+                    }
+                    if (chatMessage.getUser().getLastName() != null) {
+                        name += " " + chatMessage.getUser().getLastName();
+                    }
                 }
-                if (chatMessage.getUser().getLastName() != null) {
-                    name += " " + chatMessage.getUser().getLastName();
-                }
-                holder.tvUserName.setText(String.format("%s", name));
+                holder.binding.tvUserName.setText(String.format("%s", name));
 
-                holder.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
-                Glide.with(context).load(FILE_URL + chatMessage.getUser().getPicture()).placeholder(ContextCompat.getDrawable(context, R.drawable.ic_user_circle)).into(holder.imageViewProfile);
+                holder.binding.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
+                Glide.with(context).load(FILE_URL + chatMessage.getUser().getPicture()).placeholder(ContextCompat.getDrawable(context, R.drawable.ic_user_circle)).into(holder.binding.imageViewProfile);
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.binding.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_other, popup.getMenu());
                     popup.show();
@@ -1301,7 +1044,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         int itemId = item.getItemId();
                         if (itemId == R.id.copy) {
                             ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                            ClipData clip = ClipData.newPlainText("متن", holder.tvMessage.getText().toString());
+                            ClipData clip = ClipData.newPlainText("متن", holder.binding.tvMessage.getText().toString());
                             clipboard.setPrimaryClip(clip);
                             iChatUtils.onCopy();
                         } else if (itemId == R.id.reply) {
@@ -1310,6 +1053,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         return false;
                     });
                 });
+                holder.binding.linearLayoutUserInfo.setOnClickListener(view -> iChatUtils.onMessageItemUserInfoClick(chatMessage));
                 break;
             }
 
@@ -1319,17 +1063,17 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 final ChatHolder_Picture_ReplyFalse_Me_Private holder = (ChatHolder_Picture_ReplyFalse_Me_Private) viewHolder;
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                holder.tvTime.setText(getTime(dateObject));
+                holder.binding.tvTime.setText(getTime(dateObject));
 
                 if (chatMessage.getSeenCount() != 0) {
-                    holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
                 } else {
-                    holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
                 }
 
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.binding.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_me, popup.getMenu());
                     popup.show();
@@ -1345,8 +1089,8 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 });
 
 //                Log.d(TAG, "onBindViewHolder: " + FILE_URL + chatMessage.getMessage());
-                Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.imageView);
-                holder.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
+                Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.binding.imageView);
+                holder.binding.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
                 break;
             }
 //            case 21121:
@@ -1356,17 +1100,17 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 final ChatHolder_Picture_ReplyFalse_Me_Group holder = (ChatHolder_Picture_ReplyFalse_Me_Group) viewHolder;
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                holder.tvTime.setText(getTime(dateObject));
+                holder.binding.tvTime.setText(getTime(dateObject));
 
                 if (chatMessage.getSeenCount() != 0) {
-                    holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
                 } else {
-                    holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
                 }
 
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.binding.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_me, popup.getMenu());
                     popup.show();
@@ -1383,9 +1127,9 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 });
 
-                Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.imageView);
+                Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.binding.imageView);
 
-                holder.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
+                holder.binding.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
                 break;
             }
 
@@ -1394,12 +1138,12 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 final ChatHolder_Picture_ReplyFalse_Other_Private holder = (ChatHolder_Picture_ReplyFalse_Other_Private) viewHolder;
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                holder.tvTime.setText(getTime(dateObject));
+                holder.binding.tvTime.setText(getTime(dateObject));
 
 
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.binding.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     if (chatMessage.getMessageType().equals("text")) {
                         inflater.inflate(R.menu.popup_menu_chat_click_message_other_text, popup.getMenu());
@@ -1417,9 +1161,9 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 });
 
-                Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.imageView);
+                Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.binding.imageView);
 
-                holder.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
+                holder.binding.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
                 break;
             }
             //channel picture
@@ -1427,10 +1171,10 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 final ChatHolder_Picture_ReplyFalse_Other_Private holder = (ChatHolder_Picture_ReplyFalse_Other_Private) viewHolder;
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                holder.tvTime.setText(getTime(dateObject));
+                holder.binding.tvTime.setText(getTime(dateObject));
                 holder.itemView.setOnClickListener(view -> {
                     if (isAdmin) {
-                        PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
+                        PopupMenu popup = new PopupMenu(activity, (holder.binding.tvTime));
                         MenuInflater inflater = popup.getMenuInflater();
                         inflater.inflate(R.menu.popup_menu_chat_click_message_me, popup.getMenu());
                         popup.show();
@@ -1445,8 +1189,8 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         });
                     }
                 });
-                Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.imageView);
-                holder.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
+                Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.binding.imageView);
+                holder.binding.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
                 break;
             }
 //            case 21221:
@@ -1456,24 +1200,28 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 final ChatHolder_Picture_ReplyFalse_Other_Group holder = (ChatHolder_Picture_ReplyFalse_Other_Group) viewHolder;
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                holder.tvTime.setText(getTime(dateObject));
+                holder.binding.tvTime.setText(getTime(dateObject));
 
                 String name = "";
-                if (chatMessage.getUser().getFirstName() != null) {
-                    name = chatMessage.getUser().getFirstName();
+                if (isWorkWithFullname) {
+                    name = chatMessage.getUser().getFullname();
+                } else {
+                    if (chatMessage.getUser().getFirstName() != null) {
+                        name = chatMessage.getUser().getFirstName();
+                    }
+                    if (chatMessage.getUser().getLastName() != null) {
+                        name += " " + chatMessage.getUser().getLastName();
+                    }
                 }
-                if (chatMessage.getUser().getLastName() != null) {
-                    name += " " + chatMessage.getUser().getLastName();
-                }
-                holder.tvUserName.setText(String.format("%s", name));
+                holder.binding.tvUserName.setText(String.format("%s", name));
 
 
-                Glide.with(context).load(FILE_URL + chatMessage.getUser().getPicture()).placeholder(ContextCompat.getDrawable(context, R.drawable.ic_user_circle)).into(holder.imageViewProfile);
+                Glide.with(context).load(FILE_URL + chatMessage.getUser().getPicture()).placeholder(ContextCompat.getDrawable(context, R.drawable.ic_user_circle)).into(holder.binding.imageViewProfile);
 
 
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.binding.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     if (chatMessage.getMessageType().equals("text")) {
                         inflater.inflate(R.menu.popup_menu_chat_click_message_other_text, popup.getMenu());
@@ -1490,10 +1238,9 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
 
                 });
-
-                Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.imageView);
-
-                holder.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
+                holder.binding.linearLayoutUserInfo.setOnClickListener(view -> iChatUtils.onMessageItemUserInfoClick(chatMessage));
+                Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.binding.imageView);
+                holder.binding.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
                 break;
             }
 
@@ -1502,43 +1249,43 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 final ChatHolder_Picture_ReplyTrue_Me_Private holder = (ChatHolder_Picture_ReplyTrue_Me_Private) viewHolder;
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                holder.tvTime.setText(getTime(dateObject));
+                holder.binding.tvTime.setText(getTime(dateObject));
 
                 if (chatMessage.getSeenCount() != 0) {
-                    holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
                 } else {
-                    holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
                 }
 
                 switch (chatMessage.getReply().getMessageType()) {
                     case "text":
-                        holder.tvReply.setVisibility(View.VISIBLE);
-                        holder.cardViewReplyPicture.setVisibility(View.GONE);
+                        holder.binding.tvReplyMessage.setVisibility(View.VISIBLE);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.GONE);
                         break;
                     case "picture":
-                        holder.cardViewReplyPicture.setVisibility(View.VISIBLE);
-                        holder.tvReply.setVisibility(View.GONE);
-                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.imageViewReplyMessage);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.VISIBLE);
+                        holder.binding.tvReplyMessage.setVisibility(View.GONE);
+                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.binding.imageViewReplyMessage);
                         break;
                     case "file":
-                        holder.cardViewReplyPicture.setVisibility(View.GONE);
-                        holder.tvReply.setVisibility(View.VISIBLE);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.GONE);
+                        holder.binding.tvReplyMessage.setVisibility(View.VISIBLE);
                         break;
                 }
                 if (chatMessage.getReply().getMessageType().equals("file")) {
                     if (chatMessage.getReply().getMessage().contains("_nznv_")) {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
+                        holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
                     } else {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
+                        holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage()));
                     }
                 } else {
-                    holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
+                    holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage()));
                 }
-                holder.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
+                holder.binding.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
 
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.binding.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_me, popup.getMenu());
                     popup.show();
@@ -1555,9 +1302,9 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 });
 
-                Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.imageView);
+                Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.binding.imageView);
 
-                holder.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
+                holder.binding.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
                 break;
             }
 
@@ -1568,43 +1315,43 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 final ChatHolder_Picture_ReplyTrue_Me_Group holder = (ChatHolder_Picture_ReplyTrue_Me_Group) viewHolder;
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                holder.tvTime.setText(getTime(dateObject));
+                holder.binding.tvTime.setText(getTime(dateObject));
 
                 if (chatMessage.getSeenCount() != 0) {
-                    holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
                 } else {
-                    holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
                 }
 
                 switch (chatMessage.getReply().getMessageType()) {
                     case "text":
-                        holder.tvReply.setVisibility(View.VISIBLE);
-                        holder.cardViewReplyPicture.setVisibility(View.GONE);
+                        holder.binding.tvReplyMessage.setVisibility(View.VISIBLE);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.GONE);
                         break;
                     case "picture":
-                        holder.cardViewReplyPicture.setVisibility(View.VISIBLE);
-                        holder.tvReply.setVisibility(View.GONE);
-                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.imageViewReplyMessage);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.VISIBLE);
+                        holder.binding.tvReplyMessage.setVisibility(View.GONE);
+                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.binding.imageViewReplyMessage);
                         break;
                     case "file":
-                        holder.cardViewReplyPicture.setVisibility(View.GONE);
-                        holder.tvReply.setVisibility(View.VISIBLE);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.GONE);
+                        holder.binding.tvReplyMessage.setVisibility(View.VISIBLE);
                         break;
                 }
                 if (chatMessage.getReply().getMessageType().equals("file")) {
                     if (chatMessage.getReply().getMessage().contains("_nznv_")) {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
+                        holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
                     } else {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
+                        holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage()));
                     }
                 } else {
-                    holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
+                    holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage()));
                 }
-                holder.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
+                holder.binding.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
 
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.binding.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_me, popup.getMenu());
                     popup.show();
@@ -1621,9 +1368,9 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 });
 
-                Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.imageView);
+                Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.binding.imageView);
 
-                holder.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
+                holder.binding.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
                 break;
             }
 
@@ -1632,37 +1379,37 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 final ChatHolder_Picture_ReplyTrue_Other_Private holder = (ChatHolder_Picture_ReplyTrue_Other_Private) viewHolder;
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                holder.tvTime.setText(getTime(dateObject));
+                holder.binding.tvTime.setText(getTime(dateObject));
 
                 switch (chatMessage.getReply().getMessageType()) {
                     case "text":
-                        holder.tvReply.setVisibility(View.VISIBLE);
-                        holder.cardViewReplyPicture.setVisibility(View.GONE);
+                        holder.binding.tvReplyMessage.setVisibility(View.VISIBLE);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.GONE);
                         break;
                     case "picture":
-                        holder.cardViewReplyPicture.setVisibility(View.VISIBLE);
-                        holder.tvReply.setVisibility(View.GONE);
-                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.imageViewReplyMessage);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.VISIBLE);
+                        holder.binding.tvReplyMessage.setVisibility(View.GONE);
+                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.binding.imageViewReplyMessage);
                         break;
                     case "file":
-                        holder.cardViewReplyPicture.setVisibility(View.GONE);
-                        holder.tvReply.setVisibility(View.VISIBLE);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.GONE);
+                        holder.binding.tvReplyMessage.setVisibility(View.VISIBLE);
                         break;
                 }
                 if (chatMessage.getReply().getMessageType().equals("file")) {
                     if (chatMessage.getReply().getMessage().contains("_nznv_")) {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
+                        holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
                     } else {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
+                        holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage()));
                     }
                 } else {
-                    holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
+                    holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage()));
                 }
-                holder.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
+                holder.binding.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
 
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.binding.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     if (chatMessage.getMessageType().equals("text")) {
                         inflater.inflate(R.menu.popup_menu_chat_click_message_other_text, popup.getMenu());
@@ -1678,9 +1425,9 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     });
                 });
 
-                Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.imageView);
+                Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.binding.imageView);
 
-                holder.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
+                holder.binding.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
                 break;
             }
 
@@ -1691,50 +1438,48 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 final ChatHolder_Picture_ReplyTrue_Other_Group holder = (ChatHolder_Picture_ReplyTrue_Other_Group) viewHolder;
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                holder.tvTime.setText(getTime(dateObject));
+                holder.binding.tvTime.setText(getTime(dateObject));
                 switch (chatMessage.getReply().getMessageType()) {
                     case "text":
-                        holder.tvReply.setVisibility(View.VISIBLE);
-                        holder.cardViewReplyPicture.setVisibility(View.GONE);
+                        holder.binding.tvReplyMessage.setVisibility(View.VISIBLE);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.GONE);
                         break;
                     case "picture":
-                        holder.cardViewReplyPicture.setVisibility(View.VISIBLE);
-                        holder.tvReply.setVisibility(View.GONE);
-                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.imageViewReplyMessage);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.VISIBLE);
+                        holder.binding.tvReplyMessage.setVisibility(View.GONE);
+                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.binding.imageViewReplyMessage);
                         break;
                     case "file":
-                        holder.cardViewReplyPicture.setVisibility(View.GONE);
-                        holder.tvReply.setVisibility(View.VISIBLE);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.GONE);
+                        holder.binding.tvReplyMessage.setVisibility(View.VISIBLE);
                         break;
                 }
                 if (chatMessage.getReply().getMessageType().equals("file")) {
                     if (chatMessage.getReply().getMessage().contains("_nznv_")) {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
+                        holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
                     } else {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
+                        holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage()));
                     }
                 } else {
-                    holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
+                    holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage()));
                 }
-                holder.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
-
-
+                holder.binding.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
                 String name = "";
-                if (chatMessage.getUser().getFirstName() != null) {
-                    name = chatMessage.getUser().getFirstName();
+                if (isWorkWithFullname) {
+                    name = chatMessage.getUser().getFullname();
+                } else {
+                    if (chatMessage.getUser().getFirstName() != null) {
+                        name = chatMessage.getUser().getFirstName();
+                    }
+                    if (chatMessage.getUser().getLastName() != null) {
+                        name += " " + chatMessage.getUser().getLastName();
+                    }
                 }
-                if (chatMessage.getUser().getLastName() != null) {
-                    name += " " + chatMessage.getUser().getLastName();
-                }
-                holder.tvUserName.setText(String.format("%s", name));
-
-
-                Glide.with(context).load(FILE_URL + chatMessage.getUser().getPicture()).placeholder(ContextCompat.getDrawable(context, R.drawable.ic_user_circle)).into(holder.imageViewProfile);
-
-
+                holder.binding.tvUserName.setText(String.format("%s", name));
+                Glide.with(context).load(FILE_URL + chatMessage.getUser().getPicture()).placeholder(ContextCompat.getDrawable(context, R.drawable.ic_user_circle)).into(holder.binding.imageViewProfile);
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.binding.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     if (chatMessage.getMessageType().equals("text")) {
                         inflater.inflate(R.menu.popup_menu_chat_click_message_other_text, popup.getMenu());
@@ -1749,49 +1494,48 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         return false;
                     });
                 });
-
-                Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.imageView);
-
-                holder.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
+                holder.binding.linearLayoutUserInfo.setOnClickListener(view -> iChatUtils.onMessageItemUserInfoClick(chatMessage));
+                Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.binding.imageView);
+                holder.binding.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
                 break;
             }
             //File
             case 31111: {
                 ChatHolder_File_ReplyFalse_Me_Private holder = (ChatHolder_File_ReplyFalse_Me_Private) viewHolder;
 
-                holder.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
+                holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
                 if (chatMessage.getProgress() != null) {
                     if (chatMessage.getProgress() == -1 || chatMessage.getProgress() == 100) {
-                        holder.tvProgress.setVisibility(View.GONE);
+                        holder.binding.tvProgress.setVisibility(View.GONE);
                     } else {
-                        holder.tvProgress.setVisibility(View.VISIBLE);
-                        holder.tvProgress.setText(String.format("در حال دانلود... %s%s کامل شده", chatMessage.getProgress(), "%"));
+                        holder.binding.tvProgress.setVisibility(View.VISIBLE);
+                        holder.binding.tvProgress.setText(String.format("در حال دانلود... %s%s کامل شده", chatMessage.getProgress(), "%"));
                     }
                 } else {
-                    holder.tvProgress.setVisibility(View.GONE);
+                    holder.binding.tvProgress.setVisibility(View.GONE);
                 }
 
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 }
                 if (chatMessage.getSeenCount() != 0) {
-                    holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
                 } else {
-                    holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
                 }
 
                 if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
-                    holder.coordinatorDownloadedFile.setVisibility(View.GONE);
+                    holder.binding.coordinatorDownloadedFile.setVisibility(View.GONE);
                 } else {
-                    holder.coordinatorDownloadedFile.setVisibility(View.VISIBLE);
+                    holder.binding.coordinatorDownloadedFile.setVisibility(View.VISIBLE);
                 }
-                holder.coordinatorDownloadFile.setOnClickListener(v -> {
+                holder.binding.coordinatorDownloadFile.setOnClickListener(v -> {
                     if (checkReadExternalPermission(activity)) {
                         if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
                             FileDownloaderNew.openFile(context, chatMessage.getMessage());
@@ -1810,7 +1554,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.binding.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_me, popup.getMenu());
                     popup.show();
@@ -1830,39 +1574,39 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             case 31131: {
                 ChatHolder_File_ReplyFalse_Me_Group holder = (ChatHolder_File_ReplyFalse_Me_Group) viewHolder;
 
-                holder.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
-                if (chatMessage.getProgress() != null) {
-                    if (chatMessage.getProgress() == -1 || chatMessage.getProgress() == 100) {
-                        holder.tvProgress.setVisibility(View.GONE);
-                    } else {
-                        holder.tvProgress.setVisibility(View.VISIBLE);
-                        holder.tvProgress.setText(String.format("در حال دانلود... %s%s کامل شده", chatMessage.getProgress(), "%"));
-                    }
-                } else {
-                    holder.tvProgress.setVisibility(View.GONE);
-                }
+                holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
+//                if (chatMessage.getProgress() != null) {
+//                    if (chatMessage.getProgress() == -1 || chatMessage.getProgress() == 100) {
+//                        holder.binding.tvProgress.setVisibility(View.GONE);
+//                    } else {
+//                        holder.binding.tvProgress.setVisibility(View.VISIBLE);
+//                        holder.binding.tvProgress.setText(String.format("در حال دانلود... %s%s کامل شده", chatMessage.getProgress(), "%"));
+//                    }
+//                } else {
+//                    holder.binding.tvProgress.setVisibility(View.GONE);
+//                }
 
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 }
                 if (chatMessage.getSeenCount() != 0) {
-                    holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
                 } else {
-                    holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
                 }
 
                 if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
-                    holder.coordinatorDownloadedFile.setVisibility(View.GONE);
+                    holder.binding.coordinatorDownloadedFile.setVisibility(View.GONE);
                 } else {
-                    holder.coordinatorDownloadedFile.setVisibility(View.VISIBLE);
+                    holder.binding.coordinatorDownloadedFile.setVisibility(View.VISIBLE);
                 }
-                holder.coordinatorDownloadFile.setOnClickListener(v -> {
+                holder.binding.coordinatorDownloadFile.setOnClickListener(v -> {
                     if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
                         FileDownloaderNew.openFile(context, chatMessage.getMessage());
                     } else {
@@ -1878,7 +1622,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.binding.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_me, popup.getMenu());
                     popup.show();
@@ -1896,34 +1640,34 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             }
             case 31211: {
                 ChatHolder_File_ReplyFalse_Other_Private holder = (ChatHolder_File_ReplyFalse_Other_Private) viewHolder;
-                holder.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
+                holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
                 if (chatMessage.getProgress() != null) {
                     if (chatMessage.getProgress() == -1 || chatMessage.getProgress() == 100) {
-                        holder.tvProgress.setVisibility(View.GONE);
+                        holder.binding.tvProgress.setVisibility(View.GONE);
                     } else {
-                        holder.tvProgress.setVisibility(View.VISIBLE);
-                        holder.tvProgress.setText(String.format("در حال دانلود... %s%s کامل شده", chatMessage.getProgress(), "%"));
+                        holder.binding.tvProgress.setVisibility(View.VISIBLE);
+                        holder.binding.tvProgress.setText(String.format("در حال دانلود... %s%s کامل شده", chatMessage.getProgress(), "%"));
                     }
                 } else {
-                    holder.tvProgress.setVisibility(View.GONE);
+                    holder.binding.tvProgress.setVisibility(View.GONE);
                 }
 
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 }
 
                 if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
-                    holder.coordinatorDownloadedFile.setVisibility(View.GONE);
+                    holder.binding.coordinatorDownloadedFile.setVisibility(View.GONE);
                 } else {
-                    holder.coordinatorDownloadedFile.setVisibility(View.VISIBLE);
+                    holder.binding.coordinatorDownloadedFile.setVisibility(View.VISIBLE);
                 }
-                holder.coordinatorDownloadFile.setOnClickListener(v -> {
+                holder.binding.coordinatorDownloadFile.setOnClickListener(v -> {
 
                     if (checkReadExternalPermission(activity)) {
                         if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
@@ -1944,7 +1688,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.binding.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_other, popup.getMenu());
                     popup.show();
@@ -1960,33 +1704,33 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             //channel file
             case 31221: {
                 ChatHolder_File_ReplyFalse_Other_Private holder = (ChatHolder_File_ReplyFalse_Other_Private) viewHolder;
-                holder.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
+                holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
                 if (chatMessage.getProgress() != null) {
                     if (chatMessage.getProgress() == -1 || chatMessage.getProgress() == 100) {
-                        holder.tvProgress.setVisibility(View.GONE);
+                        holder.binding.tvProgress.setVisibility(View.GONE);
                     } else {
-                        holder.tvProgress.setVisibility(View.VISIBLE);
-                        holder.tvProgress.setText(String.format("در حال دانلود... %s%s کامل شده", chatMessage.getProgress(), "%"));
+                        holder.binding.tvProgress.setVisibility(View.VISIBLE);
+                        holder.binding.tvProgress.setText(String.format("در حال دانلود... %s%s کامل شده", chatMessage.getProgress(), "%"));
                     }
                 } else {
-                    holder.tvProgress.setVisibility(View.GONE);
+                    holder.binding.tvProgress.setVisibility(View.GONE);
                 }
 
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 }
                 if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
-                    holder.coordinatorDownloadedFile.setVisibility(View.GONE);
+                    holder.binding.coordinatorDownloadedFile.setVisibility(View.GONE);
                 } else {
-                    holder.coordinatorDownloadedFile.setVisibility(View.VISIBLE);
+                    holder.binding.coordinatorDownloadedFile.setVisibility(View.VISIBLE);
                 }
-                holder.coordinatorDownloadFile.setOnClickListener(v -> {
+                holder.binding.coordinatorDownloadFile.setOnClickListener(v -> {
                     if (checkReadExternalPermission(activity)) {
                         if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
                             FileDownloaderNew.openFile(context, chatMessage.getMessage());
@@ -2004,7 +1748,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 });
                 holder.itemView.setOnClickListener(view -> {
                     if (isAdmin) {
-                        PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
+                        PopupMenu popup = new PopupMenu(activity, (holder.binding.tvTime));
                         MenuInflater inflater = popup.getMenuInflater();
                         inflater.inflate(R.menu.popup_menu_chat_click_message_me, popup.getMenu());
                         popup.show();
@@ -2039,45 +1783,49 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
             case 31231: {
                 ChatHolder_File_ReplyFalse_Other_Group holder = (ChatHolder_File_ReplyFalse_Other_Group) viewHolder;
-                holder.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
+                holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
                 if (chatMessage.getProgress() != null) {
                     if (chatMessage.getProgress() == -1 || chatMessage.getProgress() == 100) {
-                        holder.tvProgress.setVisibility(View.GONE);
+                        holder.binding.tvProgress.setVisibility(View.GONE);
                     } else {
-                        holder.tvProgress.setVisibility(View.VISIBLE);
-                        holder.tvProgress.setText(String.format("در حال دانلود... %s%s کامل شده", chatMessage.getProgress(), "%"));
+                        holder.binding.tvProgress.setVisibility(View.VISIBLE);
+                        holder.binding.tvProgress.setText(String.format("در حال دانلود... %s%s کامل شده", chatMessage.getProgress(), "%"));
                     }
                 } else {
-                    holder.tvProgress.setVisibility(View.GONE);
+                    holder.binding.tvProgress.setVisibility(View.GONE);
                 }
 
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 }
 
                 String name = "";
-                if (chatMessage.getUser().getFirstName() != null) {
-                    name = chatMessage.getUser().getFirstName();
+                if (isWorkWithFullname) {
+                    name = chatMessage.getUser().getFullname();
+                } else {
+                    if (chatMessage.getUser().getFirstName() != null) {
+                        name = chatMessage.getUser().getFirstName();
+                    }
+                    if (chatMessage.getUser().getLastName() != null) {
+                        name += " " + chatMessage.getUser().getLastName();
+                    }
                 }
-                if (chatMessage.getUser().getLastName() != null) {
-                    name += " " + chatMessage.getUser().getLastName();
-                }
-                holder.tvUserName.setText(String.format("%s", name));
+                holder.binding.tvUserName.setText(String.format("%s", name));
 
-                Glide.with(context).load(FILE_URL + chatMessage.getUser().getPicture()).placeholder(ContextCompat.getDrawable(context, R.drawable.ic_user_circle)).into(holder.imageViewProfile);
+                Glide.with(context).load(FILE_URL + chatMessage.getUser().getPicture()).placeholder(ContextCompat.getDrawable(context, R.drawable.ic_user_circle)).into(holder.binding.imageViewProfile);
 
                 if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
-                    holder.coordinatorDownloadedFile.setVisibility(View.GONE);
+                    holder.binding.coordinatorDownloadedFile.setVisibility(View.GONE);
                 } else {
-                    holder.coordinatorDownloadedFile.setVisibility(View.VISIBLE);
+                    holder.binding.coordinatorDownloadedFile.setVisibility(View.VISIBLE);
                 }
-                holder.coordinatorDownloadFile.setOnClickListener(v -> {
+                holder.binding.coordinatorDownloadFile.setOnClickListener(v -> {
                     if (checkReadExternalPermission(activity)) {
                         if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
                             FileDownloaderNew.openFile(context, chatMessage.getMessage());
@@ -2094,10 +1842,9 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     }
                 });
 
-
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.binding.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_other, popup.getMenu());
                     popup.show();
@@ -2110,64 +1857,65 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
 
                 });
+                holder.binding.linearLayoutUserInfo.setOnClickListener(view -> iChatUtils.onMessageItemUserInfoClick(chatMessage));
                 break;
             }
 
             case 32111: {
                 ChatHolder_File_ReplyTrue_Me_Private holder = (ChatHolder_File_ReplyTrue_Me_Private) viewHolder;
-                holder.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
+                holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
                 if (chatMessage.getProgress() != null) {
                     if (chatMessage.getProgress() == -1 || chatMessage.getProgress() == 100) {
-                        holder.tvProgress.setVisibility(View.GONE);
+                        holder.binding.tvProgress.setVisibility(View.GONE);
                     } else {
-                        holder.tvProgress.setVisibility(View.VISIBLE);
-                        holder.tvProgress.setText(String.format("در حال دانلود... %s%s کامل شده", chatMessage.getProgress(), "%"));
+                        holder.binding.tvProgress.setVisibility(View.VISIBLE);
+                        holder.binding.tvProgress.setText(String.format("در حال دانلود... %s%s کامل شده", chatMessage.getProgress(), "%"));
                     }
                 } else {
-                    holder.tvProgress.setVisibility(View.GONE);
+                    holder.binding.tvProgress.setVisibility(View.GONE);
                 }
 
                 switch (chatMessage.getReply().getMessageType()) {
                     case "text":
-                        holder.tvReply.setVisibility(View.VISIBLE);
-                        holder.cardViewReplyPicture.setVisibility(View.GONE);
+                        holder.binding.tvReplyMessage.setVisibility(View.VISIBLE);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.GONE);
                         break;
                     case "picture":
-                        holder.cardViewReplyPicture.setVisibility(View.VISIBLE);
-                        holder.tvReply.setVisibility(View.GONE);
-                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.imageViewReplyMessage);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.VISIBLE);
+                        holder.binding.tvReplyMessage.setVisibility(View.GONE);
+                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.binding.imageViewReplyMessage);
                         break;
                     case "file":
-                        holder.cardViewReplyPicture.setVisibility(View.GONE);
-                        holder.tvReply.setVisibility(View.VISIBLE);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.GONE);
+                        holder.binding.tvReplyMessage.setVisibility(View.VISIBLE);
                         break;
                 }
                 if (chatMessage.getReply().getMessageType().equals("file")) {
                     if (chatMessage.getReply().getMessage().contains("_nznv_")) {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
+                        holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
                     } else {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
+                        holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage()));
                     }
                 } else {
-                    holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
+                    holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage()));
                 }
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 }
                 if (chatMessage.getSeenCount() != 0) {
-                    holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
                 } else {
-                    holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
                 }
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.binding.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_me, popup.getMenu());
                     popup.show();
@@ -2183,11 +1931,11 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 });
 
                 if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
-                    holder.coordinatorDownloadedFile.setVisibility(View.GONE);
+                    holder.binding.coordinatorDownloadedFile.setVisibility(View.GONE);
                 } else {
-                    holder.coordinatorDownloadedFile.setVisibility(View.VISIBLE);
+                    holder.binding.coordinatorDownloadedFile.setVisibility(View.VISIBLE);
                 }
-                holder.coordinatorDownloadFile.setOnClickListener(v -> {
+                holder.binding.coordinatorDownloadFile.setOnClickListener(v -> {
                     if (checkReadExternalPermission(activity)) {
                         if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
                             FileDownloaderNew.openFile(context, chatMessage.getMessage());
@@ -2203,65 +1951,65 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         }
                     }
                 });
-                holder.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
+                holder.binding.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
                 break;
             }
 
             case 32131: {
                 ChatHolder_File_ReplyTrue_Me_Group holder = (ChatHolder_File_ReplyTrue_Me_Group) viewHolder;
-                holder.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
+                holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
                 if (chatMessage.getProgress() != null) {
                     if (chatMessage.getProgress() == -1 || chatMessage.getProgress() == 100) {
-                        holder.tvProgress.setVisibility(View.GONE);
+                        holder.binding.tvProgress.setVisibility(View.GONE);
                     } else {
-                        holder.tvProgress.setVisibility(View.VISIBLE);
-                        holder.tvProgress.setText(String.format("در حال دانلود... %s%s کامل شده", chatMessage.getProgress(), "%"));
+                        holder.binding.tvProgress.setVisibility(View.VISIBLE);
+                        holder.binding.tvProgress.setText(String.format("در حال دانلود... %s%s کامل شده", chatMessage.getProgress(), "%"));
                     }
                 } else {
-                    holder.tvProgress.setVisibility(View.GONE);
+                    holder.binding.tvProgress.setVisibility(View.GONE);
                 }
 
                 switch (chatMessage.getReply().getMessageType()) {
                     case "text":
-                        holder.tvReply.setVisibility(View.VISIBLE);
-                        holder.cardViewReplyPicture.setVisibility(View.GONE);
+                        holder.binding.tvReplyMessage.setVisibility(View.VISIBLE);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.GONE);
                         break;
                     case "picture":
-                        holder.cardViewReplyPicture.setVisibility(View.VISIBLE);
-                        holder.tvReply.setVisibility(View.GONE);
-                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.imageViewReplyMessage);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.VISIBLE);
+                        holder.binding.tvReplyMessage.setVisibility(View.GONE);
+                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.binding.imageViewReplyMessage);
                         break;
                     case "file":
-                        holder.cardViewReplyPicture.setVisibility(View.GONE);
-                        holder.tvReply.setVisibility(View.VISIBLE);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.GONE);
+                        holder.binding.tvReplyMessage.setVisibility(View.VISIBLE);
                         break;
                 }
                 if (chatMessage.getReply().getMessageType().equals("file")) {
                     if (chatMessage.getReply().getMessage().contains("_nznv_")) {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
+                        holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
                     } else {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
+                        holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage()));
                     }
                 } else {
-                    holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
+                    holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage()));
                 }
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 }
                 if (chatMessage.getSeenCount() != 0) {
-                    holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
                 } else {
-                    holder.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
                 }
                 holder.itemView.setOnClickListener(view -> {
 
-                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.binding.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_me, popup.getMenu());
                     popup.show();
@@ -2277,11 +2025,11 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 });
 
                 if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
-                    holder.coordinatorDownloadedFile.setVisibility(View.GONE);
+                    holder.binding.coordinatorDownloadedFile.setVisibility(View.GONE);
                 } else {
-                    holder.coordinatorDownloadedFile.setVisibility(View.VISIBLE);
+                    holder.binding.coordinatorDownloadedFile.setVisibility(View.VISIBLE);
                 }
-                holder.coordinatorDownloadFile.setOnClickListener(v -> {
+                holder.binding.coordinatorDownloadFile.setOnClickListener(v -> {
                     if (checkReadExternalPermission(activity)) {
                         if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
                             FileDownloaderNew.openFile(context, chatMessage.getMessage());
@@ -2298,63 +2046,63 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     }
                 });
 
-                holder.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
+                holder.binding.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
                 break;
             }
 
 
             case 32211: {
                 ChatHolder_File_ReplyTrue_Other_Private holder = (ChatHolder_File_ReplyTrue_Other_Private) viewHolder;
-                holder.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
+                holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
                 if (chatMessage.getProgress() != null) {
                     if (chatMessage.getProgress() == -1 || chatMessage.getProgress() == 100) {
-                        holder.tvProgress.setVisibility(View.GONE);
+                        holder.binding.tvProgress.setVisibility(View.GONE);
                     } else {
-                        holder.tvProgress.setVisibility(View.VISIBLE);
-                        holder.tvProgress.setText(String.format("در حال دانلود... %s%s کامل شده", chatMessage.getProgress(), "%"));
+                        holder.binding.tvProgress.setVisibility(View.VISIBLE);
+                        holder.binding.tvProgress.setText(String.format("در حال دانلود... %s%s کامل شده", chatMessage.getProgress(), "%"));
                     }
                 } else {
-                    holder.tvProgress.setVisibility(View.GONE);
+                    holder.binding.tvProgress.setVisibility(View.GONE);
                 }
 
                 if (chatMessage.getReply().getMessageType().equals("text")) {
-                    holder.tvReply.setVisibility(View.VISIBLE);
-                    holder.cardViewReplyPicture.setVisibility(View.GONE);
+                    holder.binding.tvReplyMessage.setVisibility(View.VISIBLE);
+                    holder.binding.cardViewReplyPicture.setVisibility(View.GONE);
                 } else if (chatMessage.getReply().getMessageType().equals("picture")) {
-                    holder.cardViewReplyPicture.setVisibility(View.VISIBLE);
-                    holder.tvReply.setVisibility(View.GONE);
-                    Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.imageViewReplyMessage);
+                    holder.binding.cardViewReplyPicture.setVisibility(View.VISIBLE);
+                    holder.binding.tvReplyMessage.setVisibility(View.GONE);
+                    Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.binding.imageViewReplyMessage);
                 } else {
-                    holder.tvReply.setVisibility(View.VISIBLE);
-                    holder.cardViewReplyPicture.setVisibility(View.GONE);
+                    holder.binding.tvReplyMessage.setVisibility(View.VISIBLE);
+                    holder.binding.cardViewReplyPicture.setVisibility(View.GONE);
                 }
                 if (chatMessage.getReply().getMessageType().equals("file")) {
                     if (chatMessage.getReply().getMessage().contains("_nznv_")) {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
+                        holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
                     } else {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
+                        holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage()));
                     }
                 } else {
-                    holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
+                    holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage()));
                 }
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 }
 
-                holder.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
+                holder.binding.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
 
                 if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
-                    holder.coordinatorDownloadedFile.setVisibility(View.GONE);
+                    holder.binding.coordinatorDownloadedFile.setVisibility(View.GONE);
                 } else {
-                    holder.coordinatorDownloadedFile.setVisibility(View.VISIBLE);
+                    holder.binding.coordinatorDownloadedFile.setVisibility(View.VISIBLE);
                 }
-                holder.coordinatorDownloadFile.setOnClickListener(v -> {
+                holder.binding.coordinatorDownloadFile.setOnClickListener(v -> {
                     if (checkReadExternalPermission(activity)) {
                         if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
                             FileDownloaderNew.openFile(context, chatMessage.getMessage());
@@ -2365,7 +2113,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 });
 
                 holder.itemView.setOnClickListener(view -> {
-                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.binding.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_other, popup.getMenu());
                     popup.show();
@@ -2380,59 +2128,59 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             }
             case 32231: {
                 ChatHolder_File_ReplyTrue_Other_Group holder = (ChatHolder_File_ReplyTrue_Other_Group) viewHolder;
-                holder.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
+                holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
                 if (chatMessage.getProgress() != null) {
                     if (chatMessage.getProgress() == -1 || chatMessage.getProgress() == 100) {
-                        holder.tvProgress.setVisibility(View.GONE);
+                        holder.binding.tvProgress.setVisibility(View.GONE);
                     } else {
-                        holder.tvProgress.setVisibility(View.VISIBLE);
-                        holder.tvProgress.setText(String.format("در حال دانلود... %s%s کامل شده", chatMessage.getProgress(), "%"));
+                        holder.binding.tvProgress.setVisibility(View.VISIBLE);
+                        holder.binding.tvProgress.setText(String.format("در حال دانلود... %s%s کامل شده", chatMessage.getProgress(), "%"));
                     }
                 } else {
-                    holder.tvProgress.setVisibility(View.GONE);
+                    holder.binding.tvProgress.setVisibility(View.GONE);
                 }
                 switch (chatMessage.getReply().getMessageType()) {
                     case "text":
-                        holder.tvReply.setVisibility(View.VISIBLE);
-                        holder.cardViewReplyPicture.setVisibility(View.GONE);
+                        holder.binding.tvReplyMessage.setVisibility(View.VISIBLE);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.GONE);
                         break;
                     case "picture":
-                        holder.cardViewReplyPicture.setVisibility(View.VISIBLE);
-                        holder.tvReply.setVisibility(View.GONE);
-                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.imageViewReplyMessage);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.VISIBLE);
+                        holder.binding.tvReplyMessage.setVisibility(View.GONE);
+                        Glide.with(context).load(FILE_URL + chatMessage.getReply().getMessage()).into(holder.binding.imageViewReplyMessage);
                         break;
                     case "file":
-                        holder.cardViewReplyPicture.setVisibility(View.GONE);
-                        holder.tvReply.setVisibility(View.VISIBLE);
+                        holder.binding.cardViewReplyPicture.setVisibility(View.GONE);
+                        holder.binding.tvReplyMessage.setVisibility(View.VISIBLE);
                         break;
                 }
                 if (chatMessage.getReply().getMessageType().equals("file")) {
                     if (chatMessage.getReply().getMessage().contains("_nznv_")) {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
+                        holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage().substring(chatMessage.getReply().getMessage().indexOf("_nznv_") + 6)));
                     } else {
-                        holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
+                        holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage()));
                     }
                 } else {
-                    holder.tvReply.setText(String.format("%s", chatMessage.getReply().getMessage()));
+                    holder.binding.tvReplyMessage.setText(String.format("%s", chatMessage.getReply().getMessage()));
                 }
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 } else {
                     String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
-                    holder.tvTime.setText(getTime(dateObject));
+                    holder.binding.tvTime.setText(getTime(dateObject));
                 }
 
-                holder.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
+                holder.binding.linearLayoutReply.setOnClickListener(view -> getMessagePosition(chatMessage.getReplyMessageId(), SearchType.REPLY));
 
                 if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
-                    holder.coordinatorDownloadedFile.setVisibility(View.GONE);
+                    holder.binding.coordinatorDownloadedFile.setVisibility(View.GONE);
                 } else {
-                    holder.coordinatorDownloadedFile.setVisibility(View.VISIBLE);
+                    holder.binding.coordinatorDownloadedFile.setVisibility(View.VISIBLE);
                 }
-                holder.coordinatorDownloadFile.setOnClickListener(v -> {
+                holder.binding.coordinatorDownloadFile.setOnClickListener(v -> {
                     if (checkReadExternalPermission(activity)) {
                         if (FileDownloaderNew.isFileExists(context, chatMessage.getMessage())) {
                             FileDownloaderNew.openFile(context, chatMessage.getMessage());
@@ -2449,7 +2197,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 });
 
                 holder.itemView.setOnClickListener(view -> {
-                    PopupMenu popup = new PopupMenu(activity, (holder.tvTime));
+                    PopupMenu popup = new PopupMenu(activity, (holder.binding.tvTime));
                     MenuInflater inflater = popup.getMenuInflater();
                     inflater.inflate(R.menu.popup_menu_chat_click_message_other, popup.getMenu());
                     popup.show();
@@ -2460,15 +2208,20 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         return false;
                     });
                 });
+                holder.binding.linearLayoutUserInfo.setOnClickListener(view -> iChatUtils.onMessageItemUserInfoClick(chatMessage));
                 String name = "";
-                if (chatMessage.getUser().getFirstName() != null) {
-                    name = chatMessage.getUser().getFirstName();
+                if (isWorkWithFullname) {
+                    name = chatMessage.getUser().getFullname();
+                } else {
+                    if (chatMessage.getUser().getFirstName() != null) {
+                        name = chatMessage.getUser().getFirstName();
+                    }
+                    if (chatMessage.getUser().getLastName() != null) {
+                        name += " " + chatMessage.getUser().getLastName();
+                    }
                 }
-                if (chatMessage.getUser().getLastName() != null) {
-                    name += " " + chatMessage.getUser().getLastName();
-                }
-                holder.tvUserName.setText(String.format("%s", name));
-                Glide.with(context).load(FILE_URL + chatMessage.getUser().getPicture()).placeholder(ContextCompat.getDrawable(context, R.drawable.ic_user_circle)).into(holder.imageViewProfile);
+                holder.binding.tvUserName.setText(String.format("%s", name));
+                Glide.with(context).load(FILE_URL + chatMessage.getUser().getPicture()).placeholder(ContextCompat.getDrawable(context, R.drawable.ic_user_circle)).into(holder.binding.imageViewProfile);
                 break;
             }
         }

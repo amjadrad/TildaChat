@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:aw="http://schemas.android.com/tools"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -12,19 +11,19 @@
     android:layoutDirection="rtl"
     tools:ignore="MissingPrefix">
 
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
         android:orientation="vertical">
 
 
-        <LinearLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <LinearLayout
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -37,8 +36,7 @@
                     app:cardCornerRadius="10dp"
                     app:cardElevation="5dp">
 
-
-                    <ImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/imageView"
                         android:layout_width="200dp"
                         android:layout_height="200dp"
@@ -47,14 +45,14 @@
                         android:scaleType="centerCrop" />
                 </androidx.cardview.widget.CardView>
 
-                <LinearLayout
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
                     android:layout_marginLeft="@dimen/_10sdp"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -63,11 +61,12 @@
                         android:textSize="12sp" />
 
 
-                </LinearLayout>
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
-            </LinearLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
-            <LinearLayout
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/linearLayoutUserInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|bottom"
@@ -80,19 +79,21 @@
                     android:layout_gravity="center"
                     android:src="@drawable/ic_user_circle" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvUserName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/_3sdp"
+                    android:ellipsize="end"
                     android:gravity="center"
+                    android:lines="1"
+                    android:maxWidth="@dimen/_32sdp"
                     android:text=""
                     android:textColor="@color/colorMutedText"
                     android:textSize="@dimen/_8ssp" />
-            </LinearLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
-
-        </LinearLayout>
-    </LinearLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

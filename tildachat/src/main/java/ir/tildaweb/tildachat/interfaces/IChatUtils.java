@@ -13,4 +13,5 @@ public interface IChatUtils {
     void onLoadMoreForSearch(int searchMessageId, AdapterPrivateChatMessages.SearchType searchType);
     void onLoadMoreForSearchFinish();
     void onMessageSeen(int messageId);
+    void onMessageItemUserInfoClick(Message message);
 }
