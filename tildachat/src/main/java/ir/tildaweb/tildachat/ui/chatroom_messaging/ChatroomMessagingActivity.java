@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -101,8 +102,9 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     private static final int SWIPE_MAX_OFF_PATH = 250;
     private static final int SWIPE_THRESHOLD_VELOCITY = 200;
     private GestureDetector gestureDetector;
-
     private EmitChatroomCheck emitChatroomCheck;
+
+    private Typeface typeface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +119,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         binding = ActivityChatroomMessagingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        typeface = binding.tvUserName.getTypeface();
         AXEmojiView emojiView = new AXEmojiView(ChatroomMessagingActivity.this);
         emojiView.setEditText(binding.etMessage);
         emojiPopup = new AXEmojiPopup(emojiView);
@@ -155,7 +158,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         binding.linearUnBlock.setOnClickListener(this);
 
         binding.recyclerViewMessages.setLayoutManager(new LinearLayoutManager(this));
-        adapterPrivateChatMessages = new AdapterPrivateChatMessages(getApplicationContext(), ChatroomMessagingActivity.this, userId, FILE_URL, binding.recyclerViewMessages, new ArrayList<>(), this, this);
+        adapterPrivateChatMessages = new AdapterPrivateChatMessages(getApplicationContext(), ChatroomMessagingActivity.this, userId, FILE_URL, binding.recyclerViewMessages, new ArrayList<>(), this, this, typeface);
         if (isWorkWithFullname) {
             adapterPrivateChatMessages.setWorkWithFullname();
         }

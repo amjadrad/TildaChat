@@ -9,6 +9,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -23,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -67,6 +69,7 @@ import ir.tildaweb.tildachat.models.base_models.Message;
 import ir.tildaweb.tildachat.ui.values.MessageTypeUtil;
 import ir.tildaweb.tildachat.utils.DateUtils;
 import ir.tildaweb.tildachat.utils.FileDownloaderNew;
+import ir.tildaweb.tildachat.utils.FontUtils;
 import ir.tildaweb.tildachat.utils.OnSwipeTouchListener;
 
 
@@ -95,8 +98,10 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
     private final DownloadManager downloadManager;
     private boolean isDownloadingFile = false;
     private boolean isWorkWithFullname = false;
+    private static FontUtils fontUtils;
 
-    public AdapterPrivateChatMessages(Context context, Activity activity, int userId, String FILE_URL, RecyclerView recyclerView, ArrayList<Message> chatMessages, LoadMoreData loadMoreData, IChatUtils iChatUtils) {
+
+    public AdapterPrivateChatMessages(Context context, Activity activity, int userId, String FILE_URL, RecyclerView recyclerView, ArrayList<Message> chatMessages, LoadMoreData loadMoreData, IChatUtils iChatUtils, Typeface typeface) {
         this.chatMessages = chatMessages;
         this.context = context;
         this.activity = activity;
@@ -105,6 +110,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         this.recyclerView = recyclerView;
         this.loadMoreData = loadMoreData;
         this.dateHelper = new DateUtils();
+        fontUtils = new FontUtils(typeface);
         this.downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         if (FILE_URL.endsWith("/")) {
             this.FILE_URL = FILE_URL;
@@ -149,9 +155,10 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
     public static class ChatHolder_Text_ReplyFalse_Me_Private extends Holder {
         private final ListSocketChatTextReplyfalseMePrivateBinding binding;
 
-        public ChatHolder_Text_ReplyFalse_Me_Private(ListSocketChatTextReplyfalseMePrivateBinding binding) {
+        public ChatHolder_Text_ReplyFalse_Me_Private(@NonNull ListSocketChatTextReplyfalseMePrivateBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
         }
     }
 
@@ -162,6 +169,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         public ChatHolder_Text_ReplyFalse_Me_Group(ListSocketChatTextReplyfalseMeGroupBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
         }
     }
 
@@ -171,6 +179,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         public ChatHolder_Text_ReplyFalse_Other_Private(ListSocketChatTextReplyfalseOtherPrivateBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
         }
     }
 
@@ -180,6 +189,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         public ChatHolder_Text_ReplyTrue_Me_Private(ListSocketChatTextReplytrueMePrivateBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
         }
     }
 
@@ -189,6 +199,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         public ChatHolder_Text_ReplyTrue_Me_Group(ListSocketChatTextReplytrueMeGroupBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
         }
     }
 
@@ -199,6 +210,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         public ChatHolder_Text_ReplyTrue_Other_Private(ListSocketChatTextReplytrueOtherPrivateBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
         }
     }
 
@@ -208,6 +220,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         public ChatHolder_Text_ReplyFalse_Other_Group(ListSocketChatTextReplyfalseOtherGroupBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
         }
     }
 
@@ -217,6 +230,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         public ChatHolder_Text_ReplyTrue_Other_Group(ListSocketChatTextReplytrueOtherGroupBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
         }
     }
 
@@ -228,6 +242,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         public ChatHolder_Picture_ReplyFalse_Me_Private(ListSocketChatPictureReplyfalseMePrivateBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
         }
     }
 
@@ -237,6 +252,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         public ChatHolder_Picture_ReplyTrue_Me_Private(ListSocketChatPictureReplytrueMePrivateBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
         }
     }
 
@@ -246,6 +262,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         public ChatHolder_Picture_ReplyFalse_Me_Group(ListSocketChatPictureReplyfalseMeGroupBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
         }
     }
 
@@ -255,6 +272,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         public ChatHolder_Picture_ReplyTrue_Me_Group(ListSocketChatPictureReplytrueMeGroupBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
         }
     }
 
@@ -264,6 +282,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         public ChatHolder_Picture_ReplyFalse_Other_Private(ListSocketChatPictureReplyfalseOtherPrivateBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
         }
     }
 
@@ -274,6 +293,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         public ChatHolder_Picture_ReplyFalse_Other_Group(ListSocketChatPictureReplyfalseOtherGroupBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
         }
     }
 
@@ -283,6 +303,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         public ChatHolder_Picture_ReplyTrue_Other_Private(ListSocketChatPictureReplytrueOtherPrivateBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
         }
     }
 
@@ -292,6 +313,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         public ChatHolder_Picture_ReplyTrue_Other_Group(ListSocketChatPictureReplytrueOtherGroupBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
         }
     }
 
@@ -302,6 +324,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         public ChatHolder_File_ReplyFalse_Me_Private(ListSocketChatFileReplyfalseMePrivateBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
         }
     }
 
@@ -311,6 +334,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         public ChatHolder_File_ReplyFalse_Me_Group(ListSocketChatFileReplyfalseMeGroupBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
         }
     }
 
@@ -320,6 +344,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         public ChatHolder_File_ReplyFalse_Other_Private(ListSocketChatFileReplyfalseOtherPrivateBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
         }
     }
 
@@ -329,6 +354,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         public ChatHolder_File_ReplyTrue_Me_Private(ListSocketChatFileReplytrueMePrivateBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
         }
     }
 
@@ -338,7 +364,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         public ChatHolder_File_ReplyTrue_Me_Group(ListSocketChatFileReplytrueMeGroupBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-
+            fontUtils.replaceFonts(binding.getRoot());
         }
     }
 
@@ -349,6 +375,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         public ChatHolder_File_ReplyTrue_Other_Private(ListSocketChatFileReplytrueOtherPrivateBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
         }
     }
 
@@ -358,6 +385,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         public ChatHolder_File_ReplyFalse_Other_Group(ListSocketChatFileReplyfalseOtherGroupBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
         }
     }
 
@@ -368,6 +396,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         public ChatHolder_File_ReplyTrue_Other_Group(ListSocketChatFileReplytrueOtherGroupBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
         }
     }
 
@@ -391,7 +420,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
     @NonNull
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
         //Message type (text , picture , file , voice)
         //Reply (false, true)
         //User type (me , other)
