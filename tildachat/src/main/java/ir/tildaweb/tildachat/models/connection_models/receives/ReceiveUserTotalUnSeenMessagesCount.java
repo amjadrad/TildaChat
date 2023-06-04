@@ -13,6 +13,16 @@ public class ReceiveUserTotalUnSeenMessagesCount {
     private Integer userId;
     @SerializedName("total_unseen_messages_count")
     private Integer totalUnseenMessagesCount;
+    @SerializedName("last_message_id")
+    private Integer lastMessageId;
+
+    public Integer getLastMessageId() {
+        return lastMessageId;
+    }
+
+    public void setLastMessageId(Integer lastMessageId) {
+        this.lastMessageId = lastMessageId;
+    }
 
     public Integer getStatus() {
         return status;
