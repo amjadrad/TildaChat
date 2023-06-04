@@ -245,4 +245,17 @@ public class Receiver implements SocketReceiverInterface {
         });
     }
 
+    @Override
+    public <T> void receiveUserTotalUnSeenMessagesCount(@Nullable Activity activityForRunOnUI, Class<T> receiveModel, OnReceiveListener<T> onReceiveListener) {
+        TildaChatApp.getSocket().on(SocketEndpoints.TAG_RECEIVE_USER_TOTAL_UNSEEN_MESSAGES_COUNT, args -> {
+            Log.d(TAG, "receiveUserTotalUnSeenMessagesCount: " + args[0]);
+            T t = (T) DataParser.fromJson(String.valueOf(args[0]), receiveModel);
+            if (activityForRunOnUI != null) {
+                activityForRunOnUI.runOnUiThread(() -> onReceiveListener.onReceive(t));
+            } else {
+                onReceiveListener.onReceive(t);
+            }
+        });
+    }
+
 }

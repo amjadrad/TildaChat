@@ -4,6 +4,8 @@ import android.app.Activity;
 
 import androidx.annotation.Nullable;
 
+import ir.tildaweb.tildachat.models.connection_models.emits.EmitUserTotalUnSeenMessagesCount;
+
 
 public interface SocketReceiverInterface {
 
@@ -46,5 +48,7 @@ public interface SocketReceiverInterface {
     <T> void receiveUserOnlineStatus(@Nullable Activity activityForRunOnUI, Class<T> receiveModel, OnReceiveListener<T> onReceiveListener);
 
     <T> void receiveUserBlock(@Nullable Activity activityForRunOnUI, Class<T> receiveModel, OnReceiveListener<T> onReceiveListener);
+    <T> void receiveUserTotalUnSeenMessagesCount(@Nullable Activity activityForRunOnUI, Class<T> receiveModel, OnReceiveListener<T> onReceiveListener);
+
 
 }

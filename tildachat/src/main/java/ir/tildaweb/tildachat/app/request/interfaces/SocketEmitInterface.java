@@ -14,6 +14,7 @@ import ir.tildaweb.tildachat.models.connection_models.emits.EmitMessageUpdate;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitUserBlock;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitUserChatrooms;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitUserOnlineStatus;
+import ir.tildaweb.tildachat.models.connection_models.emits.EmitUserTotalUnSeenMessagesCount;
 
 public interface SocketEmitInterface {
 
@@ -55,5 +56,7 @@ public interface SocketEmitInterface {
     void emitUserOnlineStatus(EmitUserOnlineStatus emit);
 
     void emitUserBlock(EmitUserBlock emit);
+
+    void emitUserTotalUnSeenMessagesCount(EmitUserTotalUnSeenMessagesCount emit);
 
 }

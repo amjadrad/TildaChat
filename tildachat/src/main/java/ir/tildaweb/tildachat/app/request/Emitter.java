@@ -18,6 +18,7 @@ import ir.tildaweb.tildachat.models.connection_models.emits.EmitMessageUpdate;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitUserBlock;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitUserChatrooms;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitUserOnlineStatus;
+import ir.tildaweb.tildachat.models.connection_models.emits.EmitUserTotalUnSeenMessagesCount;
 
 public class Emitter implements SocketEmitInterface {
 
@@ -94,6 +95,11 @@ public class Emitter implements SocketEmitInterface {
     @Override
     public void emitUserBlock(EmitUserBlock emit) {
         TildaChatApp.getSocket().emit(SocketEndpoints.TAG_EMIT_USER_BLOCK, DataParser.toJson(emit));
+    }
+
+    @Override
+    public void emitUserTotalUnSeenMessagesCount(EmitUserTotalUnSeenMessagesCount emit) {
+        TildaChatApp.getSocket().emit(SocketEndpoints.TAG_EMIT_USER_TOTAL_UNSEEN_MESSAGES_COUNT, DataParser.toJson(emit));
     }
 
 
