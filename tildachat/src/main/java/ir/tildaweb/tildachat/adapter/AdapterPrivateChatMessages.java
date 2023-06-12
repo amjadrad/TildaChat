@@ -15,10 +15,14 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.text.util.Linkify;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.URLUtil;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
@@ -71,6 +75,7 @@ import ir.tildaweb.tildachat.utils.DateUtils;
 import ir.tildaweb.tildachat.utils.FileDownloaderNew;
 import ir.tildaweb.tildachat.utils.FontUtils;
 import ir.tildaweb.tildachat.utils.OnSwipeTouchListener;
+import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 
 
 public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements FileDownloaderNew.OnFileDownloadListener {
@@ -400,6 +405,90 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         }
     }
 
+
+    //Video
+    public static class ChatHolder_Video_ReplyFalse_Me_Private extends Holder {
+        private final ListSocketChatFileReplyfalseMePrivateBinding binding;
+
+        public ChatHolder_Video_ReplyFalse_Me_Private(ListSocketChatFileReplyfalseMePrivateBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
+        }
+    }
+
+    public static class ChatHolder_Video_ReplyFalse_Me_Group extends Holder {
+        private final ListSocketChatFileReplyfalseMeGroupBinding binding;
+
+        public ChatHolder_Video_ReplyFalse_Me_Group(ListSocketChatFileReplyfalseMeGroupBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
+        }
+    }
+
+    public static class ChatHolder_Video_ReplyFalse_Other_Private extends Holder {
+        private final ListSocketChatFileReplyfalseOtherPrivateBinding binding;
+
+        public ChatHolder_Video_ReplyFalse_Other_Private(ListSocketChatFileReplyfalseOtherPrivateBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
+        }
+    }
+
+    public static class ChatHolder_Video_ReplyTrue_Me_Private extends Holder {
+        private final ListSocketChatFileReplytrueMePrivateBinding binding;
+
+        public ChatHolder_Video_ReplyTrue_Me_Private(ListSocketChatFileReplytrueMePrivateBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
+        }
+    }
+
+    public static class ChatHolder_Video_ReplyTrue_Me_Group extends Holder {
+        private final ListSocketChatFileReplytrueMeGroupBinding binding;
+
+        public ChatHolder_Video_ReplyTrue_Me_Group(ListSocketChatFileReplytrueMeGroupBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
+        }
+    }
+
+    public static class ChatHolder_Video_ReplyTrue_Other_Private extends Holder {
+        private final ListSocketChatFileReplytrueOtherPrivateBinding binding;
+
+
+        public ChatHolder_Video_ReplyTrue_Other_Private(ListSocketChatFileReplytrueOtherPrivateBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
+        }
+    }
+
+    public static class ChatHolder_Video_ReplyFalse_Other_Group extends Holder {
+        private final ListSocketChatFileReplyfalseOtherGroupBinding binding;
+
+        public ChatHolder_Video_ReplyFalse_Other_Group(ListSocketChatFileReplyfalseOtherGroupBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
+        }
+    }
+
+    public static class ChatHolder_Video_ReplyTrue_Other_Group extends Holder {
+        private final ListSocketChatFileReplytrueOtherGroupBinding binding;
+
+        public ChatHolder_Video_ReplyTrue_Other_Group(ListSocketChatFileReplytrueOtherGroupBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
+        }
+    }
+
+
     @Override
     public int getItemViewType(int position) {
         Message chatMessage = chatMessages.get(position);
@@ -555,7 +644,12 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 ChatHolder_Text_ReplyFalse_Me_Private holder = (ChatHolder_Text_ReplyFalse_Me_Private) viewHolder;
 
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
-
+                BetterLinkMovementMethod
+                        .linkify(Linkify.ALL, holder.binding.tvMessage)
+                        .setOnLinkClickListener((textView, url) -> {
+                            iChatUtils.onMessageTextLinkClick(url);
+                            return true;
+                        });
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
@@ -606,7 +700,12 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 ChatHolder_Text_ReplyFalse_Me_Group holder = (ChatHolder_Text_ReplyFalse_Me_Group) viewHolder;
 
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
-
+                BetterLinkMovementMethod
+                        .linkify(Linkify.ALL, holder.binding.tvMessage)
+                        .setOnLinkClickListener((textView, url) -> {
+                            iChatUtils.onMessageTextLinkClick(url);
+                            return true;
+                        });
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
@@ -656,7 +755,12 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             case 11211: {
                 ChatHolder_Text_ReplyFalse_Other_Private holder = (ChatHolder_Text_ReplyFalse_Other_Private) viewHolder;
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
-
+                BetterLinkMovementMethod
+                        .linkify(Linkify.ALL, holder.binding.tvMessage)
+                        .setOnLinkClickListener((textView, url) -> {
+                            iChatUtils.onMessageTextLinkClick(url);
+                            return true;
+                        });
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
@@ -696,6 +800,12 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             case 11221: {
                 ChatHolder_Text_ReplyFalse_Other_Private holder = (ChatHolder_Text_ReplyFalse_Other_Private) viewHolder;
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
+                BetterLinkMovementMethod
+                        .linkify(Linkify.ALL, holder.binding.tvMessage)
+                        .setOnLinkClickListener((textView, url) -> {
+                            iChatUtils.onMessageTextLinkClick(url);
+                            return true;
+                        });
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
@@ -740,7 +850,12 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             case 11231: {
                 ChatHolder_Text_ReplyFalse_Other_Group holder = (ChatHolder_Text_ReplyFalse_Other_Group) viewHolder;
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
-
+                BetterLinkMovementMethod
+                        .linkify(Linkify.ALL, holder.binding.tvMessage)
+                        .setOnLinkClickListener((textView, url) -> {
+                            iChatUtils.onMessageTextLinkClick(url);
+                            return true;
+                        });
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
                     DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
@@ -793,6 +908,12 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             case 12111: {
                 ChatHolder_Text_ReplyTrue_Me_Private holder = (ChatHolder_Text_ReplyTrue_Me_Private) viewHolder;
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
+                BetterLinkMovementMethod
+                        .linkify(Linkify.ALL, holder.binding.tvMessage)
+                        .setOnLinkClickListener((textView, url) -> {
+                            iChatUtils.onMessageTextLinkClick(url);
+                            return true;
+                        });
                 switch (chatMessage.getReply().getMessageType()) {
                     case "text":
                         holder.binding.tvReplyMessage.setVisibility(View.VISIBLE);
@@ -869,6 +990,12 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             case 12131: {
                 ChatHolder_Text_ReplyTrue_Me_Group holder = (ChatHolder_Text_ReplyTrue_Me_Group) viewHolder;
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
+                BetterLinkMovementMethod
+                        .linkify(Linkify.ALL, holder.binding.tvMessage)
+                        .setOnLinkClickListener((textView, url) -> {
+                            iChatUtils.onMessageTextLinkClick(url);
+                            return true;
+                        });
                 switch (chatMessage.getReply().getMessageType()) {
                     case "text":
                         holder.binding.tvReplyMessage.setVisibility(View.VISIBLE);
@@ -944,6 +1071,12 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             case 12211: {
                 ChatHolder_Text_ReplyTrue_Other_Private holder = (ChatHolder_Text_ReplyTrue_Other_Private) viewHolder;
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
+                BetterLinkMovementMethod
+                        .linkify(Linkify.ALL, holder.binding.tvMessage)
+                        .setOnLinkClickListener((textView, url) -> {
+                            iChatUtils.onMessageTextLinkClick(url);
+                            return true;
+                        });
                 switch (chatMessage.getReply().getMessageType()) {
                     case "text":
                         holder.binding.tvReplyMessage.setVisibility(View.VISIBLE);
@@ -1013,6 +1146,12 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             case 12231: {
                 ChatHolder_Text_ReplyTrue_Other_Group holder = (ChatHolder_Text_ReplyTrue_Other_Group) viewHolder;
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
+                BetterLinkMovementMethod
+                        .linkify(Linkify.ALL, holder.binding.tvMessage)
+                        .setOnLinkClickListener((textView, url) -> {
+                            iChatUtils.onMessageTextLinkClick(url);
+                            return true;
+                        });
                 switch (chatMessage.getReply().getMessageType()) {
                     case "text":
                         holder.binding.tvReplyMessage.setVisibility(View.VISIBLE);
@@ -1532,6 +1671,12 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 ChatHolder_File_ReplyFalse_Me_Private holder = (ChatHolder_File_ReplyFalse_Me_Private) viewHolder;
 
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
+                BetterLinkMovementMethod
+                        .linkify(Linkify.ALL, holder.binding.tvMessage)
+                        .setOnLinkClickListener((textView, url) -> {
+                            iChatUtils.onMessageTextLinkClick(url);
+                            return true;
+                        });
                 if (chatMessage.getProgress() != null) {
                     if (chatMessage.getProgress() == -1 || chatMessage.getProgress() == 100) {
                         holder.binding.tvProgress.setVisibility(View.GONE);
@@ -1603,16 +1748,12 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 ChatHolder_File_ReplyFalse_Me_Group holder = (ChatHolder_File_ReplyFalse_Me_Group) viewHolder;
 
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
-//                if (chatMessage.getProgress() != null) {
-//                    if (chatMessage.getProgress() == -1 || chatMessage.getProgress() == 100) {
-//                        holder.binding.tvProgress.setVisibility(View.GONE);
-//                    } else {
-//                        holder.binding.tvProgress.setVisibility(View.VISIBLE);
-//                        holder.binding.tvProgress.setText(String.format("در حال دانلود... %s%s کامل شده", chatMessage.getProgress(), "%"));
-//                    }
-//                } else {
-//                    holder.binding.tvProgress.setVisibility(View.GONE);
-//                }
+                BetterLinkMovementMethod
+                        .linkify(Linkify.ALL, holder.binding.tvMessage)
+                        .setOnLinkClickListener((textView, url) -> {
+                            iChatUtils.onMessageTextLinkClick(url);
+                            return true;
+                        });
 
                 if (chatMessage.getUpdatedAt() != null) {
                     String normalizedDate = chatMessage.getUpdatedAt().replace(".000Z", "").replace("T", " ");
@@ -1669,6 +1810,12 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             case 31211: {
                 ChatHolder_File_ReplyFalse_Other_Private holder = (ChatHolder_File_ReplyFalse_Other_Private) viewHolder;
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
+                BetterLinkMovementMethod
+                        .linkify(Linkify.ALL, holder.binding.tvMessage)
+                        .setOnLinkClickListener((textView, url) -> {
+                            iChatUtils.onMessageTextLinkClick(url);
+                            return true;
+                        });
                 if (chatMessage.getProgress() != null) {
                     if (chatMessage.getProgress() == -1 || chatMessage.getProgress() == 100) {
                         holder.binding.tvProgress.setVisibility(View.GONE);

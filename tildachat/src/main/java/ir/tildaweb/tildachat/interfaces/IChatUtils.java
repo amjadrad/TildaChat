@@ -14,4 +14,5 @@ public interface IChatUtils {
     void onLoadMoreForSearchFinish();
     void onMessageSeen(int messageId);
     void onMessageItemUserInfoClick(Message message);
+    void onMessageTextLinkClick(String link);
 }

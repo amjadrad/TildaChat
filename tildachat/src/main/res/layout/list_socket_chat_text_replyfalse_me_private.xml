@@ -28,7 +28,6 @@
                 android:id="@+id/tvMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:autoLink="all"
                 android:lineSpacingExtra="@dimen/_8sdp"
                 android:paddingLeft="@dimen/_10sdp"
                 android:paddingTop="@dimen/_10sdp"

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,6 +15,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.URLUtil;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -27,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.aghajari.emojiview.view.AXEmojiPopup;
 import com.aghajari.emojiview.view.AXEmojiView;
 import com.bumptech.glide.Glide;
+import com.r0adkll.slidr.Slidr;
 
 import java.util.ArrayList;
 
@@ -98,10 +101,11 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 
 
     //Swipe to finish
-    private static final int SWIPE_MIN_DISTANCE = 120;
-    private static final int SWIPE_MAX_OFF_PATH = 250;
-    private static final int SWIPE_THRESHOLD_VELOCITY = 200;
-    private GestureDetector gestureDetector;
+//    private static final int SWIPE_MIN_DISTANCE = 120;
+//    private static final int SWIPE_MAX_OFF_PATH = 250;
+//    private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+//    private GestureDetector gestureDetector;
+
     private EmitChatroomCheck emitChatroomCheck;
 
     private Typeface typeface;
@@ -114,10 +118,11 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                 getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
             }
         }
-        gestureDetector = new GestureDetector(new SwipeDetector());
+//        gestureDetector = new GestureDetector(new SwipeDetector());
 
         binding = ActivityChatroomMessagingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        Slidr.attach(this);
 
         typeface = binding.tvUserName.getTypeface();
         AXEmojiView emojiView = new AXEmojiView(ChatroomMessagingActivity.this);
@@ -645,6 +650,18 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     }
 
     @Override
+    public void onMessageTextLinkClick(String link) {
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setData(Uri.parse(link));
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.imageViewBack) {
@@ -875,40 +892,44 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         }
     }
 
-    private class SwipeDetector extends GestureDetector.SimpleOnGestureListener {
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            // Check movement along the Y-axis. If it exceeds SWIPE_MAX_OFF_PATH,
-            // then dismiss the swipe.
-            if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
-                return false;
-            // Swipe from left to right.
-            // The swipe needs to exceed a certain distance (SWIPE_MIN_DISTANCE)
-            // and a certain velocity (SWIPE_THRESHOLD_VELOCITY).
-            if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                onBackPressed();
-                return true;
-            }
-            return false;
-        }
-    }
+//    private class SwipeDetector extends GestureDetector.SimpleOnGestureListener {
+//        @Override
+//        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+//            // Check movement along the Y-axis. If it exceeds SWIPE_MAX_OFF_PATH,
+//            // then dismiss the swipe.
+//            if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
+//                return false;
+//            // Swipe from left to right.
+//            // The swipe needs to exceed a certain distance (SWIPE_MIN_DISTANCE)
+//            // and a certain velocity (SWIPE_THRESHOLD_VELOCITY).
+//            if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+//                onBackPressed();
+//                return true;
+//            }
+//            return false;
+//        }
+//    }
+//
+//    @Override
+//    public boolean dispatchTouchEvent(MotionEvent ev) {
+//        // TouchEvent dispatcher.
+//        try {
+//            if (gestureDetector != null) {
+//                if (gestureDetector.onTouchEvent(ev))
+//                    // If the gestureDetector handles the event, a swipe has been
+//                    // executed and no more needs to be done.
+//                    return true;
+//            }
+//            return super.dispatchTouchEvent(ev);
+//        } catch (Exception e) {
+//            return true;
+//        }
+//    }
 
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        // TouchEvent dispatcher.
-        if (gestureDetector != null) {
-            if (gestureDetector.onTouchEvent(ev))
-                // If the gestureDetector handles the event, a swipe has been
-                // executed and no more needs to be done.
-                return true;
-        }
-        return super.dispatchTouchEvent(ev);
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        return gestureDetector.onTouchEvent(event);
-    }
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        return gestureDetector.onTouchEvent(event);
+//    }
 
     private void toast(String str) {
         Toast.makeText(this, str, Toast.LENGTH_SHORT).show();

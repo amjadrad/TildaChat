@@ -68,6 +68,12 @@ dependencies {
     //Emoji
     implementation "io.github.aghajari:AXEmojiView:$emojiViewVersion"
     implementation "io.github.aghajari:AXEmojiView-$emojiViewProvider:$emojiViewVersion"
+    //ExoPlayer
+    implementation 'com.google.android.exoplayer:exoplayer:2.18.2'
+    //Swipe to dismiss
+    implementation 'com.r0adkll:slidableactivity:2.1.0'
+    //TextviewLink
+    implementation 'me.saket:better-link-movement-method:2.2.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
