@@ -14,7 +14,7 @@ public class App extends Application {
         super.onCreate();
 
         String query = "user_id=" + userId;
-        TildaChatApp.setUp("https://chat.nazmenovin.com", query, userId);
+        TildaChatApp.setUp("https://chat.nazmenovin.com", query, userId, true);
         TildaChatApp.setConstantsUp("https://nazmenovin.com/uploaded_files/", "tildachat", "https://nazmenovin.com/api/chat_uploader");
         TildaChatApp.setUpEmojis(this);
     }

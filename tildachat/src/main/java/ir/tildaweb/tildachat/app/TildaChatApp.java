@@ -28,7 +28,12 @@ public class TildaChatApp {
         AXEmojiManager.install(context, new AXAppleEmojiProvider(context));
     }
 
-    public static void setUp(String chatUrl, String query, Integer userId) {
+    public static void setUp(String chatUrl, String query, Integer userId, boolean reset) {
+        if (reset) {
+            if (socket != null)
+                socket.disconnect();
+            socket = null;
+        }
         if (socket == null) {
             try {
                 mUserId = userId;
