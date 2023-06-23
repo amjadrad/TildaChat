@@ -826,6 +826,9 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 
     }
 
+    protected ActivityChatroomMessagingBinding getBinding() {
+        return binding;
+    }
 
     protected Integer getChatroomSecondUserId() {
         if (roomType != null && roomType.equals("private")) {
