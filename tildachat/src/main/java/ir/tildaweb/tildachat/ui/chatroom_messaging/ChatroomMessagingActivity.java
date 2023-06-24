@@ -830,6 +830,10 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         return binding;
     }
 
+    protected AdapterPrivateChatMessages getAdapterPrivateChatMessages() {
+        return this.adapterPrivateChatMessages;
+    }
+
     protected Integer getChatroomSecondUserId() {
         if (roomType != null && roomType.equals("private")) {
             return secondUserId;

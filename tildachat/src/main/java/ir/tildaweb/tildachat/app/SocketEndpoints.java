@@ -22,6 +22,7 @@ public class SocketEndpoints {
     public static final String TAG_EMIT_MESSAGE_SEEN = "emit_message_seen";
     public static final String TAG_EMIT_USER_BLOCK = "emit_user_block";
     public static final String TAG_EMIT_USER_TOTAL_UNSEEN_MESSAGES_COUNT = "emit_user_total_unseen_messages_count";
+    public static final String TAG_EMIT_CHATROOM_DELETE_HISTORY = "emit_chatroom_delete_history";
 
     /*
         Listeners
@@ -49,6 +50,7 @@ public class SocketEndpoints {
     //More
     public static final String TAG_RECEIVE_USER_BLOCK = "receive_user_block";
     public static final String TAG_RECEIVE_USER_TOTAL_UNSEEN_MESSAGES_COUNT = "receive_user_total_unseen_messages_count";
+    public static final String TAG_RECEIVE_CHATROOM_DELETE_HISTORY = "receive_chatroom_delete_history";
 
 
 }
