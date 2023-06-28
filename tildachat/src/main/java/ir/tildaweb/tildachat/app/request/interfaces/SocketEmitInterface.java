@@ -4,6 +4,7 @@ import ir.tildaweb.tildachat.models.base_models.BaseModel;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomCheck;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomDeleteHistory;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomGroupLeft;
+import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomGroupMembershipStore;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomJoin;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomMembers;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomMessages;
@@ -65,6 +66,6 @@ public interface SocketEmitInterface {
 
     void emitChatroomGroupLeft(EmitChatroomGroupLeft emit);
 
-    void emitChatroomGroupMembershipStore(EmitChatroomGroupLeft emit);
+    void emitChatroomGroupMembershipStore(EmitChatroomGroupMembershipStore emit);
 
 }

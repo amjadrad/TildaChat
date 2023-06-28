@@ -8,6 +8,7 @@ import ir.tildaweb.tildachat.models.base_models.BaseModel;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomCheck;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomDeleteHistory;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomGroupLeft;
+import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomGroupMembershipStore;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomJoin;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomMembers;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomMessages;
@@ -115,7 +116,7 @@ public class Emitter implements SocketEmitInterface {
     }
 
     @Override
-    public void emitChatroomGroupMembershipStore(EmitChatroomGroupLeft emit) {
+    public void emitChatroomGroupMembershipStore(EmitChatroomGroupMembershipStore emit) {
         TildaChatApp.getSocket().emit(SocketEndpoints.TAG_EMIT_CHATROOM_GROUP_MEMBERSHIP_STORE, DataParser.toJson(emit));
     }
 
