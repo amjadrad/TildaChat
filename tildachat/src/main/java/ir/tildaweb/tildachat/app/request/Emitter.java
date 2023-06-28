@@ -114,5 +114,10 @@ public class Emitter implements SocketEmitInterface {
         TildaChatApp.getSocket().emit(SocketEndpoints.TAG_EMIT_CHATROOM_GROUP_LEFT, DataParser.toJson(emit));
     }
 
+    @Override
+    public void emitChatroomGroupMembershipStore(EmitChatroomGroupLeft emit) {
+        TildaChatApp.getSocket().emit(SocketEndpoints.TAG_EMIT_CHATROOM_GROUP_MEMBERSHIP_STORE, DataParser.toJson(emit));
+    }
+
 
 }

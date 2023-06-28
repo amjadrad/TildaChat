@@ -285,4 +285,17 @@ public class Receiver implements SocketReceiverInterface {
 
     }
 
+    @Override
+    public <T> void receiveChatroomGroupMembershipStore(@Nullable Activity activityForRunOnUI, Class<T> receiveModel, OnReceiveListener<T> onReceiveListener) {
+        TildaChatApp.getSocket().on(SocketEndpoints.TAG_RECEIVE_CHATROOM_GROUP_MEMBERSHIP_STORE, args -> {
+            Log.d(TAG, "receiveChatroomGroupMembershipStore: " + args[0]);
+            T t = (T) DataParser.fromJson(String.valueOf(args[0]), receiveModel);
+            if (activityForRunOnUI != null) {
+                activityForRunOnUI.runOnUiThread(() -> onReceiveListener.onReceive(t));
+            } else {
+                onReceiveListener.onReceive(t);
+            }
+        });
+    }
+
 }

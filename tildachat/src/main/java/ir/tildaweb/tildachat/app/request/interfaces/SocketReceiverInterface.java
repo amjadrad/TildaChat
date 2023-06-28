@@ -48,10 +48,14 @@ public interface SocketReceiverInterface {
     <T> void receiveUserOnlineStatus(@Nullable Activity activityForRunOnUI, Class<T> receiveModel, OnReceiveListener<T> onReceiveListener);
 
     <T> void receiveUserBlock(@Nullable Activity activityForRunOnUI, Class<T> receiveModel, OnReceiveListener<T> onReceiveListener);
+
     <T> void receiveUserTotalUnSeenMessagesCount(@Nullable Activity activityForRunOnUI, Class<T> receiveModel, OnReceiveListener<T> onReceiveListener);
 
     <T> void receiveChatroomDeleteHistory(@Nullable Activity activityForRunOnUI, Class<T> receiveModel, OnReceiveListener<T> onReceiveListener);
+
     <T> void receiveChatroomGroupLeft(@Nullable Activity activityForRunOnUI, Class<T> receiveModel, OnReceiveListener<T> onReceiveListener);
+
+    <T> void receiveChatroomGroupMembershipStore(@Nullable Activity activityForRunOnUI, Class<T> receiveModel, OnReceiveListener<T> onReceiveListener);
 
 
 }

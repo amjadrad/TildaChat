@@ -65,4 +65,6 @@ public interface SocketEmitInterface {
 
     void emitChatroomGroupLeft(EmitChatroomGroupLeft emit);
 
+    void emitChatroomGroupMembershipStore(EmitChatroomGroupLeft emit);
+
 }

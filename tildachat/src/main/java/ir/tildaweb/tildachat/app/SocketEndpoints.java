@@ -24,6 +24,7 @@ public class SocketEndpoints {
     public static final String TAG_EMIT_USER_TOTAL_UNSEEN_MESSAGES_COUNT = "emit_user_total_unseen_messages_count";
     public static final String TAG_EMIT_CHATROOM_DELETE_HISTORY = "emit_chatroom_delete_history";
     public static final String TAG_EMIT_CHATROOM_GROUP_LEFT = "emit_chatroom_group_left";
+    public static final String TAG_EMIT_CHATROOM_GROUP_MEMBERSHIP_STORE = "emit_chatroom_group_membership_store";
 
     /*
         Listeners
@@ -53,6 +54,7 @@ public class SocketEndpoints {
     public static final String TAG_RECEIVE_USER_TOTAL_UNSEEN_MESSAGES_COUNT = "receive_user_total_unseen_messages_count";
     public static final String TAG_RECEIVE_CHATROOM_DELETE_HISTORY = "receive_chatroom_delete_history";
     public static final String TAG_RECEIVE_CHATROOM_GROUP_LEFT = "receive_chatroom_group_left";
+    public static final String TAG_RECEIVE_CHATROOM_GROUP_MEMBERSHIP_STORE = "receive_chatroom_group_membership_store";
 
 
 }
