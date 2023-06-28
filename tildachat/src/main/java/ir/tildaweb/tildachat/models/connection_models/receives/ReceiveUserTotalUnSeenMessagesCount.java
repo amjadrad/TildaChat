@@ -15,6 +15,16 @@ public class ReceiveUserTotalUnSeenMessagesCount {
     private Integer totalUnseenMessagesCount;
     @SerializedName("last_message_id")
     private Integer lastMessageId;
+    @SerializedName("last_message_chatroom_id")
+    private Integer lastMessageChatroomId;
+
+    public Integer getLastMessageChatroomId() {
+        return lastMessageChatroomId;
+    }
+
+    public void setLastMessageChatroomId(Integer lastMessageChatroomId) {
+        this.lastMessageChatroomId = lastMessageChatroomId;
+    }
 
     public Integer getLastMessageId() {
         return lastMessageId;
