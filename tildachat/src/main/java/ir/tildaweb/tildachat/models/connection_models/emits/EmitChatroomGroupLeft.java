@@ -2,11 +2,11 @@ package ir.tildaweb.tildachat.models.connection_models.emits;
 
 import com.google.gson.annotations.SerializedName;
 
-public class EmitChatroomDeleteHistory {
+public class EmitChatroomGroupLeft {
 
     @SerializedName("user_id")
     private Integer userId;
-    @SerializedName("room_id")
+    @SerializedName("chatroom_id")
     private Integer chatroomId;
 
     public Integer getChatroomId() {

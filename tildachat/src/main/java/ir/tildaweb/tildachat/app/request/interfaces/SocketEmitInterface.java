@@ -3,6 +3,7 @@ package ir.tildaweb.tildachat.app.request.interfaces;
 import ir.tildaweb.tildachat.models.base_models.BaseModel;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomCheck;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomDeleteHistory;
+import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomGroupLeft;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomJoin;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomMembers;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomMessages;
@@ -61,5 +62,7 @@ public interface SocketEmitInterface {
     void emitUserTotalUnSeenMessagesCount(EmitUserTotalUnSeenMessagesCount emit);
 
     void emitChatroomDeleteHistory(EmitChatroomDeleteHistory emit);
+
+    void emitChatroomGroupLeft(EmitChatroomGroupLeft emit);
 
 }
