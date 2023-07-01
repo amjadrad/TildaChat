@@ -10,6 +10,16 @@ public class EmitMessageSeen {
     private Integer userId;
     @SerializedName("room_id")
     private String roomId;
+    @SerializedName("chatroom_id")
+    private Integer chatroomId;
+
+    public Integer getChatroomId() {
+        return chatroomId;
+    }
+
+    public void setChatroomId(Integer chatroomId) {
+        this.chatroomId = chatroomId;
+    }
 
     public String getRoomId() {
         return roomId;

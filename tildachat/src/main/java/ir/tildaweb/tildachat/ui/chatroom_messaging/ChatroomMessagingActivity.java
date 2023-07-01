@@ -641,6 +641,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         emitMessageSeen.setMessageId(messageId);
         emitMessageSeen.setUserId(userId);
         emitMessageSeen.setRoomId(roomId);
+        emitMessageSeen.setChatroomId(chatroomId);
         TildaChatApp.getSocketRequestController().emitter().emitMessageSeen(emitMessageSeen);
     }
 
