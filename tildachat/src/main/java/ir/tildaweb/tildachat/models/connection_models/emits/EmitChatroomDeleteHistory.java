@@ -6,7 +6,7 @@ public class EmitChatroomDeleteHistory {
 
     @SerializedName("user_id")
     private Integer userId;
-    @SerializedName("room_id")
+    @SerializedName("chatroom_id")
     private Integer chatroomId;
 
     public Integer getChatroomId() {
