@@ -76,66 +76,68 @@ public class TildaFileUploaderForegroundService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        Log.d(TAG, "onStartCommand: ");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            channel = createNotificationChannel("TildaChatFileUploader", "TildaChatChannel_uploader");
-        } else {
-            channel = "TildaChatChannel_uploader";
-        }
-        manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        RemoteViews notificationLayout = new RemoteViews(getPackageName(), R.layout.tilda_file_uploader_service_layout);
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            Notification.Builder notifBuilderO = new Notification.Builder(this, channel)
-                    .setOngoing(true)
-                    .setCustomContentView(notificationLayout)
-                    .setSmallIcon(R.drawable.ic_upload_cloud)
-                    .setOnlyAlertOnce(true);
-            notification = notifBuilderO.build();
-        } else {
-            notificationBuilder = new NotificationCompat.Builder(this, channel)
-                    .setOngoing(true)
-                    .setCategory(Notification.CATEGORY_SERVICE)
-                    .setSmallIcon(R.drawable.ic_upload_cloud)
-                    .setCustomContentView(notificationLayout)
-                    .setTicker("TildaChat")
-                    .setSound(null)
-                    .setOnlyAlertOnce(true);
-            notification = notificationBuilder.build();
-        }
-        startForeground(notificationId, notification);
-
-        //------------------------------------
-        this.context = this;
-        isSendToChatroom = intent.getBooleanExtra("is_send_to_chatroom", false);
-        messageType = intent.getStringExtra("message_type");
-        if (isSendToChatroom) {
-            if (intent.getBooleanExtra("is_second_user", false)) {
-                secondUserId = intent.getIntExtra("second_user_id", -1);
+        if (intent != null) {
+            Log.d(TAG, "onStartCommand: ");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                channel = createNotificationChannel("TildaChatFileUploader", "TildaChatChannel_uploader");
             } else {
-                roomId = intent.getStringExtra("room_id");
+                channel = "TildaChatChannel_uploader";
             }
-            chatroomId = intent.getIntExtra("chatroom_id", -1);
-        }
-        if (intent.hasExtra("file_name")) {
-            fileName = intent.getStringExtra("file_name");
-        }
+            manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            RemoteViews notificationLayout = new RemoteViews(getPackageName(), R.layout.tilda_file_uploader_service_layout);
 
-        String filePath = intent.getStringExtra("file_path");
-        String uploadRoute = TildaChatApp._uploadRoute;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                Notification.Builder notifBuilderO = new Notification.Builder(this, channel)
+                        .setOngoing(true)
+                        .setCustomContentView(notificationLayout)
+                        .setSmallIcon(R.drawable.ic_upload_cloud)
+                        .setOnlyAlertOnce(true);
+                notification = notifBuilderO.build();
+            } else {
+                notificationBuilder = new NotificationCompat.Builder(this, channel)
+                        .setOngoing(true)
+                        .setCategory(Notification.CATEGORY_SERVICE)
+                        .setSmallIcon(R.drawable.ic_upload_cloud)
+                        .setCustomContentView(notificationLayout)
+                        .setTicker("TildaChat")
+                        .setSound(null)
+                        .setOnlyAlertOnce(true);
+                notification = notificationBuilder.build();
+            }
+            startForeground(notificationId, notification);
 
-        handlerTimeDigital = new Handler();
-        runnableTimeDigital = this::updateService;
-        try {
-            FileInputStream fileInputStream = new FileInputStream(filePath);
-            totalBytesAvailable = fileInputStream.available();
-        } catch (Exception e) {
-            e.printStackTrace();
+            //------------------------------------
+            this.context = this;
+            isSendToChatroom = intent.getBooleanExtra("is_send_to_chatroom", false);
+            messageType = intent.getStringExtra("message_type");
+            if (isSendToChatroom) {
+                if (intent.getBooleanExtra("is_second_user", false)) {
+                    secondUserId = intent.getIntExtra("second_user_id", -1);
+                } else {
+                    roomId = intent.getStringExtra("room_id");
+                }
+                chatroomId = intent.getIntExtra("chatroom_id", -1);
+            }
+            if (intent.hasExtra("file_name")) {
+                fileName = intent.getStringExtra("file_name");
+            }
+
+            String filePath = intent.getStringExtra("file_path");
+            String uploadRoute = TildaChatApp._uploadRoute;
+
+            handlerTimeDigital = new Handler();
+            runnableTimeDigital = this::updateService;
+            try {
+                FileInputStream fileInputStream = new FileInputStream(filePath);
+                totalBytesAvailable = fileInputStream.available();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            updateService();
+            Log.d(TAG, "onStartCommand: 1");
+            //----------------------------------
+            doMyJob(filePath, uploadRoute);
         }
-        updateService();
-        Log.d(TAG, "onStartCommand: 1");
-        //----------------------------------
-        doMyJob(filePath, uploadRoute);
         //----------------------------------
         return Service.START_STICKY;
     }

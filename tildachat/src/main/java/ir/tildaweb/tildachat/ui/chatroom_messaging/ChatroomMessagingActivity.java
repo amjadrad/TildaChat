@@ -457,35 +457,34 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         TildaChatApp.getSocketRequestController().receiver().receiveUserBlock(this, ReceiveUserBlock.class, response -> {
             Log.d(TAG, "setSocketListeners: " + response);
 //            TildaChatApp.getSocketRequestController().emitter().emitChatroomCheck(emitChatroomCheck);
-
-            if (response.getStatus() == 200) {
-                if (response.getBlockerUserId().intValue() == userId && response.getBlockedUserId().intValue() == getChatroomSecondUserId()) {
-                    receiveChatroomCheck.setItBlocked(response.getBlocked());
-                    if (response.getBlocked()) {
-                        binding.linearUnBlock.setVisibility(View.VISIBLE);
-                        binding.linearChatBox.setVisibility(View.GONE);
-                    } else {
-                        binding.linearUnBlock.setVisibility(View.GONE);
-                        if (!receiveChatroomCheck.getAmIBlocked()) {
-                            binding.linearChatBox.setVisibility(View.VISIBLE);
+            if (response != null && userId != null && getChatroomSecondUserId() != null) {
+                if (response.getStatus() == 200) {
+                    if (response.getBlockerUserId().intValue() == userId && response.getBlockedUserId().intValue() == getChatroomSecondUserId()) {
+                        receiveChatroomCheck.setItBlocked(response.getBlocked());
+                        if (response.getBlocked()) {
+                            binding.linearUnBlock.setVisibility(View.VISIBLE);
+                            binding.linearChatBox.setVisibility(View.GONE);
+                        } else {
+                            binding.linearUnBlock.setVisibility(View.GONE);
+                            if (!receiveChatroomCheck.getAmIBlocked()) {
+                                binding.linearChatBox.setVisibility(View.VISIBLE);
+                            }
                         }
-                    }
-                } else if (response.getBlockedUserId().intValue() == userId && response.getBlockerUserId().intValue() == getChatroomSecondUserId()) {
-                    receiveChatroomCheck.setAmIBlocked(response.getBlocked());
-                    if (response.getBlocked()) {
-                        binding.tvUserStatus.setText("آخرین بازدید، خیلی وقت پیش");
-                        binding.linearChatBox.setVisibility(View.GONE);
-                        finish();
-                    } else {
-                        binding.tvUserStatus.setText("آنلاین");
-                        if (!receiveChatroomCheck.getItBlocked()) {
-                            binding.linearChatBox.setVisibility(View.VISIBLE);
+                    } else if (response.getBlockedUserId().intValue() == userId && response.getBlockerUserId().intValue() == getChatroomSecondUserId()) {
+                        receiveChatroomCheck.setAmIBlocked(response.getBlocked());
+                        if (response.getBlocked()) {
+                            binding.tvUserStatus.setText("آخرین بازدید، خیلی وقت پیش");
+                            binding.linearChatBox.setVisibility(View.GONE);
+                            finish();
+                        } else {
+                            binding.tvUserStatus.setText("آنلاین");
+                            if (!receiveChatroomCheck.getItBlocked()) {
+                                binding.linearChatBox.setVisibility(View.VISIBLE);
+                            }
                         }
                     }
                 }
             }
-
-
         });
 //        socket.on(SocketEndpoints.TAG_CLIENT_RECEIVE_ERROR, args -> runOnUiThread(() -> toast("خطایی رخ داد.")));
 //        socket.on(SocketEndpoints.TAG_CLIENT_RECEIVE_CHATROOM_CHANNEL_MEMBERSHIP, args -> runOnUiThread(new Runnable() {
