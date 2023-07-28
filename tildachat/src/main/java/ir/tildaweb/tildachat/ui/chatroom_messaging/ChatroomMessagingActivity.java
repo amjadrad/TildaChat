@@ -887,6 +887,22 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         }
     }
 
+    public void showFileButton(boolean visible) {
+        binding.imageViewFile.setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
+
+    public void showVoiceButton(boolean visible) {
+        binding.imageViewVoice.setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
+
+    public void showPictureButton(boolean visible) {
+        binding.imageViewImage.setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
+
+    public void showEmojiButton(boolean visible) {
+        binding.imageViewEmoji.setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {

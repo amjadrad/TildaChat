@@ -1,5 +1,6 @@
 package ir.tildaweb.tildachatapp;
 
+import android.os.Bundle;
 import android.util.Log;
 
 import ir.tildaweb.tildachat.dialogs.DialogShowPicture;
@@ -12,5 +13,12 @@ public class Chat extends ChatroomMessagingActivity {
     @Override
     protected void onChatDetailsClicked() {
         super.onChatDetailsClicked();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        showEmojiButton(false);
+        showFileButton(false);
     }
 }
