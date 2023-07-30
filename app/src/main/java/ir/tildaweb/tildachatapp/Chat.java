@@ -20,5 +20,7 @@ public class Chat extends ChatroomMessagingActivity {
         super.onCreate(savedInstanceState);
         showEmojiButton(false);
         showFileButton(false);
+        setMaxMessageLength(5);
+        setMessageTimer(5);
     }
 }

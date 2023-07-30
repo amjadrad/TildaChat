@@ -153,7 +153,7 @@ public class TildaFileUploaderForegroundService extends Service {
             }
             remoteViews = new RemoteViews(getPackageName(), R.layout.tilda_file_uploader_service_layout);
             remoteViews.setTextViewText(R.id.tvFileName, filePath.substring(filePath.lastIndexOf("/") + 1));
-            remoteViews.setTextViewText(R.id.tvProgress, "0MB - 0MB");
+//            remoteViews.setTextViewText(R.id.tvProgress, "0MB - 0MB");
             notificationBuilder = new NotificationCompat.Builder(this,
                     channel)
                     .setOngoing(true)
@@ -197,7 +197,7 @@ public class TildaFileUploaderForegroundService extends Service {
 
     private void updateService() {
         if (remoteViews != null && notificationBuilder != null) {
-            remoteViews.setTextViewText(R.id.tvProgress, String.format("%.2fMB - %.2fMB", (totalBytesUploaded / 1048576), (totalBytesAvailable / 1048576)));
+//            remoteViews.setTextViewText(R.id.tvProgress, String.format("%.2f KB - %.2f KB", (totalBytesUploaded / 1024), (totalBytesAvailable / 1024)));
             notificationBuilder.setOnlyAlertOnce(true);
             notification = notificationBuilder.build();
             startForeground(notificationId, notification);

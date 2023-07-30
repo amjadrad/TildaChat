@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -99,6 +100,10 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     private int PICK_IMAGE_PERMISSION_CODE = 1001;
     private int PICK_FILE_PERMISSION_CODE = 1003;
 
+    private int maxMessageLength = 1024;
+    private int messageTimer = -1;
+    private boolean isMessageTimerOn = false;
+
 
     //Swipe to finish
 //    private static final int SWIPE_MIN_DISTANCE = 120;
@@ -182,7 +187,11 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                     binding.imageViewFile.setVisibility(View.GONE);
                     binding.imageViewVoice.setVisibility(View.GONE);
                     binding.imageViewImage.setVisibility(View.GONE);
-                    binding.imageViewSend.setVisibility(View.VISIBLE);
+                    if (!isMessageTimerOn) {
+                        binding.imageViewSend.setVisibility(View.VISIBLE);
+                    } else {
+                        binding.imageViewSend.setVisibility(View.GONE);
+                    }
                 } else {
                     binding.imageViewFile.setVisibility(View.VISIBLE);
                     binding.imageViewVoice.setVisibility(View.VISIBLE);
@@ -669,6 +678,9 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         } else if (id == R.id.imageViewSend) {
             onSendClicked();
             String message = binding.etMessage.getText().toString().trim();
+            if (message.length() > maxMessageLength) {
+                message = message.substring(0, maxMessageLength);
+            }
             emojiPopup.dismiss();
             if (message.length() > 0) {
                 if (isUpdate) {
@@ -700,6 +712,8 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                     resetReply();
                 }
             }
+
+            startMessageTimer();
         } else if (id == R.id.imageViewReplyClose) {
             resetReply();
         } else if (id == R.id.imageViewUpdateClose) {
@@ -901,6 +915,37 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 
     public void showEmojiButton(boolean visible) {
         binding.imageViewEmoji.setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
+
+    public void setMaxMessageLength(int maxMessageLength) {
+        this.maxMessageLength = maxMessageLength;
+    }
+
+    public void setMessageTimer(int timerInSeconds) {
+        this.messageTimer = timerInSeconds;
+    }
+
+    private void startMessageTimer() {
+        if (this.messageTimer > 0) {
+            isMessageTimerOn = true;
+            binding.tvMessageTimer.setVisibility(View.VISIBLE);
+            binding.tvMessageTimer.setText(String.format("%s%s", messageTimer, "s"));
+            binding.imageViewSend.setVisibility(View.GONE);
+            new CountDownTimer(messageTimer * 1000L, 1000) {
+                @Override
+                public void onTick(long l) {
+                    binding.tvMessageTimer.setText(String.format("%s%s", l / 1000, "s"));
+                }
+
+                @Override
+                public void onFinish() {
+                    isMessageTimerOn = false;
+                    binding.tvMessageTimer.setVisibility(View.GONE);
+                    binding.tvMessageTimer.setText(String.format("%s%s", messageTimer, "s"));
+                    binding.imageViewSend.setVisibility(View.VISIBLE);
+                }
+            }.start();
+        }
     }
 
     @Override
