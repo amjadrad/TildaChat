@@ -23,4 +23,10 @@ public class Chat extends ChatroomMessagingActivity {
         setMaxMessageLength(5);
         setMessageTimer(5);
     }
+
+//    @Override
+//    protected void onSelectPictureClicked() {
+////        super.onSelectPictureClicked();
+//        Log.d(TAG, "onSelectPictureClicked: 0000000000000000");
+//    }
 }

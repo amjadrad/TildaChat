@@ -723,54 +723,8 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             join();
         } else if (id == R.id.imageViewImage) {
             onSelectPictureClicked();
-            if (checkImagesPermission(this, PICK_IMAGE_PERMISSION_CODE)) {
-                TildaFilePicker tildaFilePicker = new TildaFilePicker(ChatroomMessagingActivity.this, new FileType[]{FileType.FILE_TYPE_IMAGE});
-                tildaFilePicker.setSingleChoice();
-                tildaFilePicker.setOnTildaFileSelectListener(list -> {
-                    for (FileModel model : list) {
-                        Intent intent = new Intent(ChatroomMessagingActivity.this, TildaFileUploaderForegroundService.class);
-                        intent.setAction("chat_uploader");
-                        intent.putExtra("file_path", model.getPath());
-                        intent.putExtra("is_send_to_chatroom", true);
-                        intent.putExtra("chatroom_id", chatroomId);
-                        intent.putExtra("message_type", MessageType.PICTURE.label);
-                        intent.putExtra("room_id", roomId);
-                        intent.putExtra("second_user_id", secondUserId);
-                        intent.putExtra("is_second_user", roomId == null);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            ContextCompat.startForegroundService(ChatroomMessagingActivity.this, intent);
-                        } else {
-                            startService(intent);
-                        }
-                    }
-                });
-                tildaFilePicker.show(getSupportFragmentManager());
-            }
         } else if (id == R.id.imageViewFile) {
             onSelectFileClicked();
-            if (checkFilesPermission(this, PICK_FILE_PERMISSION_CODE)) {
-                TildaFilePicker tildaFilePicker = new TildaFilePicker(ChatroomMessagingActivity.this);
-                tildaFilePicker.setSingleChoice();
-                tildaFilePicker.setOnTildaFileSelectListener(list -> {
-                    for (FileModel model : list) {
-                        Intent intent = new Intent(ChatroomMessagingActivity.this, TildaFileUploaderForegroundService.class);
-                        intent.setAction("chat_uploader");
-                        intent.putExtra("file_path", model.getPath());
-                        intent.putExtra("is_send_to_chatroom", true);
-                        intent.putExtra("chatroom_id", chatroomId);
-                        intent.putExtra("message_type", MessageType.FILE.label);
-                        intent.putExtra("room_id", roomId);
-                        intent.putExtra("second_user_id", secondUserId);
-                        intent.putExtra("is_second_user", roomId == null);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            ContextCompat.startForegroundService(ChatroomMessagingActivity.this, intent);
-                        } else {
-                            startService(intent);
-                        }
-                    }
-                });
-                tildaFilePicker.show(getSupportFragmentManager());
-            }
         } else if (id == R.id.imageViewVoice) {
             onRecordVoiceClicked();
         } else if (id == R.id.linearChatroomDetails) {
@@ -821,11 +775,55 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     }
 
     protected void onSelectFileClicked() {
-
+        if (checkFilesPermission(this, PICK_FILE_PERMISSION_CODE)) {
+            TildaFilePicker tildaFilePicker = new TildaFilePicker(ChatroomMessagingActivity.this);
+            tildaFilePicker.setSingleChoice();
+            tildaFilePicker.setOnTildaFileSelectListener(list -> {
+                for (FileModel model : list) {
+                    Intent intent = new Intent(ChatroomMessagingActivity.this, TildaFileUploaderForegroundService.class);
+                    intent.setAction("chat_uploader");
+                    intent.putExtra("file_path", model.getPath());
+                    intent.putExtra("is_send_to_chatroom", true);
+                    intent.putExtra("chatroom_id", chatroomId);
+                    intent.putExtra("message_type", MessageType.FILE.label);
+                    intent.putExtra("room_id", roomId);
+                    intent.putExtra("second_user_id", secondUserId);
+                    intent.putExtra("is_second_user", roomId == null);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        ContextCompat.startForegroundService(ChatroomMessagingActivity.this, intent);
+                    } else {
+                        startService(intent);
+                    }
+                }
+            });
+            tildaFilePicker.show(getSupportFragmentManager());
+        }
     }
 
     protected void onSelectPictureClicked() {
-
+        if (checkImagesPermission(this, PICK_IMAGE_PERMISSION_CODE)) {
+            TildaFilePicker tildaFilePicker = new TildaFilePicker(ChatroomMessagingActivity.this, new FileType[]{FileType.FILE_TYPE_IMAGE});
+            tildaFilePicker.setSingleChoice();
+            tildaFilePicker.setOnTildaFileSelectListener(list -> {
+                for (FileModel model : list) {
+                    Intent intent = new Intent(ChatroomMessagingActivity.this, TildaFileUploaderForegroundService.class);
+                    intent.setAction("chat_uploader");
+                    intent.putExtra("file_path", model.getPath());
+                    intent.putExtra("is_send_to_chatroom", true);
+                    intent.putExtra("chatroom_id", chatroomId);
+                    intent.putExtra("message_type", MessageType.PICTURE.label);
+                    intent.putExtra("room_id", roomId);
+                    intent.putExtra("second_user_id", secondUserId);
+                    intent.putExtra("is_second_user", roomId == null);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        ContextCompat.startForegroundService(ChatroomMessagingActivity.this, intent);
+                    } else {
+                        startService(intent);
+                    }
+                }
+            });
+            tildaFilePicker.show(getSupportFragmentManager());
+        }
     }
 
     protected void onRecordVoiceClicked() {
