@@ -127,4 +127,6 @@ public class Message {
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+
 }

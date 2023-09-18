@@ -6,14 +6,22 @@
     android:background="@color/colorWhite"
     android:layoutDirection="rtl">
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/linearLayoutToolbar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_48sdp"
+            android:background="@color/colorWhite"
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatImageView

@@ -104,6 +104,8 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     private int messageTimer = -1;
     private boolean isMessageTimerOn = false;
 
+    private boolean isShowVoice = true, isShowFile = true, isShowPicture = true;
+
 
     //Swipe to finish
 //    private static final int SWIPE_MIN_DISTANCE = 120;
@@ -193,9 +195,12 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                         binding.imageViewSend.setVisibility(View.GONE);
                     }
                 } else {
-                    binding.imageViewFile.setVisibility(View.VISIBLE);
-                    binding.imageViewVoice.setVisibility(View.VISIBLE);
-                    binding.imageViewImage.setVisibility(View.VISIBLE);
+                    if (isShowFile)
+                        binding.imageViewFile.setVisibility(View.VISIBLE);
+                    if (isShowVoice)
+                        binding.imageViewVoice.setVisibility(View.VISIBLE);
+                    if (isShowPicture)
+                        binding.imageViewImage.setVisibility(View.VISIBLE);
                     binding.imageViewSend.setVisibility(View.GONE);
                 }
             }
@@ -900,14 +905,17 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     }
 
     public void showFileButton(boolean visible) {
+        this.isShowFile = visible;
         binding.imageViewFile.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
     public void showVoiceButton(boolean visible) {
+        this.isShowVoice = visible;
         binding.imageViewVoice.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
     public void showPictureButton(boolean visible) {
+        this.isShowPicture = visible;
         binding.imageViewImage.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
