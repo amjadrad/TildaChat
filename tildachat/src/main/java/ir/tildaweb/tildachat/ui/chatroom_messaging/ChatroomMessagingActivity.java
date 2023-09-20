@@ -1128,7 +1128,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         if (usersAreWriting.size() > 0) {
             if (usersAreWriting.size() > 2) {
                 binding.tvUsersWriting.setText(String.format("%s %s", usersAreWriting.size(), " نفر در حال نوشتن..."));
-            } else {
+            } else if (usersAreWritingIds.size()==2){
                 StringBuilder builder = new StringBuilder();
                 int i = 0;
                 for (String str : usersAreWriting) {
@@ -1139,6 +1139,8 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                     i++;
                 }
                 binding.tvUsersWriting.setText(String.format("%s %s", builder.toString(), "در حال نوشتن..."));
+            }else{
+                binding.tvUsersWriting.setText(String.format("%s", "در حال نوشتن..."));
             }
         } else {
             binding.tvUsersWriting.setText("");
