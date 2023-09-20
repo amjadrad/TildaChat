@@ -1,5 +1,6 @@
 package ir.tildaweb.tildachatapp;
 
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,8 +28,8 @@ public class Chat extends ChatroomMessagingActivity {
         setMaxMessageLength(5);
         setMessageTimer(5);
 //        setFont(ResourcesCompat.getFont(Chat.this , R.font.kalameh));
-//        setDarkMode();
-//        setPinMessage("پیام پین شده");
+        setDarkMode(Color.parseColor("#292424"), Color.parseColor("#494444"));
+        setPinMessage("پیام پین شده");
 //        getBinding().tvUserStatus.setText("در حال نوشتن...");
     }
 

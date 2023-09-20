@@ -164,201 +164,211 @@
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/linearChatBox"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewChatBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
         android:layout_margin="@dimen/_8sdp"
-        android:background="@drawable/bg_chat_box"
-        android:orientation="vertical"
-        android:visibility="visible">
+        android:outlineAmbientShadowColor="@color/colorText"
+        android:outlineSpotShadowColor="@color/colorText"
+        app:cardCornerRadius="@dimen/_8sdp"
+        app:cardElevation="0dp"
+        tools:targetApi="p">
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/linearReply"
+            android:id="@+id/linearChatBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="@dimen/_40sdp"
-                android:layout_height="@dimen/_48sdp"
-                android:padding="@dimen/_12sdp"
-                app:srcCompat="@drawable/ic_reply"
-                app:tint="@color/colorMutedText" />
+            android:background="@drawable/bg_chat_box"
+            android:orientation="vertical">
 
             <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="0dp"
+                android:id="@+id/linearReply"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="match_parent"
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="@dimen/_48sdp"
+                    android:padding="@dimen/_12sdp"
+                    app:srcCompat="@drawable/ic_reply"
+                    app:tint="@color/colorMutedText" />
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:text="پاسخ به پیام"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="@dimen/_12sdp"
-                    android:textStyle="bold" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tvReplyMessage"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:layout_weight="1"
-                    android:gravity="right"
-                    android:maxLines="1"
-                    android:text="پیام"
-                    android:textColor="@color/colorMutedText"
-                    android:textSize="@dimen/_12sdp" />
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:text="پاسخ به پیام"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/_12sdp"
+                        android:textStyle="bold" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvReplyMessage"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:maxLines="1"
+                        android:text="پیام"
+                        android:textColor="@color/colorMutedText"
+                        android:textSize="@dimen/_12sdp" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imageViewReplyClose"
+                    android:layout_width="@dimen/_48sdp"
+                    android:layout_height="@dimen/_48sdp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="@dimen/_14sdp"
+                    app:srcCompat="@drawable/ic_close"
+                    app:tint="@color/colorMutedText" />
+
             </androidx.appcompat.widget.LinearLayoutCompat>
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageViewReplyClose"
-                android:layout_width="@dimen/_48sdp"
-                android:layout_height="@dimen/_48sdp"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="@dimen/_14sdp"
-                app:srcCompat="@drawable/ic_close"
-                app:tint="@color/colorMutedText" />
-
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/linearUpdate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="@dimen/_40sdp"
-                android:layout_height="@dimen/_48sdp"
-                android:padding="@dimen/_12sdp"
-                app:srcCompat="@drawable/ic_edit"
-                app:tint="@color/colorMutedText" />
 
             <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="0dp"
+                android:id="@+id/linearUpdate"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_4sdp"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="match_parent"
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="@dimen/_48sdp"
+                    android:padding="@dimen/_12sdp"
+                    app:srcCompat="@drawable/ic_edit"
+                    app:tint="@color/colorMutedText" />
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:text="ویرایش پیام"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="@dimen/_12sdp"
-                    android:textStyle="bold" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tvUpdateMessage"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/_4sdp"
                     android:layout_weight="1"
-                    android:gravity="right"
-                    android:maxLines="1"
-                    android:text="ویرایش پیام"
-                    android:textColor="@color/colorMutedText"
-                    android:textSize="@dimen/_12sdp" />
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:text="ویرایش پیام"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/_12sdp"
+                        android:textStyle="bold" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvUpdateMessage"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:maxLines="1"
+                        android:text="ویرایش پیام"
+                        android:textColor="@color/colorMutedText"
+                        android:textSize="@dimen/_12sdp" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imageViewUpdateClose"
+                    android:layout_width="@dimen/_48sdp"
+                    android:layout_height="@dimen/_48sdp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="@dimen/_14sdp"
+                    app:srcCompat="@drawable/ic_close"
+                    app:tint="@color/colorMutedText" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageViewUpdateClose"
-                android:layout_width="@dimen/_48sdp"
-                android:layout_height="@dimen/_48sdp"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="@dimen/_14sdp"
-                app:srcCompat="@drawable/ic_close"
-                app:tint="@color/colorMutedText" />
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageViewSend"
-                android:layout_width="@dimen/_38sdp"
-                android:layout_height="@dimen/_48sdp"
-                android:padding="@dimen/_10sdp"
-                android:rotation="45"
-                android:visibility="gone"
-                app:srcCompat="@drawable/ic_send"
-                app:tint="@color/colorAccent" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvMessageTimer"
-                android:layout_width="@dimen/_48sdp"
-                android:layout_height="@dimen/_48sdp"
-                android:gravity="center"
-                android:padding="@dimen/_10sdp"
-                android:text="0s"
-                android:visibility="gone" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageViewVoice"
-                android:layout_width="@dimen/_38sdp"
-                android:layout_height="@dimen/_48sdp"
-                android:padding="@dimen/_10sdp"
-                app:srcCompat="@drawable/ic_mic"
-                app:tint="@color/colorMutedText" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageViewFile"
-                android:layout_width="@dimen/_38sdp"
-                android:layout_height="@dimen/_48sdp"
-                android:padding="@dimen/_10sdp"
-                android:tint="@color/colorMutedText"
-                android:visibility="visible"
-                app:srcCompat="@drawable/ic_file_plus"
-                app:tint="@color/colorMutedText" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageViewImage"
-                android:layout_width="@dimen/_38sdp"
-                android:layout_height="@dimen/_48sdp"
-                android:padding="@dimen/_10sdp"
-                android:tint="@color/colorMutedText"
-                android:visibility="visible"
-                app:srcCompat="@drawable/ic_camera"
-                app:tint="@color/colorMutedText" />
-
-
-            <EditText
-                android:id="@+id/etMessage"
-                android:layout_width="0dp"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginRight="@dimen/_5sdp"
-                android:layout_weight="1"
-                android:background="@drawable/chat_et_selector"
-                android:ems="10"
-                android:hint="پیام..."
-                android:inputType="textMultiLine|text"
-                android:textColor="@color/colorText"
-                android:textColorHint="@color/colorMutedText"
-                android:textSize="@dimen/_12sdp"
-                android:textStyle="bold" />
+                android:orientation="horizontal">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageViewEmoji"
-                android:layout_width="@dimen/_48sdp"
-                android:layout_height="@dimen/_48sdp"
-                android:padding="@dimen/_14sdp"
-                android:tint="@color/colorMutedText"
-                app:srcCompat="@drawable/ic_smile"
-                app:tint="@color/colorMutedText" />
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imageViewSend"
+                    android:layout_width="@dimen/_38sdp"
+                    android:layout_height="@dimen/_48sdp"
+                    android:padding="@dimen/_10sdp"
+                    android:rotation="45"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/ic_send"
+                    app:tint="@color/colorAccent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvMessageTimer"
+                    android:layout_width="@dimen/_48sdp"
+                    android:layout_height="@dimen/_48sdp"
+                    android:gravity="center"
+                    android:padding="@dimen/_10sdp"
+                    android:text="0s"
+                    android:visibility="gone" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imageViewVoice"
+                    android:layout_width="@dimen/_38sdp"
+                    android:layout_height="@dimen/_48sdp"
+                    android:padding="@dimen/_10sdp"
+                    app:srcCompat="@drawable/ic_mic"
+                    app:tint="@color/colorMutedText" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imageViewFile"
+                    android:layout_width="@dimen/_38sdp"
+                    android:layout_height="@dimen/_48sdp"
+                    android:padding="@dimen/_10sdp"
+                    android:tint="@color/colorMutedText"
+                    android:visibility="visible"
+                    app:srcCompat="@drawable/ic_file_plus"
+                    app:tint="@color/colorMutedText" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imageViewImage"
+                    android:layout_width="@dimen/_38sdp"
+                    android:layout_height="@dimen/_48sdp"
+                    android:padding="@dimen/_10sdp"
+                    android:tint="@color/colorMutedText"
+                    android:visibility="visible"
+                    app:srcCompat="@drawable/ic_camera"
+                    app:tint="@color/colorMutedText" />
+
+
+                <EditText
+                    android:id="@+id/etMessage"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:layout_weight="1"
+                    android:background="@drawable/chat_et_selector"
+                    android:ems="10"
+                    android:hint="پیام..."
+                    android:inputType="textMultiLine|text"
+                    android:textColor="@color/colorText"
+                    android:textColorHint="@color/colorMutedText"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imageViewEmoji"
+                    android:layout_width="@dimen/_48sdp"
+                    android:layout_height="@dimen/_48sdp"
+                    android:padding="@dimen/_14sdp"
+                    android:tint="@color/colorMutedText"
+                    app:srcCompat="@drawable/ic_smile"
+                    app:tint="@color/colorMutedText" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.appcompat.widget.LinearLayoutCompat>
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.cardview.widget.CardView>
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/linearJoinChannel"

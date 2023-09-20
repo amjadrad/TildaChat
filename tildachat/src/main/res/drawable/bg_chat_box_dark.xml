@@ -7,10 +7,10 @@
             <item>
                 <shape>
                     <corners android:radius="@dimen/_8sdp" />
-                    <solid android:color="#242424"/>
+<!--                    <solid android:color="#242424"/>-->
                     <stroke
                         android:width="@dimen/_1sdp"
-                        android:color="#202a29" />
+                        android:color="#303a39" />
                 </shape>
             </item>
         </selector>

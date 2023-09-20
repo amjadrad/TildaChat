@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.core.app.ActivityCompat;
@@ -253,8 +254,13 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         }
     }
 
-    protected void setDarkMode() {
+    protected void setDarkMode(int colorHighDark, int colorDark1) {
+        if (colorHighDark == -1) {
+            colorHighDark = ContextCompat.getColor(ChatroomMessagingActivity.this, R.color.colorBlack);
+            colorDark1 = ContextCompat.getColor(ChatroomMessagingActivity.this, R.color.colorDark1);
+        }
         if (binding != null) {
+
             binding.etMessage.setTextColor(ContextCompat.getColor(ChatroomMessagingActivity.this, R.color.colorWhite));
             binding.tvUserName.setTextColor(ContextCompat.getColor(ChatroomMessagingActivity.this, R.color.colorWhite));
             binding.tvUserStatus.setTextColor(ContextCompat.getColor(ChatroomMessagingActivity.this, R.color.colorWhite));
@@ -262,11 +268,12 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             binding.imageViewMenu.setColorFilter(ContextCompat.getColor(ChatroomMessagingActivity.this, R.color.colorWhite), android.graphics.PorterDuff.Mode.SRC_IN);
             binding.imageViewBack.setColorFilter(ContextCompat.getColor(ChatroomMessagingActivity.this, R.color.colorWhite), android.graphics.PorterDuff.Mode.SRC_IN);
 
+            binding.cardViewChatBox.setCardBackgroundColor(colorHighDark);
             binding.linearChatBox.setBackground(ContextCompat.getDrawable(ChatroomMessagingActivity.this, R.drawable.bg_chat_box_dark));
-            binding.linearLayoutToolbar.setBackgroundColor(ContextCompat.getColor(ChatroomMessagingActivity.this, R.color.colorBlack));
-            binding.viewToolbarDivider.setBackgroundColor(ContextCompat.getColor(ChatroomMessagingActivity.this, R.color.colorDark1));
-            binding.coordinatorMain.setBackgroundColor(ContextCompat.getColor(ChatroomMessagingActivity.this, R.color.colorBlack));
-            binding.cardViewPinMessage.setBackgroundColor(ContextCompat.getColor(ChatroomMessagingActivity.this, R.color.colorDark1));
+            binding.linearLayoutToolbar.setBackgroundColor(colorHighDark);
+            binding.viewToolbarDivider.setBackgroundColor(colorDark1);
+            binding.coordinatorMain.setBackgroundColor(colorHighDark);
+            binding.cardViewPinMessage.setBackgroundColor(colorDark1);
         }
         if (adapterPrivateChatMessages != null) {
             adapterPrivateChatMessages.setDarkMode();
