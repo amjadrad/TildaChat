@@ -1,10 +1,14 @@
 package ir.tildaweb.tildachatapp;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.core.content.res.ResourcesCompat;
+
 import ir.tildaweb.tildachat.dialogs.DialogShowPicture;
 import ir.tildaweb.tildachat.ui.chatroom_messaging.ChatroomMessagingActivity;
+import tildachatapp.R;
 
 public class Chat extends ChatroomMessagingActivity {
 
@@ -22,9 +26,13 @@ public class Chat extends ChatroomMessagingActivity {
         showFileButton(false);
         setMaxMessageLength(5);
         setMessageTimer(5);
+//        setFont(ResourcesCompat.getFont(Chat.this , R.font.kalameh));
+//        setDarkMode();
+//        setPinMessage("پیام پین شده");
+//        getBinding().tvUserStatus.setText("در حال نوشتن...");
     }
 
-//    @Override
+    //    @Override
 //    protected void onSelectPictureClicked() {
 ////        super.onSelectPictureClicked();
 //        Log.d(TAG, "onSelectPictureClicked: 0000000000000000");

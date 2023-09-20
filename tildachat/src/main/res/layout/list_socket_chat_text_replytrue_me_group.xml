@@ -30,8 +30,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
                 android:clickable="true"
-                android:orientation="horizontal"
-                android:focusable="true">
+                android:focusable="true"
+                android:orientation="horizontal">
 
                 <View
                     android:layout_width="@dimen/_2sdp"
@@ -98,6 +98,7 @@
             android:layout_height="wrap_content"
             android:gravity="right"
             android:text="16:48"
+            android:textColor="@color/colorDark2"
             android:textSize="@dimen/_10ssp" />
 
     </LinearLayout>

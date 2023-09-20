@@ -311,4 +311,30 @@ public class Receiver implements SocketReceiverInterface {
         });
     }
 
+    @Override
+    public <T> void receiveChatroomUserWriting(@Nullable Activity activityForRunOnUI, Class<T> receiveModel, OnReceiveListener<T> onReceiveListener) {
+        TildaChatApp.getSocket().on(SocketEndpoints.TAG_RECEIVE_CHATROOM_USER_WRITING, args -> {
+            Log.d(TAG, "receiveChatroomUserWriting: " + args[0]);
+            T t = (T) DataParser.fromJson(String.valueOf(args[0]), receiveModel);
+            if (activityForRunOnUI != null) {
+                activityForRunOnUI.runOnUiThread(() -> onReceiveListener.onReceive(t));
+            } else {
+                onReceiveListener.onReceive(t);
+            }
+        });
+    }
+
+    @Override
+    public <T> void receiveChatroomPinMessages(@Nullable Activity activityForRunOnUI, Class<T> receiveModel, OnReceiveListener<T> onReceiveListener) {
+        TildaChatApp.getSocket().on(SocketEndpoints.TAG_RECEIVE_CHATROOM_PIN_MESSAGES, args -> {
+            Log.d(TAG, "receiveChatroomPinMessages: " + args[0]);
+            T t = (T) DataParser.fromJson(String.valueOf(args[0]), receiveModel);
+            if (activityForRunOnUI != null) {
+                activityForRunOnUI.runOnUiThread(() -> onReceiveListener.onReceive(t));
+            } else {
+                onReceiveListener.onReceive(t);
+            }
+        });
+    }
+
 }

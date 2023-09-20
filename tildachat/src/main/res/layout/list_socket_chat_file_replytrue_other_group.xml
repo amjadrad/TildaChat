@@ -43,8 +43,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
                         android:clickable="true"
-                        android:orientation="horizontal"
-                        android:focusable="true">
+                        android:focusable="true"
+                        android:orientation="horizontal">
 
                         <View
                             android:layout_width="@dimen/_2sdp"
@@ -159,6 +159,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="left"
                     android:text="00:00"
+                    android:textColor="@color/colorDark2"
                     android:textSize="@dimen/_10ssp" />
 
                 <androidx.appcompat.widget.AppCompatTextView

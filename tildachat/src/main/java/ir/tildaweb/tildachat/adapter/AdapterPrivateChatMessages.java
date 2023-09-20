@@ -104,6 +104,8 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
     private boolean isDownloadingFile = false;
     private boolean isWorkWithFullname = false;
     private static FontUtils fontUtils;
+    private Typeface typeface = null;
+    private boolean isDarkMode = false;
 
 
     public AdapterPrivateChatMessages(Context context, Activity activity, int userId, String FILE_URL, RecyclerView recyclerView, ArrayList<Message> chatMessages, LoadMoreData loadMoreData, IChatUtils iChatUtils, Typeface typeface) {
@@ -154,6 +156,14 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         public Holder(View view) {
             super(view);
         }
+    }
+
+    public void setFont(Typeface typeface) {
+        this.typeface = typeface;
+    }
+
+    public void setDarkMode() {
+        this.isDarkMode = true;
     }
 
     //Text
@@ -488,14 +498,12 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         }
     }
 
-
     @Override
     public int getItemViewType(int position) {
         Message chatMessage = chatMessages.get(position);
         //        Log.d(TAG, "getItemViewType: " + type + " _ " + chatMessage.getMessage() + " _ " + chatMessage.getUserId());
         return MessageTypeUtil.getType(chatMessage, userId, roomType);
     }
-
 
     @Override
     public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
@@ -631,6 +639,9 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
         });
 
+//        int colorWhite = ContextCompat.getColor(context, R.color.colorWhite);
+//        int colorDark2 = ContextCompat.getColor(context, R.color.colorDark2);
+
         switch (viewHolder.getItemViewType()) {
 
             case 1: {
@@ -642,7 +653,15 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             }
             case 11111: {
                 ChatHolder_Text_ReplyFalse_Me_Private holder = (ChatHolder_Text_ReplyFalse_Me_Private) viewHolder;
-
+                if (typeface != null) {
+                    holder.binding.tvMessage.setTypeface(typeface);
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
+//                if (isDarkMode) {
+//                    holder.binding.tvTime.setTextColor(colorWhite);
+//                } else {
+//                    holder.binding.tvTime.setTextColor(colorDark2);
+//                }
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
                 BetterLinkMovementMethod
                         .linkify(Linkify.ALL, holder.binding.tvMessage)
@@ -698,7 +717,10 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 //            ChatHolder_Text_ReplyFalse_Me_Group
             case 11131: {
                 ChatHolder_Text_ReplyFalse_Me_Group holder = (ChatHolder_Text_ReplyFalse_Me_Group) viewHolder;
-
+                if (typeface != null) {
+                    holder.binding.tvMessage.setTypeface(typeface);
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
                 BetterLinkMovementMethod
                         .linkify(Linkify.ALL, holder.binding.tvMessage)
@@ -754,6 +776,10 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 //            ChatHolder_Text_ReplyFalse_Other_Private
             case 11211: {
                 ChatHolder_Text_ReplyFalse_Other_Private holder = (ChatHolder_Text_ReplyFalse_Other_Private) viewHolder;
+                if (typeface != null) {
+                    holder.binding.tvMessage.setTypeface(typeface);
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
                 BetterLinkMovementMethod
                         .linkify(Linkify.ALL, holder.binding.tvMessage)
@@ -799,6 +825,10 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             //Channel text
             case 11221: {
                 ChatHolder_Text_ReplyFalse_Other_Private holder = (ChatHolder_Text_ReplyFalse_Other_Private) viewHolder;
+                if (typeface != null) {
+                    holder.binding.tvMessage.setTypeface(typeface);
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
                 BetterLinkMovementMethod
                         .linkify(Linkify.ALL, holder.binding.tvMessage)
@@ -849,6 +879,10 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 //            ChatHolder_Text_ReplyFalse_Other_Group
             case 11231: {
                 ChatHolder_Text_ReplyFalse_Other_Group holder = (ChatHolder_Text_ReplyFalse_Other_Group) viewHolder;
+                if (typeface != null) {
+                    holder.binding.tvMessage.setTypeface(typeface);
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
                 BetterLinkMovementMethod
                         .linkify(Linkify.ALL, holder.binding.tvMessage)
@@ -907,6 +941,10 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 //            ChatHolder_Text_ReplyTrue_Me_Private
             case 12111: {
                 ChatHolder_Text_ReplyTrue_Me_Private holder = (ChatHolder_Text_ReplyTrue_Me_Private) viewHolder;
+                if (typeface != null) {
+                    holder.binding.tvMessage.setTypeface(typeface);
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
                 BetterLinkMovementMethod
                         .linkify(Linkify.ALL, holder.binding.tvMessage)
@@ -989,6 +1027,10 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 //            ChatHolder_Text_ReplyTrue_Me_Group
             case 12131: {
                 ChatHolder_Text_ReplyTrue_Me_Group holder = (ChatHolder_Text_ReplyTrue_Me_Group) viewHolder;
+                if (typeface != null) {
+                    holder.binding.tvMessage.setTypeface(typeface);
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
                 BetterLinkMovementMethod
                         .linkify(Linkify.ALL, holder.binding.tvMessage)
@@ -1070,6 +1112,10 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 //            ChatHolder_Text_ReplyTrue_Other_Private
             case 12211: {
                 ChatHolder_Text_ReplyTrue_Other_Private holder = (ChatHolder_Text_ReplyTrue_Other_Private) viewHolder;
+                if (typeface != null) {
+                    holder.binding.tvMessage.setTypeface(typeface);
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
                 BetterLinkMovementMethod
                         .linkify(Linkify.ALL, holder.binding.tvMessage)
@@ -1145,6 +1191,10 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 //            ChatHolder_Text_ReplyTrue_Other_Group
             case 12231: {
                 ChatHolder_Text_ReplyTrue_Other_Group holder = (ChatHolder_Text_ReplyTrue_Other_Group) viewHolder;
+                if (typeface != null) {
+                    holder.binding.tvMessage.setTypeface(typeface);
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
                 BetterLinkMovementMethod
                         .linkify(Linkify.ALL, holder.binding.tvMessage)
@@ -1228,6 +1278,9 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             case 21111: {
 
                 final ChatHolder_Picture_ReplyFalse_Me_Private holder = (ChatHolder_Picture_ReplyFalse_Me_Private) viewHolder;
+                if (typeface != null) {
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
                 holder.binding.tvTime.setText(getTime(dateObject));
@@ -1265,6 +1318,9 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 //            ChatHolder_Picture_ReplyFalse_Me_Group
             case 21131: {
                 final ChatHolder_Picture_ReplyFalse_Me_Group holder = (ChatHolder_Picture_ReplyFalse_Me_Group) viewHolder;
+                if (typeface != null) {
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
                 holder.binding.tvTime.setText(getTime(dateObject));
@@ -1303,6 +1359,9 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 //            ChatHolder_Picture_ReplyFalse_Other_Private
             case 21211: {
                 final ChatHolder_Picture_ReplyFalse_Other_Private holder = (ChatHolder_Picture_ReplyFalse_Other_Private) viewHolder;
+                if (typeface != null) {
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
                 holder.binding.tvTime.setText(getTime(dateObject));
@@ -1336,6 +1395,9 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             //channel picture
             case 21221: {
                 final ChatHolder_Picture_ReplyFalse_Other_Private holder = (ChatHolder_Picture_ReplyFalse_Other_Private) viewHolder;
+                if (typeface != null) {
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
                 holder.binding.tvTime.setText(getTime(dateObject));
@@ -1365,6 +1427,9 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 //            ChatHolder_Picture_ReplyFalse_Other_Group
             case 21231: {
                 final ChatHolder_Picture_ReplyFalse_Other_Group holder = (ChatHolder_Picture_ReplyFalse_Other_Group) viewHolder;
+                if (typeface != null) {
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
                 holder.binding.tvTime.setText(getTime(dateObject));
@@ -1414,6 +1479,9 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 //            ChatHolder_Picture_ReplyTrue_Me_Private
             case 22111: {
                 final ChatHolder_Picture_ReplyTrue_Me_Private holder = (ChatHolder_Picture_ReplyTrue_Me_Private) viewHolder;
+                if (typeface != null) {
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
                 holder.binding.tvTime.setText(getTime(dateObject));
@@ -1480,6 +1548,9 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 //            ChatHolder_Picture_ReplyTrue_Me_Group
             case 22131: {
                 final ChatHolder_Picture_ReplyTrue_Me_Group holder = (ChatHolder_Picture_ReplyTrue_Me_Group) viewHolder;
+                if (typeface != null) {
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
                 holder.binding.tvTime.setText(getTime(dateObject));
@@ -1544,6 +1615,9 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 //            ChatHolder_Picture_ReplyTrue_Other_Private
             case 22211: {
                 final ChatHolder_Picture_ReplyTrue_Other_Private holder = (ChatHolder_Picture_ReplyTrue_Other_Private) viewHolder;
+                if (typeface != null) {
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
                 holder.binding.tvTime.setText(getTime(dateObject));
@@ -1603,6 +1677,9 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 //            ChatHolder_Picture_ReplyTrue_Other_Group
             case 22231: {
                 final ChatHolder_Picture_ReplyTrue_Other_Group holder = (ChatHolder_Picture_ReplyTrue_Other_Group) viewHolder;
+                if (typeface != null) {
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
                 holder.binding.tvTime.setText(getTime(dateObject));
@@ -1669,7 +1746,10 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             //File
             case 31111: {
                 ChatHolder_File_ReplyFalse_Me_Private holder = (ChatHolder_File_ReplyFalse_Me_Private) viewHolder;
-
+                if (typeface != null) {
+                    holder.binding.tvMessage.setTypeface(typeface);
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
                 BetterLinkMovementMethod
                         .linkify(Linkify.ALL, holder.binding.tvMessage)
@@ -1746,7 +1826,10 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
             case 31131: {
                 ChatHolder_File_ReplyFalse_Me_Group holder = (ChatHolder_File_ReplyFalse_Me_Group) viewHolder;
-
+                if (typeface != null) {
+                    holder.binding.tvMessage.setTypeface(typeface);
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
                 BetterLinkMovementMethod
                         .linkify(Linkify.ALL, holder.binding.tvMessage)
@@ -1809,6 +1892,10 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             }
             case 31211: {
                 ChatHolder_File_ReplyFalse_Other_Private holder = (ChatHolder_File_ReplyFalse_Other_Private) viewHolder;
+                if (typeface != null) {
+                    holder.binding.tvMessage.setTypeface(typeface);
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
                 BetterLinkMovementMethod
                         .linkify(Linkify.ALL, holder.binding.tvMessage)
@@ -1879,6 +1966,10 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             //channel file
             case 31221: {
                 ChatHolder_File_ReplyFalse_Other_Private holder = (ChatHolder_File_ReplyFalse_Other_Private) viewHolder;
+                if (typeface != null) {
+                    holder.binding.tvMessage.setTypeface(typeface);
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
                 if (chatMessage.getProgress() != null) {
                     if (chatMessage.getProgress() == -1 || chatMessage.getProgress() == 100) {
@@ -1958,6 +2049,10 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
             case 31231: {
                 ChatHolder_File_ReplyFalse_Other_Group holder = (ChatHolder_File_ReplyFalse_Other_Group) viewHolder;
+                if (typeface != null) {
+                    holder.binding.tvMessage.setTypeface(typeface);
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
                 if (chatMessage.getProgress() != null) {
                     if (chatMessage.getProgress() == -1 || chatMessage.getProgress() == 100) {
@@ -2038,6 +2133,10 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
             case 32111: {
                 ChatHolder_File_ReplyTrue_Me_Private holder = (ChatHolder_File_ReplyTrue_Me_Private) viewHolder;
+                if (typeface != null) {
+                    holder.binding.tvMessage.setTypeface(typeface);
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
                 if (chatMessage.getProgress() != null) {
                     if (chatMessage.getProgress() == -1 || chatMessage.getProgress() == 100) {
@@ -2132,6 +2231,10 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
             case 32131: {
                 ChatHolder_File_ReplyTrue_Me_Group holder = (ChatHolder_File_ReplyTrue_Me_Group) viewHolder;
+                if (typeface != null) {
+                    holder.binding.tvMessage.setTypeface(typeface);
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
                 if (chatMessage.getProgress() != null) {
                     if (chatMessage.getProgress() == -1 || chatMessage.getProgress() == 100) {
@@ -2228,6 +2331,10 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
             case 32211: {
                 ChatHolder_File_ReplyTrue_Other_Private holder = (ChatHolder_File_ReplyTrue_Other_Private) viewHolder;
+                if (typeface != null) {
+                    holder.binding.tvMessage.setTypeface(typeface);
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
                 if (chatMessage.getProgress() != null) {
                     if (chatMessage.getProgress() == -1 || chatMessage.getProgress() == 100) {
@@ -2303,6 +2410,10 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             }
             case 32231: {
                 ChatHolder_File_ReplyTrue_Other_Group holder = (ChatHolder_File_ReplyTrue_Other_Group) viewHolder;
+                if (typeface != null) {
+                    holder.binding.tvMessage.setTypeface(typeface);
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
                 if (chatMessage.getProgress() != null) {
                     if (chatMessage.getProgress() == -1 || chatMessage.getProgress() == 100) {

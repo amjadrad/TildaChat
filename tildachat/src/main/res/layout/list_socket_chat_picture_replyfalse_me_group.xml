@@ -69,6 +69,7 @@
                         android:layout_marginRight="@dimen/_10sdp"
                         android:gravity="right"
                         android:text="00:00"
+                        android:textColor="@color/colorDark2"
                         android:textSize="12sp" />
 
                 </LinearLayout>

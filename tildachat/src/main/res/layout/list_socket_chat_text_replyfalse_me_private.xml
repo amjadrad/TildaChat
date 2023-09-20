@@ -69,6 +69,7 @@
             android:layout_height="wrap_content"
             android:gravity="right"
             android:text="00:00"
+            android:textColor="@color/colorDark2"
             android:textSize="@dimen/_10ssp" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>

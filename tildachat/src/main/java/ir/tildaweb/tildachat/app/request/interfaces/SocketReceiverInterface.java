@@ -59,5 +59,8 @@ public interface SocketReceiverInterface {
 
     <T> void receiveChatroomGroupMembershipStore(@Nullable Activity activityForRunOnUI, Class<T> receiveModel, OnReceiveListener<T> onReceiveListener);
 
+    <T> void receiveChatroomUserWriting(@Nullable Activity activityForRunOnUI, Class<T> receiveModel, OnReceiveListener<T> onReceiveListener);
+    <T> void receiveChatroomPinMessages(@Nullable Activity activityForRunOnUI, Class<T> receiveModel, OnReceiveListener<T> onReceiveListener);
+
 
 }

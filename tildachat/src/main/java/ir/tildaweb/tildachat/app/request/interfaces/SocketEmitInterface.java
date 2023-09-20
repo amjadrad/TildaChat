@@ -9,7 +9,9 @@ import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomGroupMem
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomJoin;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomMembers;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomMessages;
+import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomPinMessages;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomSearch;
+import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomUserWriting;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomUsernameCheck;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitMessageDelete;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitMessageSeen;
@@ -70,5 +72,9 @@ public interface SocketEmitInterface {
     void emitChatroomGroupLeft(EmitChatroomGroupLeft emit);
 
     void emitChatroomGroupMembershipStore(EmitChatroomGroupMembershipStore emit);
+
+    void emitChatroomUserWriting(EmitChatroomUserWriting emit);
+
+    void emitChatroomPinMessages(EmitChatroomPinMessages emit);
 
 }

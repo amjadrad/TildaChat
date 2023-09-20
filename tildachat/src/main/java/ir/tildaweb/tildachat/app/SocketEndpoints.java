@@ -26,6 +26,8 @@ public class SocketEndpoints {
     public static final String TAG_EMIT_CHATROOM_DELETE = "emit_chatroom_delete";
     public static final String TAG_EMIT_CHATROOM_GROUP_LEFT = "emit_chatroom_group_left";
     public static final String TAG_EMIT_CHATROOM_GROUP_MEMBERSHIP_STORE = "emit_chatroom_group_membership_store";
+    public static final String TAG_EMIT_CHATROOM_USER_WRITING = "emit_chatroom_user_writing";
+    public static final String TAG_EMIT_CHATROOM_PIN_MESSAGES = "emit_chatroom_pin_messages";
 
     /*
         Listeners
@@ -57,6 +59,8 @@ public class SocketEndpoints {
     public static final String TAG_RECEIVE_CHATROOM_DELETE = "receive_chatroom_delete";
     public static final String TAG_RECEIVE_CHATROOM_GROUP_LEFT = "receive_chatroom_group_left";
     public static final String TAG_RECEIVE_CHATROOM_GROUP_MEMBERSHIP_STORE = "receive_chatroom_group_membership_store";
+    public static final String TAG_RECEIVE_CHATROOM_USER_WRITING = "receive_chatroom_user_writing";
+    public static final String TAG_RECEIVE_CHATROOM_PIN_MESSAGES = "receive_chatroom_pin_messages";
 
 
 }

@@ -13,7 +13,9 @@ import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomGroupMem
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomJoin;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomMembers;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomMessages;
+import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomPinMessages;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomSearch;
+import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomUserWriting;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitChatroomUsernameCheck;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitMessageDelete;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitMessageSeen;
@@ -113,7 +115,7 @@ public class Emitter implements SocketEmitInterface {
 
     @Override
     public void emitChatroomDelete(EmitChatroomDelete emit) {
-        TildaChatApp.getSocket().emit(SocketEndpoints.TAG_EMIT_CHATROOM_DELETE , DataParser.toJson(emit));
+        TildaChatApp.getSocket().emit(SocketEndpoints.TAG_EMIT_CHATROOM_DELETE, DataParser.toJson(emit));
     }
 
     @Override
@@ -126,5 +128,14 @@ public class Emitter implements SocketEmitInterface {
         TildaChatApp.getSocket().emit(SocketEndpoints.TAG_EMIT_CHATROOM_GROUP_MEMBERSHIP_STORE, DataParser.toJson(emit));
     }
 
+    @Override
+    public void emitChatroomUserWriting(EmitChatroomUserWriting emit) {
+        TildaChatApp.getSocket().emit(SocketEndpoints.TAG_EMIT_CHATROOM_USER_WRITING, DataParser.toJson(emit));
+    }
+
+    @Override
+    public void emitChatroomPinMessages(EmitChatroomPinMessages emit) {
+        TildaChatApp.getSocket().emit(SocketEndpoints.TAG_EMIT_CHATROOM_PIN_MESSAGES, DataParser.toJson(emit));
+    }
 
 }

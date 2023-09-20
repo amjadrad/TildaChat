@@ -50,6 +50,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="left"
                 android:text="00:0"
+                android:textColor="@color/colorDark2"
                 android:textSize="@dimen/_10ssp" />
 
         </LinearLayout>
