@@ -3,47 +3,55 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/_10sdp"
-    android:layout_marginTop="@dimen/_10sdp"
-    android:layout_marginRight="@dimen/_10sdp"
+    android:layout_marginLeft="@dimen/_8sdp"
+    android:layout_marginTop="@dimen/_6sdp"
+    android:layout_marginRight="@dimen/_8sdp"
+    android:layout_marginBottom="@dimen/_4sdp"
     android:layoutDirection="rtl"
     tools:ignore="MissingPrefix">
 
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/linearChatMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
+        android:background="@drawable/chat_bubble_send_other"
         android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:lineSpacingExtra="@dimen/_8sdp"
+            android:paddingLeft="@dimen/_10sdp"
+            android:paddingTop="@dimen/_10sdp"
+            android:paddingRight="@dimen/_5sdp"
+            android:paddingBottom="@dimen/_10sdp"
+            android:text="...."
+            android:textColor="@color/colorDark1"
+            android:textStyle="bold" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/chat_bubble_send_other"
-            android:orientation="vertical">
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_3sdp"
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tvMessage"
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvTime"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:lineSpacingExtra="@dimen/_8sdp"
-                android:paddingLeft="@dimen/_10sdp"
-                android:paddingTop="@dimen/_10sdp"
-                android:paddingRight="@dimen/_5sdp"
-                android:paddingBottom="@dimen/_10sdp"
-                android:text="...."
-                android:textColor="@color/colorDark1"
-                android:textStyle="bold" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_4sdp"
+                android:layout_marginRight="@dimen/_4sdp"
+                android:gravity="right"
+                android:text="00:00"
+                android:textColor="@color/colorMutedText"
+                android:textSize="@dimen/_10ssp" />
 
-        </LinearLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <TextView
-            android:id="@+id/tvTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:text="16:48"
-            android:textColor="@color/colorDark2"
-            android:textSize="@dimen/_10ssp" />
-
-    </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

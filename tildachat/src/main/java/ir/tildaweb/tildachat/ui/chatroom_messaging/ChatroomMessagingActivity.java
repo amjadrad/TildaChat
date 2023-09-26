@@ -28,6 +28,7 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.aghajari.emojiview.view.AXEmojiPopup;
 import com.aghajari.emojiview.view.AXEmojiView;
@@ -179,6 +180,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         binding.imageViewImage.setOnClickListener(this);
         binding.imageViewFile.setOnClickListener(this);
         binding.linearUnBlock.setOnClickListener(this);
+        binding.btnGoDown.setOnClickListener(this);
 
         binding.recyclerViewMessages.setLayoutManager(new LinearLayoutManager(this));
         adapterPrivateChatMessages = new AdapterPrivateChatMessages(getApplicationContext(), ChatroomMessagingActivity.this, userId, FILE_URL, binding.recyclerViewMessages, new ArrayList<>(), this, this, typeface);
@@ -187,7 +189,6 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         }
 
         binding.recyclerViewMessages.setAdapter(adapterPrivateChatMessages);
-
         binding.etMessage.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -707,6 +708,12 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     }
 
     @Override
+    public void onShowGoDownButton(boolean show) {
+        binding.btnGoDown.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
+
+    @Override
     public void onCopy() {
         Toast.makeText(this, "کپی شد.", Toast.LENGTH_SHORT).show();
     }
@@ -736,6 +743,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     public void onDelete(Message message) {
         String description = "آیا می خواهید این پیام حذف شود؟";
         DialogConfirmMessage dialogConfirmMessage = new DialogConfirmMessage(ChatroomMessagingActivity.this, "حذف پیام", description);
+        dialogConfirmMessage.setDanger();
         dialogConfirmMessage.setOnCancelClickListener(view -> dialogConfirmMessage.dismiss());
         dialogConfirmMessage.setOnConfirmClickListener(view -> {
             EmitMessageDelete emitMessageDelete = new EmitMessageDelete();
@@ -882,6 +890,8 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             emitUserBlock.setBlockedUserId(getChatroomSecondUserId());
             Log.d(TAG, "onClick: " + DataParser.toJson(emitUserBlock));
             TildaChatApp.getSocketRequestController().emitter().emitUserBlock(emitUserBlock);
+        } else if (view.getId() == binding.btnGoDown.getId()) {
+            binding.recyclerViewMessages.smoothScrollToPosition(adapterPrivateChatMessages.getItemCount() - 1);
         }
     }
 
@@ -1128,7 +1138,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         if (usersAreWriting.size() > 0) {
             if (usersAreWriting.size() > 2) {
                 binding.tvUsersWriting.setText(String.format("%s %s", usersAreWriting.size(), " نفر در حال نوشتن..."));
-            } else if (usersAreWritingIds.size()==2){
+            } else if (usersAreWritingIds.size() == 2) {
                 StringBuilder builder = new StringBuilder();
                 int i = 0;
                 for (String str : usersAreWriting) {
@@ -1139,7 +1149,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                     i++;
                 }
                 binding.tvUsersWriting.setText(String.format("%s %s", builder.toString(), "در حال نوشتن..."));
-            }else{
+            } else {
                 binding.tvUsersWriting.setText(String.format("%s", "در حال نوشتن..."));
             }
         } else {

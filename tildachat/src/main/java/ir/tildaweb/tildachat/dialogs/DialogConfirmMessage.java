@@ -34,7 +34,7 @@ public class DialogConfirmMessage {
 
         binding.tvDescription.setText(description);
         binding.tvTitle.setText(title);
-        binding.btnCancel.setOnClickListener((View.OnClickListener) view -> dismiss());
+        binding.btnCancel.setOnClickListener(view -> dismiss());
     }
 
     public void setDanger() {
