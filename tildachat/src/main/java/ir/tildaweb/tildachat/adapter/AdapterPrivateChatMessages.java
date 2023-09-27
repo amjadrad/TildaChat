@@ -55,6 +55,7 @@ import ir.tildaweb.tildachat.databinding.ListSocketChatPictureReplytrueMePrivate
 import ir.tildaweb.tildachat.databinding.ListSocketChatPictureReplytrueOtherGroupBinding;
 import ir.tildaweb.tildachat.databinding.ListSocketChatPictureReplytrueOtherPrivateBinding;
 import ir.tildaweb.tildachat.databinding.ListSocketChatSecurePictureReplyfalseMePrivateBinding;
+import ir.tildaweb.tildachat.databinding.ListSocketChatSecurePictureReplyfalseOtherPrivateBinding;
 import ir.tildaweb.tildachat.databinding.ListSocketChatTextReplyfalseMeGroupBinding;
 import ir.tildaweb.tildachat.databinding.ListSocketChatTextReplyfalseMePrivateBinding;
 import ir.tildaweb.tildachat.databinding.ListSocketChatTextReplyfalseOtherGroupBinding;
@@ -510,6 +511,16 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         }
     }
 
+    public static class ChatHolder_SecurePicture_ReplyFalse_Other_Private extends Holder {
+        private final ListSocketChatSecurePictureReplyfalseOtherPrivateBinding binding;
+
+        public ChatHolder_SecurePicture_ReplyFalse_Other_Private(ListSocketChatSecurePictureReplyfalseOtherPrivateBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
+        }
+    }
+
 
     @Override
     public int getItemViewType(int position) {
@@ -608,9 +619,11 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 return new ChatHolder_File_ReplyTrue_Other_Group(ListSocketChatFileReplytrueOtherGroupBinding.inflate(LayoutInflater.from(context), parent, false));
             case 31221://channel todo
                 return new ChatHolder_File_ReplyFalse_Other_Private(ListSocketChatFileReplyfalseOtherPrivateBinding.inflate(LayoutInflater.from(context), parent, false));
-            case 51111: {
+            case 51111:
                 return new ChatHolder_SecurePicture_ReplyFalse_Me_Private(ListSocketChatSecurePictureReplyfalseMePrivateBinding.inflate(LayoutInflater.from(context), parent, false));
-            }
+            case 51211:
+                return new ChatHolder_SecurePicture_ReplyFalse_Other_Private(ListSocketChatSecurePictureReplyfalseOtherPrivateBinding.inflate(LayoutInflater.from(context), parent, false));
+
 
         }
 
@@ -2095,7 +2108,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
             }
 
             case 51111: {
-
                 final ChatHolder_SecurePicture_ReplyFalse_Me_Private holder = (ChatHolder_SecurePicture_ReplyFalse_Me_Private) viewHolder;
                 if (typeface != null) {
                     holder.binding.tvTime.setTypeface(typeface);
@@ -2113,10 +2125,28 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         .setBlurRadius(15f);
                 Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.binding.imageView);
                 holder.binding.imageView.setOnClickListener(view -> {
-                    iChatUtils.onDelete(chatMessage);
+//                    iChatUtils.onDelete(chatMessage);//it's me, no need to delete my own message
                     new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show();
                 });
 
+                holder.itemView.setOnClickListener(view -> showPopupMenu(holder.binding.tvTime, chatMessage, true, false, false, false));
+                break;
+            }
+            case 51211: {
+                final ChatHolder_SecurePicture_ReplyFalse_Other_Private holder = (ChatHolder_SecurePicture_ReplyFalse_Other_Private) viewHolder;
+                if (typeface != null) {
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
+                String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
+                DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
+                holder.binding.tvTime.setText(getTime(dateObject));
+                holder.binding.blurView.setupWith(holder.binding.getRoot(), new RenderScriptBlur(context))
+                        .setBlurRadius(15f);
+                Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.binding.imageView);
+                holder.binding.imageView.setOnClickListener(view -> {
+                    iChatUtils.onDelete(chatMessage);
+                    new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show();
+                });
                 holder.itemView.setOnClickListener(view -> showPopupMenu(holder.binding.tvTime, chatMessage, true, false, false, false));
                 break;
             }

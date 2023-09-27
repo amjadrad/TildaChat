@@ -33,9 +33,9 @@ public class Chat extends ChatroomMessagingActivity {
 //        getBinding().tvUserStatus.setText("در حال نوشتن...");
     }
 
-    //    @Override
-//    protected void onSelectPictureClicked() {
-////        super.onSelectPictureClicked();
-//        Log.d(TAG, "onSelectPictureClicked: 0000000000000000");
-//    }
+        @Override
+    protected void onSelectPictureClicked() {
+//        super.onSelectPictureClicked();
+        Log.d(TAG, "onSelectPictureClicked: 0000000000000000");
+    }
 }

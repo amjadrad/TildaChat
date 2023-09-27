@@ -736,10 +736,12 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     @Override
     public void onDelete(Message message) {
         if (message.getMessageType().equals("secure_picture")) {
-            EmitMessageDelete emitMessageDelete = new EmitMessageDelete();
-            emitMessageDelete.setMessageId(message.getId());
-            emitMessageDelete.setRoomId(roomId);
-            TildaChatApp.getSocketRequestController().emitter().emitMessageDelete(emitMessageDelete);
+            if (message.getUserId() != userId.intValue()) {
+                EmitMessageDelete emitMessageDelete = new EmitMessageDelete();
+                emitMessageDelete.setMessageId(message.getId());
+                emitMessageDelete.setRoomId(roomId);
+                TildaChatApp.getSocketRequestController().emitter().emitMessageDelete(emitMessageDelete);
+            }
         } else {
             String description = "آیا می خواهید این پیام حذف شود؟";
             DialogConfirmMessage dialogConfirmMessage = new DialogConfirmMessage(ChatroomMessagingActivity.this, "حذف پیام", description);
