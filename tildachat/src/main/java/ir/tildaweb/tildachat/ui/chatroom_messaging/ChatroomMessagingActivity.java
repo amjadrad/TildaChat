@@ -13,22 +13,16 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.URLUtil;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.aghajari.emojiview.view.AXEmojiPopup;
 import com.aghajari.emojiview.view.AXEmojiView;
@@ -741,19 +735,26 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 
     @Override
     public void onDelete(Message message) {
-        String description = "آیا می خواهید این پیام حذف شود؟";
-        DialogConfirmMessage dialogConfirmMessage = new DialogConfirmMessage(ChatroomMessagingActivity.this, "حذف پیام", description);
-        dialogConfirmMessage.setDanger();
-        dialogConfirmMessage.setOnCancelClickListener(view -> dialogConfirmMessage.dismiss());
-        dialogConfirmMessage.setOnConfirmClickListener(view -> {
+        if (message.getMessageType().equals("secure_picture")) {
             EmitMessageDelete emitMessageDelete = new EmitMessageDelete();
             emitMessageDelete.setMessageId(message.getId());
             emitMessageDelete.setRoomId(roomId);
             TildaChatApp.getSocketRequestController().emitter().emitMessageDelete(emitMessageDelete);
-            dialogConfirmMessage.dismiss();
-        });
+        } else {
+            String description = "آیا می خواهید این پیام حذف شود؟";
+            DialogConfirmMessage dialogConfirmMessage = new DialogConfirmMessage(ChatroomMessagingActivity.this, "حذف پیام", description);
+            dialogConfirmMessage.setDanger();
+            dialogConfirmMessage.setOnCancelClickListener(view -> dialogConfirmMessage.dismiss());
+            dialogConfirmMessage.setOnConfirmClickListener(view -> {
+                EmitMessageDelete emitMessageDelete = new EmitMessageDelete();
+                emitMessageDelete.setMessageId(message.getId());
+                emitMessageDelete.setRoomId(roomId);
+                TildaChatApp.getSocketRequestController().emitter().emitMessageDelete(emitMessageDelete);
+                dialogConfirmMessage.dismiss();
+            });
 
-        dialogConfirmMessage.show();
+            dialogConfirmMessage.show();
+        }
     }
 
     @Override

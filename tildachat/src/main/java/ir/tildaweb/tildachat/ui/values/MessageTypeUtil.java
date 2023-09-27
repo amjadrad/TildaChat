@@ -29,6 +29,9 @@ public class MessageTypeUtil {
             case "voice":
                 type += (messageTypeFactor * 4);
                 break;
+            case "secure_picture":
+                type += (messageTypeFactor * 5);
+                break;
         }
 
         //Reply

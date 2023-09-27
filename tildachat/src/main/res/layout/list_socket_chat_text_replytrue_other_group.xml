@@ -38,11 +38,11 @@
                 android:orientation="horizontal">
 
                 <View
-                    android:layout_width="@dimen/_4sdp"
+                    android:layout_width="@dimen/_2sdp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/_4sdp"
                     android:layout_marginRight="@dimen/_4sdp"
-                    android:background="@drawable/bg_secondary_rounded_default" />
+                    android:background="@color/colorPrimary" />
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardViewReplyPicture"

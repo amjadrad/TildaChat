@@ -16,7 +16,6 @@ import android.os.Looper;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
@@ -36,6 +35,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import eightbitlab.com.blurview.RenderScriptBlur;
 import ir.tildaweb.tildachat.R;
 import ir.tildaweb.tildachat.app.TildaChatApp;
 import ir.tildaweb.tildachat.databinding.ListSocketChatFileReplyfalseMeGroupBinding;
@@ -54,6 +54,7 @@ import ir.tildaweb.tildachat.databinding.ListSocketChatPictureReplytrueMeGroupBi
 import ir.tildaweb.tildachat.databinding.ListSocketChatPictureReplytrueMePrivateBinding;
 import ir.tildaweb.tildachat.databinding.ListSocketChatPictureReplytrueOtherGroupBinding;
 import ir.tildaweb.tildachat.databinding.ListSocketChatPictureReplytrueOtherPrivateBinding;
+import ir.tildaweb.tildachat.databinding.ListSocketChatSecurePictureReplyfalseMePrivateBinding;
 import ir.tildaweb.tildachat.databinding.ListSocketChatTextReplyfalseMeGroupBinding;
 import ir.tildaweb.tildachat.databinding.ListSocketChatTextReplyfalseMePrivateBinding;
 import ir.tildaweb.tildachat.databinding.ListSocketChatTextReplyfalseOtherGroupBinding;
@@ -498,6 +499,18 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         }
     }
 
+    //Secure picture
+    public static class ChatHolder_SecurePicture_ReplyFalse_Me_Private extends Holder {
+        private final ListSocketChatSecurePictureReplyfalseMePrivateBinding binding;
+
+        public ChatHolder_SecurePicture_ReplyFalse_Me_Private(ListSocketChatSecurePictureReplyfalseMePrivateBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
+        }
+    }
+
+
     @Override
     public int getItemViewType(int position) {
         Message chatMessage = chatMessages.get(position);
@@ -517,10 +530,10 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
     @NonNull
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        //Message type (text , picture , file , voice)
-        //Reply (false, true)
-        //User type (me , other)
-        //Chatroom type (private , channel, group)
+        //Message type (text:1, picture:2 , file:3 , voice:4 , secure_picture:5)
+        //Reply (false:1, true:2)
+        //User type (me:1 , other:2)
+        //Chatroom type (private:1 , channel:2, group:3)
 
         //MRUC0(4,2,2,3,0)
 
@@ -595,6 +608,9 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 return new ChatHolder_File_ReplyTrue_Other_Group(ListSocketChatFileReplytrueOtherGroupBinding.inflate(LayoutInflater.from(context), parent, false));
             case 31221://channel todo
                 return new ChatHolder_File_ReplyFalse_Other_Private(ListSocketChatFileReplyfalseOtherPrivateBinding.inflate(LayoutInflater.from(context), parent, false));
+            case 51111: {
+                return new ChatHolder_SecurePicture_ReplyFalse_Me_Private(ListSocketChatSecurePictureReplyfalseMePrivateBinding.inflate(LayoutInflater.from(context), parent, false));
+            }
 
         }
 
@@ -869,6 +885,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 if (typeface != null) {
                     holder.binding.tvMessage.setTypeface(typeface);
                     holder.binding.tvTime.setTypeface(typeface);
+                    holder.binding.tvReplyMessage.setTypeface(typeface);
                 }
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
                 BetterLinkMovementMethod
@@ -931,6 +948,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 if (typeface != null) {
                     holder.binding.tvMessage.setTypeface(typeface);
                     holder.binding.tvTime.setTypeface(typeface);
+                    holder.binding.tvReplyMessage.setTypeface(typeface);
                 }
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
                 BetterLinkMovementMethod
@@ -992,6 +1010,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 if (typeface != null) {
                     holder.binding.tvMessage.setTypeface(typeface);
                     holder.binding.tvTime.setTypeface(typeface);
+                    holder.binding.tvReplyMessage.setTypeface(typeface);
                 }
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
                 BetterLinkMovementMethod
@@ -1050,6 +1069,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 if (typeface != null) {
                     holder.binding.tvMessage.setTypeface(typeface);
                     holder.binding.tvTime.setTypeface(typeface);
+                    holder.binding.tvReplyMessage.setTypeface(typeface);
                 }
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
                 BetterLinkMovementMethod
@@ -1234,6 +1254,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 final ChatHolder_Picture_ReplyTrue_Me_Private holder = (ChatHolder_Picture_ReplyTrue_Me_Private) viewHolder;
                 if (typeface != null) {
                     holder.binding.tvTime.setTypeface(typeface);
+                    holder.binding.tvReplyMessage.setTypeface(typeface);
                 }
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
@@ -1284,6 +1305,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 final ChatHolder_Picture_ReplyTrue_Me_Group holder = (ChatHolder_Picture_ReplyTrue_Me_Group) viewHolder;
                 if (typeface != null) {
                     holder.binding.tvTime.setTypeface(typeface);
+                    holder.binding.tvReplyMessage.setTypeface(typeface);
                 }
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
@@ -1332,6 +1354,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 final ChatHolder_Picture_ReplyTrue_Other_Private holder = (ChatHolder_Picture_ReplyTrue_Other_Private) viewHolder;
                 if (typeface != null) {
                     holder.binding.tvTime.setTypeface(typeface);
+                    holder.binding.tvReplyMessage.setTypeface(typeface);
                 }
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
@@ -1376,6 +1399,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 final ChatHolder_Picture_ReplyTrue_Other_Group holder = (ChatHolder_Picture_ReplyTrue_Other_Group) viewHolder;
                 if (typeface != null) {
                     holder.binding.tvTime.setTypeface(typeface);
+                    holder.binding.tvReplyMessage.setTypeface(typeface);
                 }
                 String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
                 DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
@@ -1713,6 +1737,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 if (typeface != null) {
                     holder.binding.tvMessage.setTypeface(typeface);
                     holder.binding.tvTime.setTypeface(typeface);
+                    holder.binding.tvReplyMessage.setTypeface(typeface);
                 }
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
                 if (chatMessage.getProgress() != null) {
@@ -1808,6 +1833,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 if (typeface != null) {
                     holder.binding.tvMessage.setTypeface(typeface);
                     holder.binding.tvTime.setTypeface(typeface);
+                    holder.binding.tvReplyMessage.setTypeface(typeface);
                 }
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
                 if (chatMessage.getProgress() != null) {
@@ -1904,6 +1930,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 if (typeface != null) {
                     holder.binding.tvMessage.setTypeface(typeface);
                     holder.binding.tvTime.setTypeface(typeface);
+                    holder.binding.tvReplyMessage.setTypeface(typeface);
                 }
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
                 if (chatMessage.getProgress() != null) {
@@ -1983,6 +2010,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 if (typeface != null) {
                     holder.binding.tvMessage.setTypeface(typeface);
                     holder.binding.tvTime.setTypeface(typeface);
+                    holder.binding.tvReplyMessage.setTypeface(typeface);
                 }
                 holder.binding.tvMessage.setText(String.format("%s", chatMessage.getMessage().substring(chatMessage.getMessage().indexOf("_nznv_") + 6)));
                 if (chatMessage.getProgress() != null) {
@@ -2063,6 +2091,33 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 holder.itemView.setOnClickListener(view -> showPopupMenu(holder.binding.tvTime, chatMessage, false, false, false, false));
                 holder.binding.tvMessage.setOnClickListener(view -> holder.itemView.callOnClick());
                 holder.binding.linearChatMessage.setOnClickListener(view -> holder.itemView.callOnClick());
+                break;
+            }
+
+            case 51111: {
+
+                final ChatHolder_SecurePicture_ReplyFalse_Me_Private holder = (ChatHolder_SecurePicture_ReplyFalse_Me_Private) viewHolder;
+                if (typeface != null) {
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
+                String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
+                DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
+                holder.binding.tvTime.setText(getTime(dateObject));
+
+                if (chatMessage.getSeenCount() != 0) {
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
+                } else {
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
+                }
+                holder.binding.blurView.setupWith(holder.binding.getRoot(), new RenderScriptBlur(context))
+                        .setBlurRadius(15f);
+                Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.binding.imageView);
+                holder.binding.imageView.setOnClickListener(view -> {
+                    iChatUtils.onDelete(chatMessage);
+                    new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show();
+                });
+
+                holder.itemView.setOnClickListener(view -> showPopupMenu(holder.binding.tvTime, chatMessage, true, false, false, false));
                 break;
             }
         }

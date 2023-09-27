@@ -50,7 +50,7 @@ dependencies {
         exclude group: 'org.json', module: 'json'
     }
     //GSON
-    implementation 'com.google.code.gson:gson:2.9.1'
+    implementation 'com.google.code.gson:gson:2.10.1'
     //scalable size unit
     implementation 'com.intuit.sdp:sdp-android:1.1.0'
     //scalable size unit for texts
@@ -64,7 +64,7 @@ dependencies {
     //Persian Date Calendar
     implementation 'com.github.hamsaadev:Persian-Date-Picker-Dialog:V1.0'
     //Tilda file picker
-    implementation 'com.github.amjadrad:TildaFilePicker:1.7'
+    implementation 'com.github.amjadrad:TildaFilePicker:1.8'
     //Emoji
     implementation "io.github.aghajari:AXEmojiView:$emojiViewVersion"
     implementation "io.github.aghajari:AXEmojiView-$emojiViewProvider:$emojiViewVersion"
@@ -74,6 +74,8 @@ dependencies {
     implementation 'com.r0adkll:slidableactivity:2.1.0'
     //TextviewLink
     implementation 'me.saket:better-link-movement-method:2.2.0'
+    //Blur
+    implementation 'com.github.Dimezis:BlurView:version-2.0.3'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
