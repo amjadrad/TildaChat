@@ -7,7 +7,9 @@ import android.util.Log;
 
 import androidx.core.content.res.ResourcesCompat;
 
+import ir.tildaweb.tildachat.app.DataParser;
 import ir.tildaweb.tildachat.dialogs.DialogShowPicture;
+import ir.tildaweb.tildachat.models.base_models.Message;
 import ir.tildaweb.tildachat.ui.chatroom_messaging.ChatroomMessagingActivity;
 import tildachatapp.R;
 
@@ -33,9 +35,15 @@ public class Chat extends ChatroomMessagingActivity {
 //        getBinding().tvUserStatus.setText("در حال نوشتن...");
     }
 
-        @Override
+    @Override
     protected void onSelectPictureClicked() {
 //        super.onSelectPictureClicked();
         Log.d(TAG, "onSelectPictureClicked: 0000000000000000");
     }
+
+    @Override
+    protected void onShowPurchasableSecurePictureClicked(Message message) {
+        super.onShowPurchasableSecurePictureClicked(message);
+    }
+
 }

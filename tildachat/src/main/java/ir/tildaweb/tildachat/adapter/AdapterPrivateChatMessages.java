@@ -54,6 +54,8 @@ import ir.tildaweb.tildachat.databinding.ListSocketChatPictureReplytrueMeGroupBi
 import ir.tildaweb.tildachat.databinding.ListSocketChatPictureReplytrueMePrivateBinding;
 import ir.tildaweb.tildachat.databinding.ListSocketChatPictureReplytrueOtherGroupBinding;
 import ir.tildaweb.tildachat.databinding.ListSocketChatPictureReplytrueOtherPrivateBinding;
+import ir.tildaweb.tildachat.databinding.ListSocketChatPurchasableSecurePictureReplyfalseMePrivateBinding;
+import ir.tildaweb.tildachat.databinding.ListSocketChatPurchasableSecurePictureReplyfalseOtherPrivateBinding;
 import ir.tildaweb.tildachat.databinding.ListSocketChatSecurePictureReplyfalseMePrivateBinding;
 import ir.tildaweb.tildachat.databinding.ListSocketChatSecurePictureReplyfalseOtherPrivateBinding;
 import ir.tildaweb.tildachat.databinding.ListSocketChatTextReplyfalseMeGroupBinding;
@@ -521,6 +523,27 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         }
     }
 
+    //Purchasable Secure Picture
+    public static class ChatHolder_PurchasableSecurePicture_ReplyFalse_Me_Private extends Holder {
+        private final ListSocketChatPurchasableSecurePictureReplyfalseMePrivateBinding binding;
+
+        public ChatHolder_PurchasableSecurePicture_ReplyFalse_Me_Private(ListSocketChatPurchasableSecurePictureReplyfalseMePrivateBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
+        }
+    }
+
+    public static class ChatHolder_PurchasableSecurePicture_ReplyFalse_Other_Private extends Holder {
+        private final ListSocketChatPurchasableSecurePictureReplyfalseOtherPrivateBinding binding;
+
+        public ChatHolder_PurchasableSecurePicture_ReplyFalse_Other_Private(ListSocketChatPurchasableSecurePictureReplyfalseOtherPrivateBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
+        }
+    }
+
 
     @Override
     public int getItemViewType(int position) {
@@ -619,10 +642,18 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 return new ChatHolder_File_ReplyTrue_Other_Group(ListSocketChatFileReplytrueOtherGroupBinding.inflate(LayoutInflater.from(context), parent, false));
             case 31221://channel todo
                 return new ChatHolder_File_ReplyFalse_Other_Private(ListSocketChatFileReplyfalseOtherPrivateBinding.inflate(LayoutInflater.from(context), parent, false));
+
+            //Secure picture
             case 51111:
                 return new ChatHolder_SecurePicture_ReplyFalse_Me_Private(ListSocketChatSecurePictureReplyfalseMePrivateBinding.inflate(LayoutInflater.from(context), parent, false));
             case 51211:
                 return new ChatHolder_SecurePicture_ReplyFalse_Other_Private(ListSocketChatSecurePictureReplyfalseOtherPrivateBinding.inflate(LayoutInflater.from(context), parent, false));
+
+            //Purchasable Secure picture
+            case 61111:
+                return new ChatHolder_PurchasableSecurePicture_ReplyFalse_Me_Private(ListSocketChatPurchasableSecurePictureReplyfalseMePrivateBinding.inflate(LayoutInflater.from(context), parent, false));
+            case 61211:
+                return new ChatHolder_PurchasableSecurePicture_ReplyFalse_Other_Private(ListSocketChatPurchasableSecurePictureReplyfalseOtherPrivateBinding.inflate(LayoutInflater.from(context), parent, false));
 
 
         }
@@ -704,18 +735,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
         });
 
-//        int colorWhite = ContextCompat.getColor(context, R.color.colorWhite);
-//        int colorDark2 = ContextCompat.getColor(context, R.color.colorDark2);
-
         switch (viewHolder.getItemViewType()) {
-
-            case 1: {
-//                ChatHolder_Upload holder = (ChatHolder_Upload) viewHolder;
-//                holder.tvMessage.setText(String.format("%s", chatMessage.getMessage()));
-//                holder.tvPercent.setText(String.format("%s%s", chatMessage.getPercent(), "%"));
-
-                break;
-            }
             case 11111: {
                 ChatHolder_Text_ReplyFalse_Me_Private holder = (ChatHolder_Text_ReplyFalse_Me_Private) viewHolder;
                 if (typeface != null) {
@@ -750,9 +770,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 holder.binding.linearChatMessage.setOnClickListener(view -> holder.itemView.callOnClick());
                 break;
             }
-//                         case 11121:
-//                return null;
-//            ChatHolder_Text_ReplyFalse_Me_Group
             case 11131: {
                 ChatHolder_Text_ReplyFalse_Me_Group holder = (ChatHolder_Text_ReplyFalse_Me_Group) viewHolder;
                 if (typeface != null) {
@@ -786,8 +803,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 holder.itemView.setOnClickListener(view -> showPopupMenu(holder.binding.tvTime, chatMessage, true, true, false, false));
                 break;
             }
-
-//            ChatHolder_Text_ReplyFalse_Other_Private
             case 11211: {
                 ChatHolder_Text_ReplyFalse_Other_Private holder = (ChatHolder_Text_ReplyFalse_Other_Private) viewHolder;
                 if (typeface != null) {
@@ -845,10 +860,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 holder.binding.linearChatMessage.setOnClickListener(view -> holder.itemView.callOnClick());
                 break;
             }
-
-//            case 11221:
-//                return null;
-//            ChatHolder_Text_ReplyFalse_Other_Group
             case 11231: {
                 ChatHolder_Text_ReplyFalse_Other_Group holder = (ChatHolder_Text_ReplyFalse_Other_Group) viewHolder;
                 if (typeface != null) {
@@ -892,7 +903,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 holder.binding.linearChatMessage.setOnClickListener(view -> holder.itemView.callOnClick());
                 break;
             }
-//            ChatHolder_Text_ReplyTrue_Me_Private
             case 12111: {
                 ChatHolder_Text_ReplyTrue_Me_Private holder = (ChatHolder_Text_ReplyTrue_Me_Private) viewHolder;
                 if (typeface != null) {
@@ -953,9 +963,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 holder.binding.linearChatMessage.setOnClickListener(view -> holder.itemView.callOnClick());
                 break;
             }
-//            case 12121:
-//                return null;
-//            ChatHolder_Text_ReplyTrue_Me_Group
             case 12131: {
                 ChatHolder_Text_ReplyTrue_Me_Group holder = (ChatHolder_Text_ReplyTrue_Me_Group) viewHolder;
                 if (typeface != null) {
@@ -1016,8 +1023,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 holder.binding.linearChatMessage.setOnClickListener(view -> holder.itemView.callOnClick());
                 break;
             }
-
-//            ChatHolder_Text_ReplyTrue_Other_Private
             case 12211: {
                 ChatHolder_Text_ReplyTrue_Other_Private holder = (ChatHolder_Text_ReplyTrue_Other_Private) viewHolder;
                 if (typeface != null) {
@@ -1074,9 +1079,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 break;
 
             }
-//            case 12221:
-//
-//            ChatHolder_Text_ReplyTrue_Other_Group
             case 12231: {
                 ChatHolder_Text_ReplyTrue_Other_Group holder = (ChatHolder_Text_ReplyTrue_Other_Group) viewHolder;
                 if (typeface != null) {
@@ -1149,7 +1151,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 break;
             }
 
-//            ChatHolder_Picture_ReplyFalse_Me_Private
             case 21111: {
 
                 final ChatHolder_Picture_ReplyFalse_Me_Private holder = (ChatHolder_Picture_ReplyFalse_Me_Private) viewHolder;
@@ -1171,9 +1172,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 holder.itemView.setOnClickListener(view -> showPopupMenu(holder.binding.tvTime, chatMessage, true, false, false, false));
                 break;
             }
-//            case 21121:
-//
-//            ChatHolder_Picture_ReplyFalse_Me_Group
             case 21131: {
                 final ChatHolder_Picture_ReplyFalse_Me_Group holder = (ChatHolder_Picture_ReplyFalse_Me_Group) viewHolder;
                 if (typeface != null) {
@@ -1195,8 +1193,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 holder.itemView.setOnClickListener(view -> showPopupMenu(holder.binding.tvTime, chatMessage, true, false, false, false));
                 break;
             }
-
-//            ChatHolder_Picture_ReplyFalse_Other_Private
             case 21211: {
                 final ChatHolder_Picture_ReplyFalse_Other_Private holder = (ChatHolder_Picture_ReplyFalse_Other_Private) viewHolder;
                 if (typeface != null) {
@@ -1229,9 +1225,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 holder.binding.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
                 break;
             }
-//            case 21221:
-//
-//            ChatHolder_Picture_ReplyFalse_Other_Group
             case 21231: {
                 final ChatHolder_Picture_ReplyFalse_Other_Group holder = (ChatHolder_Picture_ReplyFalse_Other_Group) viewHolder;
                 if (typeface != null) {
@@ -1261,8 +1254,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 holder.itemView.setOnClickListener(view -> showPopupMenu(holder.binding.tvTime, chatMessage, false, false, false, false));
                 break;
             }
-
-//            ChatHolder_Picture_ReplyTrue_Me_Private
             case 22111: {
                 final ChatHolder_Picture_ReplyTrue_Me_Private holder = (ChatHolder_Picture_ReplyTrue_Me_Private) viewHolder;
                 if (typeface != null) {
@@ -1310,10 +1301,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 holder.itemView.setOnClickListener(view -> showPopupMenu(holder.binding.tvTime, chatMessage, true, false, false, false));
                 break;
             }
-
-//            case 22121:
-//
-//            ChatHolder_Picture_ReplyTrue_Me_Group
             case 22131: {
                 final ChatHolder_Picture_ReplyTrue_Me_Group holder = (ChatHolder_Picture_ReplyTrue_Me_Group) viewHolder;
                 if (typeface != null) {
@@ -1361,8 +1348,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 holder.itemView.setOnClickListener(view -> showPopupMenu(holder.binding.tvTime, chatMessage, true, false, false, false));
                 break;
             }
-
-//            ChatHolder_Picture_ReplyTrue_Other_Private
             case 22211: {
                 final ChatHolder_Picture_ReplyTrue_Other_Private holder = (ChatHolder_Picture_ReplyTrue_Other_Private) viewHolder;
                 if (typeface != null) {
@@ -1405,9 +1390,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 break;
             }
 
-//            case 22221:
-//
-//            ChatHolder_Picture_ReplyTrue_Other_Group
             case 22231: {
                 final ChatHolder_Picture_ReplyTrue_Other_Group holder = (ChatHolder_Picture_ReplyTrue_Other_Group) viewHolder;
                 if (typeface != null) {
@@ -1680,7 +1662,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 });
                 break;
             }
-
             case 31231: {
                 ChatHolder_File_ReplyFalse_Other_Group holder = (ChatHolder_File_ReplyFalse_Other_Group) viewHolder;
                 if (typeface != null) {
@@ -1744,7 +1725,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 holder.binding.linearChatMessage.setOnClickListener(view -> holder.itemView.callOnClick());
                 break;
             }
-
             case 32111: {
                 ChatHolder_File_ReplyTrue_Me_Private holder = (ChatHolder_File_ReplyTrue_Me_Private) viewHolder;
                 if (typeface != null) {
@@ -1840,7 +1820,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 holder.binding.linearChatMessage.setOnClickListener(view -> holder.itemView.callOnClick());
                 break;
             }
-
             case 32131: {
                 ChatHolder_File_ReplyTrue_Me_Group holder = (ChatHolder_File_ReplyTrue_Me_Group) viewHolder;
                 if (typeface != null) {
@@ -1936,8 +1915,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 holder.binding.linearChatMessage.setOnClickListener(view -> holder.itemView.callOnClick());
                 break;
             }
-
-
             case 32211: {
                 ChatHolder_File_ReplyTrue_Other_Private holder = (ChatHolder_File_ReplyTrue_Other_Private) viewHolder;
                 if (typeface != null) {
@@ -2147,6 +2124,44 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                     iChatUtils.onDelete(chatMessage);
                     new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show();
                 });
+                holder.itemView.setOnClickListener(view -> showPopupMenu(holder.binding.tvTime, chatMessage, true, false, false, false));
+                break;
+            }
+
+            case 61111: {
+                final ChatHolder_PurchasableSecurePicture_ReplyFalse_Me_Private holder = (ChatHolder_PurchasableSecurePicture_ReplyFalse_Me_Private) viewHolder;
+                if (typeface != null) {
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
+                String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
+                DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
+                holder.binding.tvTime.setText(getTime(dateObject));
+
+                if (chatMessage.getSeenCount() != 0) {
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
+                } else {
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
+                }
+                holder.binding.blurView.setupWith(holder.binding.getRoot(), new RenderScriptBlur(context))
+                        .setBlurRadius(15f);
+                Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.binding.imageView);
+                holder.binding.imageView.setOnClickListener(view -> new DialogShowPicture(activity, FILE_URL, chatMessage.getMessage()).show());
+
+                holder.itemView.setOnClickListener(view -> showPopupMenu(holder.binding.tvTime, chatMessage, true, false, false, false));
+                break;
+            }
+            case 61211: {
+                final ChatHolder_PurchasableSecurePicture_ReplyFalse_Other_Private holder = (ChatHolder_PurchasableSecurePicture_ReplyFalse_Other_Private) viewHolder;
+                if (typeface != null) {
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
+                String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
+                DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
+                holder.binding.tvTime.setText(getTime(dateObject));
+                holder.binding.blurView.setupWith(holder.binding.getRoot(), new RenderScriptBlur(context))
+                        .setBlurRadius(15f);
+                Glide.with(context).load(FILE_URL + chatMessage.getMessage()).into(holder.binding.imageView);
+                holder.binding.imageView.setOnClickListener(view -> iChatUtils.onShowPurchasableSecurePicture(chatMessage));
                 holder.itemView.setOnClickListener(view -> showPopupMenu(holder.binding.tvTime, chatMessage, true, false, false, false));
                 break;
             }

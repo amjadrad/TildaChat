@@ -32,6 +32,9 @@ public class MessageTypeUtil {
             case "secure_picture":
                 type += (messageTypeFactor * 5);
                 break;
+            case "purchasable_secure_picture":
+                type += (messageTypeFactor * 6);
+                break;
         }
 
         //Reply

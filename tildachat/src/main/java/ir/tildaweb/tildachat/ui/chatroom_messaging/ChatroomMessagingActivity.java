@@ -759,6 +759,18 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         }
     }
 
+    protected void deleteMessage(int messageId, String roomId) {
+        EmitMessageDelete emitMessageDelete = new EmitMessageDelete();
+        emitMessageDelete.setMessageId(messageId);
+        emitMessageDelete.setRoomId(roomId);
+        TildaChatApp.getSocketRequestController().emitter().emitMessageDelete(emitMessageDelete);
+    }
+
+    @Override
+    public void onShowPurchasableSecurePicture(Message message) {
+        onShowPurchasableSecurePictureClicked(message);
+    }
+
     @Override
     public void onLoadMoreForSearch(int messageId, AdapterPrivateChatMessages.
             SearchType searchType) {
@@ -959,6 +971,10 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     }
 
     protected void onRecordVoiceClicked() {
+
+    }
+
+    protected void onShowPurchasableSecurePictureClicked(Message message) {
 
     }
 
