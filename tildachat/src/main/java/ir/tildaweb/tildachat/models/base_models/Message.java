@@ -31,6 +31,17 @@ public class Message {
     //Local
     @SerializedName("progress")
     private Integer progress;
+    //Additional
+    @SerializedName("price")
+    private float price;
+
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
+    }
 
     public Integer getProgress() {
         return progress;
