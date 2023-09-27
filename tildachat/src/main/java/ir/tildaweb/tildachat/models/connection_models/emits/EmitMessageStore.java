@@ -21,6 +21,16 @@ public class EmitMessageStore extends BaseModel {
     private Integer chatroomId;
     @SerializedName("second_user_id")
     private Integer secondUserId;
+    @SerializedName("price")
+    private float price;
+
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
+    }
 
     public Integer getChatroomId() {
         return chatroomId;
