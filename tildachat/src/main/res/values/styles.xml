@@ -10,7 +10,7 @@
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="fontFamily">@font/yekan_bakh</item>
+        <item name="fontFamily">@font/estedad</item>
         <item name="android:statusBarColor">@color/colorBg</item>
         <item name="colorAccentSoft">@color/colorAccentSoft</item>
         <item name="colorBackground">@color/colorBg</item>

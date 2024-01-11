@@ -4,7 +4,8 @@
     <item>
         <shape>
             <corners android:bottomLeftRadius="@dimen/_5sdp" android:bottomRightRadius="@dimen/_10sdp" android:topLeftRadius="@dimen/_10sdp" android:topRightRadius="@dimen/_10sdp" />
-            <solid android:color="@color/colorPrimarySoft" />
+            <gradient android:startColor="#eeeeff" android:endColor="#e0e0e0ff" />
+<!--            <solid android:color="@color/colorPrimarySoft" />-->
         </shape>
     </item>
 </selector>

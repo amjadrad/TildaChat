@@ -23,6 +23,7 @@
             android:layout_marginLeft="@dimen/_4sdp"
             android:layout_marginTop="@dimen/_3sdp"
             android:layout_marginRight="@dimen/_4sdp"
+            android:background="@drawable/bg_primary_rounded_soft"
             android:clickable="true"
             android:focusable="true"
             android:orientation="horizontal">
@@ -31,8 +32,10 @@
                 android:layout_width="@dimen/_2sdp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/_4sdp"
+                android:layout_marginTop="@dimen/_2sdp"
                 android:layout_marginRight="@dimen/_4sdp"
-                android:background="@color/colorWhite" />
+                android:layout_marginBottom="@dimen/_2sdp"
+                android:background="@color/colorPrimary" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewReplyPicture"
@@ -58,8 +61,8 @@
                 android:layout_marginRight="@dimen/_8sdp"
                 android:singleLine="true"
                 android:text="متن"
-                android:textColor="@color/colorWhite"
-                android:textSize="@dimen/_11ssp" />
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_9ssp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.cardview.widget.CardView
@@ -109,7 +112,7 @@
                         android:layout_gravity="center"
                         android:text="00:00"
                         android:textColor="@color/colorWhite"
-                        android:textSize="12sp" />
+                        android:textSize="@dimen/_9ssp" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </androidx.coordinatorlayout.widget.CoordinatorLayout>

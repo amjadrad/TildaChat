@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="right"
-    android:layout_marginLeft="@dimen/_8sdp"
-    android:layout_marginTop="@dimen/_6sdp"
+    android:layout_marginLeft="@dimen/_80sdp"
+    android:layout_marginTop="@dimen/_2sdp"
     android:layout_marginRight="@dimen/_8sdp"
     android:layout_marginBottom="@dimen/_4sdp"
     android:layoutDirection="rtl"
@@ -16,7 +16,6 @@
         android:id="@+id/linearChatMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
         android:background="@drawable/chat_bubble_send_me"
         android:orientation="vertical">
 
@@ -24,7 +23,10 @@
             android:id="@+id/linearLayoutReply"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_4sdp"
             android:layout_marginTop="@dimen/_3sdp"
+            android:layout_marginRight="@dimen/_4sdp"
+            android:background="@drawable/bg_primary_rounded_soft"
             android:clickable="true"
             android:focusable="true"
             android:orientation="horizontal"
@@ -35,7 +37,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/_4sdp"
                 android:layout_marginRight="@dimen/_4sdp"
-                android:background="@color/white" />
+                android:background="@color/colorPrimary" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewReplyPicture"
@@ -61,8 +63,8 @@
                 android:layout_marginRight="@dimen/_4sdp"
                 android:singleLine="true"
                 android:text="متن"
-                android:textColor="@color/colorWhite"
-                android:textSize="@dimen/_11ssp" />
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_9ssp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -70,15 +72,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:lineSpacingExtra="@dimen/_8sdp"
-            android:paddingLeft="@dimen/_10sdp"
-            android:paddingTop="@dimen/_10sdp"
-            android:paddingRight="@dimen/_5sdp"
-            android:paddingBottom="@dimen/_10sdp"
+            android:paddingLeft="@dimen/_8sdp"
+            android:paddingTop="@dimen/_4sdp"
+            android:paddingRight="@dimen/_8sdp"
+            android:paddingBottom="@dimen/_4sdp"
             android:text="...."
             android:textColor="@color/colorWhite"
             android:textColorHighlight="@color/colorWhite"
             android:textColorLink="@color/colorWhite"
-            android:textStyle="bold" />
+            android:textSize="@dimen/_10ssp"
+            android:textStyle="normal" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="wrap_content"
@@ -106,7 +109,7 @@
                 android:gravity="right"
                 android:text="00:00"
                 android:textColor="@color/colorWhite"
-                android:textSize="@dimen/_10ssp" />
+                android:textSize="@dimen/_9ssp" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.appcompat.widget.LinearLayoutCompat>

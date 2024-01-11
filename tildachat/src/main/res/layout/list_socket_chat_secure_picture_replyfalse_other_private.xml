@@ -88,7 +88,7 @@
                             android:layout_gravity="center"
                             android:text="00:00"
                             android:textColor="@color/colorWhite"
-                            android:textSize="12sp" />
+                            android:textSize="@dimen/_9ssp" />
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
                 </androidx.coordinatorlayout.widget.CoordinatorLayout>

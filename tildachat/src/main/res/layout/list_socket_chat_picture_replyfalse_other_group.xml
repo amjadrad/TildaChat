@@ -64,7 +64,7 @@
                                 android:layout_gravity="center"
                                 android:text="00:00"
                                 android:textColor="@color/colorWhite"
-                                android:textSize="12sp" />
+                                android:textSize="@dimen/_9ssp" />
 
                         </androidx.appcompat.widget.LinearLayoutCompat>
                     </androidx.coordinatorlayout.widget.CoordinatorLayout>
@@ -95,8 +95,8 @@
                     android:gravity="center"
                     android:lines="1"
                     android:maxWidth="@dimen/_32sdp"
-                    android:maxLength="16"
-                    android:text=""
+                    android:maxLength="9"
+                    android:text="نام کاربر"
                     android:textColor="@color/colorMutedText"
                     android:textSize="@dimen/_8ssp" />
             </androidx.appcompat.widget.LinearLayoutCompat>

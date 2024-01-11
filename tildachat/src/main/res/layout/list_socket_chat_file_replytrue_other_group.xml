@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/_8sdp"
-    android:layout_marginTop="@dimen/_6sdp"
-    android:layout_marginRight="@dimen/_8sdp"
+    android:layout_marginTop="@dimen/_2sdp"
+    android:layout_marginRight="@dimen/_80sdp"
     android:layout_marginBottom="@dimen/_4sdp"
     android:layoutDirection="rtl"
     tools:ignore="MissingPrefix">
@@ -39,6 +39,7 @@
                     android:layout_marginLeft="@dimen/_4sdp"
                     android:layout_marginTop="@dimen/_3sdp"
                     android:layout_marginRight="@dimen/_4sdp"
+                    android:background="@drawable/bg_primary_rounded_soft"
                     android:clickable="true"
                     android:focusable="true"
                     android:orientation="horizontal">
@@ -75,7 +76,7 @@
                         android:singleLine="true"
                         android:text="متن"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="@dimen/_11ssp" />
+                        android:textSize="@dimen/_9ssp" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -83,13 +84,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:lineSpacingExtra="@dimen/_8sdp"
-                    android:paddingLeft="@dimen/_10sdp"
-                    android:paddingTop="@dimen/_10sdp"
-                    android:paddingRight="@dimen/_5sdp"
-                    android:paddingBottom="@dimen/_10sdp"
+                    android:paddingLeft="@dimen/_8sdp"
+                    android:paddingTop="@dimen/_4sdp"
+                    android:paddingRight="@dimen/_8sdp"
+                    android:paddingBottom="@dimen/_4sdp"
                     android:text="..."
                     android:textColor="@color/colorDark1"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/_10ssp"
+                    android:textStyle="normal" />
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="wrap_content"
@@ -109,7 +111,7 @@
                         android:gravity="right"
                         android:text="00:00"
                         android:textColor="@color/colorMutedText"
-                        android:textSize="@dimen/_10ssp" />
+                        android:textSize="@dimen/_9ssp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvProgress"
@@ -120,7 +122,7 @@
                         android:gravity="right"
                         android:text="0%"
                         android:textColor="@color/colorMutedText"
-                        android:textSize="@dimen/_10ssp"
+                        android:textSize="@dimen/_9ssp"
                         android:visibility="gone" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
@@ -203,8 +205,8 @@
                 android:gravity="center"
                 android:lines="1"
                 android:maxWidth="@dimen/_32sdp"
-                android:maxLength="16"
-                android:text=""
+                android:maxLength="9"
+                android:text="نام کاربر"
                 android:textColor="@color/colorMutedText"
                 android:textSize="@dimen/_8ssp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
