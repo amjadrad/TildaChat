@@ -81,7 +81,7 @@
                 android:layout_marginLeft="@dimen/_4sdp"
                 android:layout_marginTop="@dimen/_3sdp"
                 android:layout_marginRight="@dimen/_4sdp"
-                android:background="@drawable/bg_primary_rounded_soft"
+                android:background="@drawable/bg_primary_rounded_soft_for_char"
                 android:clickable="true"
                 android:focusable="true"
                 android:orientation="horizontal">
