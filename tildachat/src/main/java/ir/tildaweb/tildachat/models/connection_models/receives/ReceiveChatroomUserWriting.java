@@ -12,6 +12,26 @@ public class ReceiveChatroomUserWriting {
     private Integer chatroomId;
     @SerializedName("user")
     private User writerUser;
+    @SerializedName("online_users_count")
+    private Integer onlineUsersCount;
+    @SerializedName("is_chatroom_suspended")
+    private Boolean isChatroomSuspended;
+
+    public Boolean getChatroomSuspended() {
+        return isChatroomSuspended;
+    }
+
+    public void setChatroomSuspended(Boolean chatroomSuspended) {
+        isChatroomSuspended = chatroomSuspended;
+    }
+
+    public Integer getOnlineUsersCount() {
+        return onlineUsersCount;
+    }
+
+    public void setOnlineUsersCount(Integer onlineUsersCount) {
+        this.onlineUsersCount = onlineUsersCount;
+    }
 
     public Integer getStatus() {
         return status;

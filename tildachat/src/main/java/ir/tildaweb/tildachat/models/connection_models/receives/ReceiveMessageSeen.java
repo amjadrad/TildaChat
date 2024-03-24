@@ -10,6 +10,36 @@ public class ReceiveMessageSeen {
     private Integer messageId;
     @SerializedName("room_id")
     private String roomId;
+    @SerializedName("user_id")
+    private Integer userId;
+    @SerializedName("is_user_active")
+    private boolean isUserActive;
+    @SerializedName("error")
+    private String error;
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public boolean isUserActive() {
+        return isUserActive;
+    }
+
+    public void setUserActive(boolean userActive) {
+        isUserActive = userActive;
+    }
 
     public Integer getStatus() {
         return status;

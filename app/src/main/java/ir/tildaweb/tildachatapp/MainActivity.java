@@ -34,9 +34,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         socketRequestController = SocketRequestController.getInstance();
-        EmitUserChatrooms emitUserChatrooms = new EmitUserChatrooms();
-        emitUserChatrooms.setUserId(App.userId);
-        emitUserChatrooms.setPage(1);
+//        EmitUserChatrooms emitUserChatrooms = new EmitUserChatrooms();
+//        emitUserChatrooms.setUserId(App.userId);
+//        emitUserChatrooms.setPage(1);
 
 
 //        registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
@@ -68,7 +68,11 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("user_id", App.userId);//184
 //            intent.putExtra("room_id", "group_sp_282_X8Ua3g1i");
 //            intent.putExtra("room_id", "chatroom_1_3");
-            intent.putExtra("username", "amjadrad888");
+            intent.putExtra("is_work_with_fullname", true);
+//            intent.putExtra("username", "ipom_channel");
+//            intent.putExtra("username", "ipom_group");
+//            intent.putExtra("username", "ipom");
+            intent.putExtra("username", "the_master");
             startActivity(intent);
 
         });

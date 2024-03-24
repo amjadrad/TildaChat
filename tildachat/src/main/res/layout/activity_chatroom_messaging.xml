@@ -65,9 +65,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:gravity="right"
+                        android:lines="1"
                         android:text=""
                         android:textColor="@color/colorText"
-                        android:textSize="@dimen/_12ssp"
+                        android:textSize="@dimen/_11ssp"
                         android:textStyle="bold" />
 
                     <androidx.appcompat.widget.AppCompatTextView
@@ -82,18 +83,6 @@
                         android:textDirection="rtl"
                         android:textSize="@dimen/_9ssp" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tvUsersWriting"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/_4sdp"
-                        android:ellipsize="end"
-                        android:gravity="right"
-                        android:lines="1"
-                        android:text=""
-                        android:textColor="@color/colorMutedText"
-                        android:textDirection="rtl"
-                        android:textSize="@dimen/_8ssp" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -115,46 +104,6 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_1sdp"
             android:background="@color/colorLight2" />
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardViewPinMessage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_4sdp"
-            android:outlineAmbientShadowColor="@color/colorText"
-            android:outlineSpotShadowColor="@color/colorText"
-            android:visibility="gone"
-            app:cardBackgroundColor="@color/colorWhite"
-            app:cardCornerRadius="@dimen/_4sdp"
-            app:cardElevation="@dimen/_2sdp"
-            tools:targetApi="p">
-
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="@dimen/_4sdp">
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="@dimen/_12sdp"
-                    android:layout_height="@dimen/_12sdp"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/_4sdp"
-                    app:srcCompat="@drawable/ic_info"
-                    app:tint="@color/colorMutedText" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tvPinMessage"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:maxLines="2"
-                    android:text="این یک پیام پین شده است."
-                    android:textColor="@color/colorText"
-                    android:textSize="@dimen/_10ssp" />
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
-        </androidx.cardview.widget.CardView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewMessages"
@@ -343,7 +292,7 @@
                     app:tint="@color/colorMutedText" />
 
 
-                <EditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/etMessage"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -479,5 +428,73 @@
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </androidx.cardview.widget.CardView>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_48sdp"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewPinMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_4sdp"
+            android:outlineAmbientShadowColor="@color/colorText"
+            android:outlineSpotShadowColor="@color/colorText"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/colorWhite"
+            app:cardCornerRadius="@dimen/_4sdp"
+            app:cardElevation="@dimen/_1sdp"
+            tools:targetApi="p">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/_4sdp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/_12sdp"
+                    android:layout_height="@dimen/_12sdp"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/_4sdp"
+                    app:srcCompat="@drawable/ic_info"
+                    app:tint="@color/colorMutedText" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvPinMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:maxLines="2"
+                    android:text="این یک پیام پین شده است."
+                    android:textColor="@color/colorText"
+                    android:textSize="@dimen/_10ssp" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvUsersWriting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_4sdp"
+            android:layout_marginRight="@dimen/_4sdp"
+            android:layout_marginBottom="@dimen/_4sdp"
+            android:background="@drawable/bg_light_rounded_default"
+            android:ellipsize="end"
+            android:gravity="right"
+            android:lines="1"
+            android:paddingLeft="@dimen/_4sdp"
+            android:paddingRight="@dimen/_4sdp"
+            android:text="در حال نوشتن..."
+            android:textColor="@color/colorMutedText"
+            android:textDirection="rtl"
+            android:textSize="@dimen/_8ssp"
+            android:visibility="gone" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

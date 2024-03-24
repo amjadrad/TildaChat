@@ -16,6 +16,7 @@ import android.os.Looper;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
@@ -107,6 +108,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
     private static FontUtils fontUtils;
     private Typeface typeface = null;
     private boolean isDarkMode = false;
+    private boolean isUserReadPreviousMessage = false;
 
 
     public AdapterPrivateChatMessages(Context context, Activity activity, int userId, String FILE_URL, RecyclerView recyclerView, ArrayList<Message> chatMessages, LoadMoreData loadMoreData, IChatUtils iChatUtils, Typeface typeface) {
@@ -149,7 +151,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         }
                     }
                     if (loadMoreData != null) {
-                        loadMoreData.onShowGoDownButton(linearLayoutManager.findLastCompletelyVisibleItemPosition() - getItemCount() < -20);
+                        loadMoreData.onShowGoDownButton(linearLayoutManager.findLastCompletelyVisibleItemPosition() - getItemCount() < -4);
                     }
                 }
             });
@@ -168,6 +170,10 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
 
     public void setDarkMode() {
         this.isDarkMode = true;
+    }
+
+    public void setUserReadPreviousMessage(boolean isUserReadPreviousMessage) {
+        this.isUserReadPreviousMessage = isUserReadPreviousMessage;
     }
 
     //Text
@@ -2175,7 +2181,9 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
     public void addItem(Message message) {
         this.chatMessages.add(message);
         notifyItemInserted(chatMessages.size() - 1);
-        this.recyclerView.smoothScrollToPosition(chatMessages.size() - 1);
+        if (!isUserReadPreviousMessage) {
+            this.recyclerView.smoothScrollToPosition(chatMessages.size() - 1);
+        }
     }
 
     public void deleteItem(Integer messageId) {

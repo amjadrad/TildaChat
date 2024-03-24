@@ -27,10 +27,10 @@ public class Chat extends ChatroomMessagingActivity {
         super.onCreate(savedInstanceState);
         showEmojiButton(false);
         showFileButton(false);
-//        setMaxMessageLength(5);
-//        setMessageTimer(5);
+        setMaxMessageLength(32);
+        setMessageTimer(5);
 //        setFont(ResourcesCompat.getFont(Chat.this , R.font.kalameh));
-//        setDarkMode(Color.parseColor("#292424"), Color.parseColor("#494444"));
+        setDarkMode(Color.parseColor("#292424"), Color.parseColor("#494444"));
 //        setPinMessage("پیام پین شده");
 //        getBinding().tvUserStatus.setText("در حال نوشتن...");
     }

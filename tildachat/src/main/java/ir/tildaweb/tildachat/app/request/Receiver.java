@@ -46,7 +46,7 @@ public class Receiver implements SocketReceiverInterface {
     @Override
     public <T> void receiveMessageStore(@Nullable Activity activityForRunOnUI, Class<T> receiveModel, OnReceiveListener<T> onReceiveListener) {
         TildaChatApp.getSocket().on(SocketEndpoints.TAG_RECEIVE_MESSAGE_STORE, args -> {
-            Log.d(TAG, "receiveMessageStore: " + args[0]);
+//            Log.d(TAG, "receiveMessageStore: " + args[0]);
             try {
                 T t = (T) DataParser.fromJson(String.valueOf(args[0]), receiveModel);
                 if (activityForRunOnUI != null) {
@@ -89,7 +89,7 @@ public class Receiver implements SocketReceiverInterface {
     @Override
     public <T> void receiveMessageSeen(@Nullable Activity activityForRunOnUI, Class<T> receiveModel, OnReceiveListener<T> onReceiveListener) {
         TildaChatApp.getSocket().on(SocketEndpoints.TAG_RECEIVE_MESSAGE_SEEN, args -> {
-            Log.d(TAG, "receiveMessageSeen: " + args[0]);
+//            Log.d(TAG, "receiveMessageSeen: " + args[0]);
             T t = (T) DataParser.fromJson(String.valueOf(args[0]), receiveModel);
             if (activityForRunOnUI != null) {
                 activityForRunOnUI.runOnUiThread(() -> onReceiveListener.onReceive(t));
@@ -314,7 +314,7 @@ public class Receiver implements SocketReceiverInterface {
     @Override
     public <T> void receiveChatroomUserWriting(@Nullable Activity activityForRunOnUI, Class<T> receiveModel, OnReceiveListener<T> onReceiveListener) {
         TildaChatApp.getSocket().on(SocketEndpoints.TAG_RECEIVE_CHATROOM_USER_WRITING, args -> {
-            Log.d(TAG, "receiveChatroomUserWriting: " + args[0]);
+//            Log.d(TAG, "receiveChatroomUserWriting: " + args[0]);
             T t = (T) DataParser.fromJson(String.valueOf(args[0]), receiveModel);
             if (activityForRunOnUI != null) {
                 activityForRunOnUI.runOnUiThread(() -> onReceiveListener.onReceive(t));

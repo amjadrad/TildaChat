@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -108,6 +109,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     private ArrayList<Integer> usersAreWritingIds = new ArrayList<>();
     private Handler handlerUsersAreWriting;
     private Runnable runnableUsersAreWriting;
+    private int membersCount = 1;
 
 
     //Swipe to finish
@@ -160,7 +162,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 
         runnableUsersAreWriting = this::setUsersWriting;
         handlerUsersAreWriting = new Handler();
-        handlerUsersAreWriting.postDelayed(runnableUsersAreWriting, 1500);
+        handlerUsersAreWriting.postDelayed(runnableUsersAreWriting, 2000);
 
         binding.imageViewMenu.setOnClickListener(this);
         binding.etMessage.setOnClickListener(this);
@@ -183,6 +185,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         }
 
         binding.recyclerViewMessages.setAdapter(adapterPrivateChatMessages);
+        binding.etMessage.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxMessageLength)});
         binding.etMessage.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -200,10 +203,12 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                     } else {
                         binding.imageViewSend.setVisibility(View.GONE);
                     }
-                    EmitChatroomUserWriting emitChatroomUserWriting = new EmitChatroomUserWriting();
-                    emitChatroomUserWriting.setUserId(userId);
-                    emitChatroomUserWriting.setChatroomId(chatroomId);
-                    TildaChatApp.getSocketRequestController().emitter().emitChatroomUserWriting(emitChatroomUserWriting);
+                    if (charSequence.toString().length() % 3 == 0) {
+                        EmitChatroomUserWriting emitChatroomUserWriting = new EmitChatroomUserWriting();
+                        emitChatroomUserWriting.setUserId(userId);
+                        emitChatroomUserWriting.setChatroomId(chatroomId);
+                        TildaChatApp.getSocketRequestController().emitter().emitChatroomUserWriting(emitChatroomUserWriting);
+                    }
                 } else {
                     if (isShowFile)
                         binding.imageViewFile.setVisibility(View.VISIBLE);
@@ -257,6 +262,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         if (binding != null) {
 
             binding.etMessage.setTextColor(ContextCompat.getColor(ChatroomMessagingActivity.this, R.color.colorWhite));
+            binding.tvMessageTimer.setTextColor(ContextCompat.getColor(ChatroomMessagingActivity.this, R.color.colorWhite));
             binding.tvUserName.setTextColor(ContextCompat.getColor(ChatroomMessagingActivity.this, R.color.colorWhite));
             binding.tvUserStatus.setTextColor(ContextCompat.getColor(ChatroomMessagingActivity.this, R.color.colorWhite));
             binding.tvPinMessage.setTextColor(ContextCompat.getColor(ChatroomMessagingActivity.this, R.color.colorWhite));
@@ -289,7 +295,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         }
         if (roomType.equals("channel")) {
             if (isAdmin != null && isAdmin) {
-                Log.d(TAG, "setSocketListeners: is admin, show chat box");
+//                Log.d(TAG, "setSocketListeners: is admin, show chat box");
                 binding.linearChatBox.setVisibility(View.VISIBLE);
             } else {
                 binding.linearChatBox.setVisibility(View.GONE);
@@ -307,7 +313,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 
     protected void setSocketListeners() {
         TildaChatApp.getSocketRequestController().receiver().receiveChatroomCheck(ChatroomMessagingActivity.this, ReceiveChatroomCheck.class, response -> {
-            Log.d(TAG, "setSocketListeners: CheckChatroom: " + DataParser.toJson(response));
+//            Log.d(TAG, "setSocketListeners: CheckChatroom: " + DataParser.toJson(response));
             if (response != null) {
                 receiveChatroomCheck = response;
                 if (response.getChatroom() != null) {
@@ -336,6 +342,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                             chatroomId = response.getChatroom().getId();
                             roomId = response.getChatroom().getRoomId();
                             binding.linearChatBox.setVisibility(View.VISIBLE);
+                            membersCount = response.getMemberCount();
                             binding.tvUserStatus.setText(String.format("%s %s", MathUtils.convertNumberToKilo(response.getMemberCount()), "عضو"));
                             binding.linearJoinChannel.setVisibility(View.VISIBLE);
                             setChatroomInfo();
@@ -350,6 +357,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                             chatroomId = response.getChatroom().getId();
                             roomId = response.getChatroom().getRoomId();
                             binding.linearChatBox.setVisibility(View.VISIBLE);
+                            membersCount = response.getMemberCount();
                             binding.tvUserStatus.setText(String.format("%s %s", MathUtils.convertNumberToKilo(response.getMemberCount()), "عضو"));
                             setChatroomInfo();
                             join();
@@ -430,6 +438,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                             chatroomId = response.getChatroom().getId();
                             roomId = response.getChatroom().getRoomId();
                             binding.linearChatBox.setVisibility(View.VISIBLE);
+                            membersCount = response.getMemberCount();
                             binding.tvUserStatus.setText(String.format("%s %s", MathUtils.convertNumberToKilo(response.getMemberCount()), "عضو"));
                             setChatroomInfo();
                             join();
@@ -468,6 +477,8 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                         lastPage = nextPage;
                         adapterPrivateChatMessages.addItems(nextPage, response.getMessages());
                         adapterPrivateChatMessages.setLoaded();
+                        adapterPrivateChatMessages.setUserReadPreviousMessage(false);
+                        binding.recyclerViewMessages.smoothScrollToPosition(adapterPrivateChatMessages.getItemCount() - 1);
                         if (isSearchForReply) {
                             adapterPrivateChatMessages.getMessagePosition(searchMessageId, AdapterPrivateChatMessages.SearchType.REPLY);
                         }
@@ -479,7 +490,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         });
 
         TildaChatApp.getSocketRequestController().receiver().receiveMessageStore(this, ReceiveMessageStore.class, response -> {
-            Log.d(TAG, "setSocketListeners:Store.............:  " + DataParser.toJson(response));
+//            Log.d(TAG, "setSocketListeners:Store.............:  " + DataParser.toJson(response));
             if (roomId != null && roomId.equals(response.getRoomId()) || (roomId == null && response.getMessage().getUserId().intValue() == userId)) {
                 if (roomId == null) {//first message
                     roomId = response.getRoomId();
@@ -507,9 +518,16 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         });
 
         TildaChatApp.getSocketRequestController().receiver().receiveMessageSeen(this, ReceiveMessageSeen.class, response -> {
+//            Log.d(TAG, "setSocketListeners:seen " + DataParser.toJson(response));
             if (response.getRoomId().equals(roomId)) {
                 if (response.getStatus() == 200) {
                     adapterPrivateChatMessages.seenItem(response.getMessageId());
+                    if (!response.isUserActive() && response.getRoomId().equals(roomId) && response.getUserId().intValue() == userId) {
+                        Log.d(TAG, "setSocketListeners: " + DataParser.toJson(response));
+                        Log.d(TAG, "setSocketListeners: " + userId);
+                        toast("شما مسدود شده اید.");
+                        finishAffinity();
+                    }
                 }
             }
         });
@@ -523,7 +541,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         });
 
         TildaChatApp.getSocketRequestController().receiver().receiveMessageDelete(this, ReceiveMessageDelete.class, response -> {
-            Log.d(TAG, "setSocketListeners: " + DataParser.toJson(response));
+//            Log.d(TAG, "setSocketListeners: " + DataParser.toJson(response));
             if (response.getRoomId().equals(roomId)) {
                 if (response.getStatus() == 200) {
                     adapterPrivateChatMessages.deleteItem(response.getMessageId());
@@ -532,7 +550,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         });
 
         TildaChatApp.getSocketRequestController().receiver().receiveUserBlock(this, ReceiveUserBlock.class, response -> {
-            Log.d(TAG, "setSocketListeners: " + response);
+//            Log.d(TAG, "setSocketListeners: " + response);
 //            TildaChatApp.getSocketRequestController().emitter().emitChatroomCheck(emitChatroomCheck);
             if (response != null && userId != null && getChatroomSecondUserId() != null) {
                 if (response.getStatus() == 200) {
@@ -550,7 +568,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                     } else if (response.getBlockedUserId().intValue() == userId && response.getBlockerUserId().intValue() == getChatroomSecondUserId()) {
                         receiveChatroomCheck.setAmIBlocked(response.getBlocked());
                         if (response.getBlocked()) {
-                            binding.tvUserStatus.setText("آخرین بازدید، خیلی وقت پیش");
+                            binding.tvUserStatus.setText("بلاک شدی رفت!");
                             binding.linearChatBox.setVisibility(View.GONE);
                             finish();
                         } else {
@@ -565,8 +583,16 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         });
 
         TildaChatApp.getSocketRequestController().receiver().receiveChatroomUserWriting(this, ReceiveChatroomUserWriting.class, response -> {
-            Log.d(TAG, "setSocketListeners:Writing: " + response);
+//            Log.d(TAG, "setSocketListeners:Writing: " + response);
             if (response.getStatus() == 200 && chatroomId != null && response.getChatroomId() == chatroomId.intValue() && response.getWriterUser().getId() != userId.intValue()) {
+                if (!chatroom.getType().equals("private")) {
+                    binding.tvUserStatus.setText(String.format("%s %s، %s %s", membersCount, "عضو", response.getOnlineUsersCount(), "نفر آنلاین"));
+                }
+                if (response.getChatroomSuspended()) {
+                    binding.linearChatBox.setVisibility(View.GONE);
+                } else {
+                    binding.linearChatBox.setVisibility(View.VISIBLE);
+                }
                 if (isWorkWithFullname) {
                     if (chatroom.getType().equals("private")) {
                         usersAreWriting.clear();
@@ -594,7 +620,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         });
 
         TildaChatApp.getSocketRequestController().receiver().receiveChatroomPinMessages(this, ReceiveChatroomPinMessages.class, response -> {
-            Log.d(TAG, "setSocketListeners:PinMessages: " + response);
+//            Log.d(TAG, "setSocketListeners:PinMessages: " + response);
             if (response.getStatus() == 200 && chatroomId != null && response.getChatroomId() == chatroomId.intValue()) {
                 if (response.getChatroomPinMessages().size() > 0) {
                     setPinMessage(response.getChatroomPinMessages().get(0).getMessage().getMessage());
@@ -635,6 +661,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         TildaChatApp.getSocket().off(SocketEndpoints.TAG_RECEIVE_CHATROOM_JOIN);
         TildaChatApp.getSocket().off(SocketEndpoints.TAG_RECEIVE_CHATROOM_MESSAGES);
         TildaChatApp.getSocket().off(SocketEndpoints.TAG_RECEIVE_USER_BLOCK);
+        TildaChatApp.getSocket().off(SocketEndpoints.TAG_RECEIVE_MESSAGE_SEEN);
         super.onBackPressed();
     }
 
@@ -704,8 +731,8 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     @Override
     public void onShowGoDownButton(boolean show) {
         binding.btnGoDown.setVisibility(show ? View.VISIBLE : View.GONE);
+        adapterPrivateChatMessages.setUserReadPreviousMessage(show);
     }
-
 
     @Override
     public void onCopy() {
@@ -792,6 +819,8 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         emitMessageSeen.setUserId(userId);
         emitMessageSeen.setRoomId(roomId);
         emitMessageSeen.setChatroomId(chatroomId);
+        Log.d(TAG, "onMessageSeen: --------------------->");
+        Log.d(TAG, "onMessageSeen: " + DataParser.toJson(emitMessageSeen));
         TildaChatApp.getSocketRequestController().emitter().emitMessageSeen(emitMessageSeen);
     }
 
@@ -896,6 +925,9 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                 binding.imageViewEmoji.setImageDrawable(ContextCompat.getDrawable(ChatroomMessagingActivity.this, R.drawable.ic_smile));
                 emojiPopup.dismiss();
             }
+            if (binding.btnGoDown.getVisibility() != View.VISIBLE) {
+                binding.recyclerViewMessages.smoothScrollToPosition(adapterPrivateChatMessages.getItemCount() - 1);
+            }
         } else if (id == binding.imageViewMenu.getId()) {
             onMoreClicked();
         } else if (id == binding.linearUnBlock.getId()) {
@@ -906,6 +938,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             Log.d(TAG, "onClick: " + DataParser.toJson(emitUserBlock));
             TildaChatApp.getSocketRequestController().emitter().emitUserBlock(emitUserBlock);
         } else if (view.getId() == binding.btnGoDown.getId()) {
+            adapterPrivateChatMessages.setUserReadPreviousMessage(false);
             binding.recyclerViewMessages.smoothScrollToPosition(adapterPrivateChatMessages.getItemCount() - 1);
         }
     }
@@ -1068,6 +1101,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 
     public void setMaxMessageLength(int maxMessageLength) {
         this.maxMessageLength = maxMessageLength;
+        binding.etMessage.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxMessageLength)});
     }
 
     public void setMessageTimer(int timerInSeconds) {
@@ -1155,6 +1189,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 
     private void setUsersWriting() {
         if (usersAreWriting.size() > 0) {
+            binding.tvUsersWriting.setVisibility(View.VISIBLE);
             if (usersAreWriting.size() > 2) {
                 binding.tvUsersWriting.setText(String.format("%s %s", usersAreWriting.size(), " نفر در حال نوشتن..."));
             } else if (usersAreWritingIds.size() == 2) {
@@ -1172,11 +1207,12 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                 binding.tvUsersWriting.setText(String.format("%s", "در حال نوشتن..."));
             }
         } else {
+            binding.tvUsersWriting.setVisibility(View.GONE);
             binding.tvUsersWriting.setText("");
         }
         usersAreWriting.clear();
         usersAreWritingIds.clear();
-        handlerUsersAreWriting.postDelayed(runnableUsersAreWriting, 1500);
+        handlerUsersAreWriting.postDelayed(runnableUsersAreWriting, 2000);
     }
 
 
