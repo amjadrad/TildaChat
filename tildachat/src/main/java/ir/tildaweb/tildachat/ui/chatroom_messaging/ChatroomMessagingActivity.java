@@ -586,10 +586,10 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 
         TildaChatApp.getSocketRequestController().receiver().receiveChatroomUserWriting(this, ReceiveChatroomUserWriting.class, response -> {
 //            Log.d(TAG, "setSocketListeners:Writing: " + response);
-            if (!chatroom.getType().equals("private")) {
+            if (response.getStatus() == 200 && chatroomId != null && response.getChatroomId() == chatroomId.intValue() && chatroom != null && !chatroom.getType().equals("private")) {
                 binding.tvUserStatus.setText(String.format("%s %s، %s %s", membersCount, "عضو", response.getOnlineUsersCount(), "نفر آنلاین"));
             }
-            if (response.getStatus() == 200 && chatroomId != null && response.getChatroomId() == chatroomId.intValue() && response.getWriterUser().getId() != userId.intValue()) {
+            if (response.getStatus() == 200 && chatroomId != null && response.getChatroomId() == chatroomId.intValue() && chatroom != null && response.getWriterUser().getId() != userId.intValue()) {
                 if (response.getChatroomSuspended()) {
                     binding.linearChatBox.setVisibility(View.GONE);
                 } else {
@@ -870,7 +870,6 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                 toast("حداکثر تعداد ایموجی " + maxEmojiCount + " عدد می باشد.");
                 return;
             }
-
 
 
             emojiPopup.dismiss();
