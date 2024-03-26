@@ -409,10 +409,12 @@
         android:layout_height="@dimen/_32sdp"
         android:layout_gravity="bottom|left"
         android:layout_marginLeft="@dimen/_8sdp"
-        android:layout_marginBottom="@dimen/_72sdp"
-        android:visibility="gone"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:layout_marginRight="@dimen/_8sdp"
+        android:layout_marginBottom="@dimen/_88sdp"
+        android:visibility="visible"
         app:cardBackgroundColor="@color/colorLight2"
-        app:cardCornerRadius="@dimen/_10sdp"
+        app:cardCornerRadius="@dimen/_4sdp"
         app:cardElevation="@dimen/_4sdp">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout

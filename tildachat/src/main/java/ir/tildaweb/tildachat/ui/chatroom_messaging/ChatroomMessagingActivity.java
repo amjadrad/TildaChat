@@ -101,7 +101,9 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     //Image File
     private int PICK_IMAGE_PERMISSION_CODE = 1001;
     private int PICK_FILE_PERMISSION_CODE = 1003;
-    private int maxMessageLength = 1024;
+    private int maxMessageLength = 10240;
+    private int maxEmojiCount = 255;
+    private int maxNewLineCount = 255;
     private int messageTimer = -1;
     private boolean isMessageTimerOn = false;
     private boolean isShowVoice = true, isShowFile = true, isShowPicture = true;
@@ -584,10 +586,10 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 
         TildaChatApp.getSocketRequestController().receiver().receiveChatroomUserWriting(this, ReceiveChatroomUserWriting.class, response -> {
 //            Log.d(TAG, "setSocketListeners:Writing: " + response);
+            if (!chatroom.getType().equals("private")) {
+                binding.tvUserStatus.setText(String.format("%s %s، %s %s", membersCount, "عضو", response.getOnlineUsersCount(), "نفر آنلاین"));
+            }
             if (response.getStatus() == 200 && chatroomId != null && response.getChatroomId() == chatroomId.intValue() && response.getWriterUser().getId() != userId.intValue()) {
-                if (!chatroom.getType().equals("private")) {
-                    binding.tvUserStatus.setText(String.format("%s %s، %s %s", membersCount, "عضو", response.getOnlineUsersCount(), "نفر آنلاین"));
-                }
                 if (response.getChatroomSuspended()) {
                     binding.linearChatBox.setVisibility(View.GONE);
                 } else {
@@ -852,6 +854,25 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             if (message.length() > maxMessageLength) {
                 message = message.substring(0, maxMessageLength);
             }
+
+            int countNewLine = message.length() - message.replace("\n", "").length();
+            if (countNewLine > maxNewLineCount) {
+                toast("حداکثر تعداد خط جدید (اینتر زدن) " + maxNewLineCount + " عدد می باشد.");
+                return;
+            }
+            int countEmoji = 0;
+            for (int k = 0; k < message.length(); k++) {
+                if (message.codePointAt(k) > 100000) {
+                    countEmoji++;
+                }
+            }
+            if (countEmoji > maxEmojiCount) {
+                toast("حداکثر تعداد ایموجی " + maxEmojiCount + " عدد می باشد.");
+                return;
+            }
+
+
+
             emojiPopup.dismiss();
             if (message.length() > 0) {
                 if (isUpdate) {
@@ -1102,6 +1123,14 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     public void setMaxMessageLength(int maxMessageLength) {
         this.maxMessageLength = maxMessageLength;
         binding.etMessage.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxMessageLength)});
+    }
+
+    public void setMaxEmojiCount(int maxEmojiCount) {
+        this.maxEmojiCount = maxEmojiCount;
+    }
+
+    public void setMaxNewLineCount(int maxNewLineCount) {
+        this.maxNewLineCount = maxNewLineCount;
     }
 
     public void setMessageTimer(int timerInSeconds) {
