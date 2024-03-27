@@ -151,7 +151,7 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                         }
                     }
                     if (loadMoreData != null) {
-                        loadMoreData.onShowGoDownButton(linearLayoutManager.findLastCompletelyVisibleItemPosition() - getItemCount() < -4);
+                        loadMoreData.onShowGoDownButton(linearLayoutManager.findLastCompletelyVisibleItemPosition() - getItemCount() < -10);
                     }
                 }
             });
