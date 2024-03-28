@@ -479,10 +479,11 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
                         lastPage = nextPage;
                         adapterPrivateChatMessages.addItems(nextPage, response.getMessages());
                         adapterPrivateChatMessages.setLoaded();
-                        adapterPrivateChatMessages.setUserReadPreviousMessage(false);
-                        binding.recyclerViewMessages.smoothScrollToPosition(adapterPrivateChatMessages.getItemCount() - 1);
                         if (isSearchForReply) {
                             adapterPrivateChatMessages.getMessagePosition(searchMessageId, AdapterPrivateChatMessages.SearchType.REPLY);
+                        } else {
+                            adapterPrivateChatMessages.setUserReadPreviousMessage(false);
+                            binding.recyclerViewMessages.smoothScrollToPosition(adapterPrivateChatMessages.getItemCount() - 1);
                         }
                     }
                 } else if (response.getStatus() == 404 && adapterPrivateChatMessages.getItemCount() == 0) {
@@ -806,7 +807,9 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
 //        showLoadingFullPage();
         isSearchForReply = searchType == AdapterPrivateChatMessages.SearchType.REPLY;
         searchMessageId = messageId;
-        onLoadMore();
+        if (nextPage < 10) {
+            onLoadMore();
+        }
     }
 
     @Override
@@ -854,6 +857,17 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             if (message.length() > maxMessageLength) {
                 message = message.substring(0, maxMessageLength);
             }
+
+            //Contain immoral content
+            if (roomType.equals("group") && (message.contains("کص")
+                    || message.contains("کیر")
+                    || message.contains("کون")
+                    || message.contains("سکس")
+                    || message.contains("گای"))) {
+                toast("محتوای پیام نامناسب است.");
+                return;
+            }
+
 
             int countNewLine = message.length() - message.replace("\n", "").length();
             if (countNewLine > maxNewLineCount) {
