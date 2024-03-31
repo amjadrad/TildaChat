@@ -859,7 +859,7 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             }
 
             //Contain immoral content
-            if (roomType.equals("group") && (message.contains("کص")
+            if (roomType!=null && roomType.equals("group") && (message.contains("کص")
                     || message.contains("کیر")
                     || message.contains("کون")
                     || message.contains("سکس")
@@ -972,8 +972,10 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             Log.d(TAG, "onClick: " + DataParser.toJson(emitUserBlock));
             TildaChatApp.getSocketRequestController().emitter().emitUserBlock(emitUserBlock);
         } else if (view.getId() == binding.btnGoDown.getId()) {
-            adapterPrivateChatMessages.setUserReadPreviousMessage(false);
-            binding.recyclerViewMessages.smoothScrollToPosition(adapterPrivateChatMessages.getItemCount() - 1);
+            if (adapterPrivateChatMessages != null && adapterPrivateChatMessages.getItemCount() > 0) {
+                adapterPrivateChatMessages.setUserReadPreviousMessage(false);
+                binding.recyclerViewMessages.smoothScrollToPosition(adapterPrivateChatMessages.getItemCount() - 1);
+            }
         }
     }
 
