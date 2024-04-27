@@ -30,6 +30,7 @@
     <color name="colorDark2">#777777</color>
     <color name="colorDark3">#999999</color>
     <color name="colorLight">#ffffff</color>
+    <color name="colorLightSoft">#ffffff</color>
     <color name="colorLight1">#f3f3f3</color>
     <color name="colorLight2">#eeeeee</color>
     <color name="colorLight3">#dddddd</color>
