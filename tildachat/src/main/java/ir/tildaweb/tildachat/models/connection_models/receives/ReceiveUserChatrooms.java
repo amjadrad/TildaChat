@@ -10,6 +10,16 @@ public class ReceiveUserChatrooms {
 
     @SerializedName("data")
     private List<Chatroom> chatrooms;
+    @SerializedName("request_code")
+    private Integer requestCode;
+
+    public Integer getRequestCode() {
+        return requestCode;
+    }
+
+    public void setRequestCode(Integer requestCode) {
+        this.requestCode = requestCode;
+    }
 
     public List<Chatroom> getChatrooms() {
         return chatrooms;
