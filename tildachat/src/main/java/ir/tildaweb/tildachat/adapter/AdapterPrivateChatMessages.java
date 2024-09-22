@@ -16,7 +16,6 @@ import android.os.Looper;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
@@ -67,6 +66,8 @@ import ir.tildaweb.tildachat.databinding.ListSocketChatTextReplytrueMeGroupBindi
 import ir.tildaweb.tildachat.databinding.ListSocketChatTextReplytrueMePrivateBinding;
 import ir.tildaweb.tildachat.databinding.ListSocketChatTextReplytrueOtherGroupBinding;
 import ir.tildaweb.tildachat.databinding.ListSocketChatTextReplytrueOtherPrivateBinding;
+import ir.tildaweb.tildachat.databinding.ListSocketChatVoiceReplyfalseMePrivateBinding;
+import ir.tildaweb.tildachat.databinding.ListSocketChatVoiceReplyfalseOtherPrivateBinding;
 import ir.tildaweb.tildachat.dialogs.DialogShowPicture;
 import ir.tildaweb.tildachat.enums.ChatroomType;
 import ir.tildaweb.tildachat.interfaces.IChatUtils;
@@ -508,6 +509,29 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
         }
     }
 
+    //Voice
+    //Secure picture
+    public static class ChatHolder_Voice_ReplyFalse_Me_Private extends Holder {
+        private final ListSocketChatVoiceReplyfalseMePrivateBinding binding;
+
+        public ChatHolder_Voice_ReplyFalse_Me_Private(ListSocketChatVoiceReplyfalseMePrivateBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
+        }
+    }
+
+    public static class ChatHolder_Voice_ReplyFalse_Other_Private extends Holder {
+        private final ListSocketChatVoiceReplyfalseOtherPrivateBinding binding;
+
+        public ChatHolder_Voice_ReplyFalse_Other_Private(ListSocketChatVoiceReplyfalseOtherPrivateBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            fontUtils.replaceFonts(binding.getRoot());
+        }
+    }
+
+
     //Secure picture
     public static class ChatHolder_SecurePicture_ReplyFalse_Me_Private extends Holder {
         private final ListSocketChatSecurePictureReplyfalseMePrivateBinding binding;
@@ -629,7 +653,6 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 return new ChatHolder_Picture_ReplyTrue_Other_Group(ListSocketChatPictureReplytrueOtherGroupBinding.inflate(LayoutInflater.from(context), parent, false));
 
             //File
-
             case 31111:
                 return new ChatHolder_File_ReplyFalse_Me_Private(ListSocketChatFileReplyfalseMePrivateBinding.inflate(LayoutInflater.from(context), parent, false));
             case 31131:
@@ -648,6 +671,12 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 return new ChatHolder_File_ReplyTrue_Other_Group(ListSocketChatFileReplytrueOtherGroupBinding.inflate(LayoutInflater.from(context), parent, false));
             case 31221://channel todo
                 return new ChatHolder_File_ReplyFalse_Other_Private(ListSocketChatFileReplyfalseOtherPrivateBinding.inflate(LayoutInflater.from(context), parent, false));
+
+            //Voice
+            case 41111:
+                return new ChatHolder_Voice_ReplyFalse_Me_Private(ListSocketChatVoiceReplyfalseMePrivateBinding.inflate(LayoutInflater.from(context), parent, false));
+            case 41211:
+                return new ChatHolder_Voice_ReplyFalse_Other_Private(ListSocketChatVoiceReplyfalseOtherPrivateBinding.inflate(LayoutInflater.from(context), parent, false));
 
             //Secure picture
             case 51111:
@@ -2090,6 +2119,36 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 break;
             }
 
+            case 41111: {
+                final ChatHolder_Voice_ReplyFalse_Me_Private holder = (ChatHolder_Voice_ReplyFalse_Me_Private) viewHolder;
+                if (typeface != null) {
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
+                String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
+                DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
+                holder.binding.tvTime.setText(getTime(dateObject));
+                if (chatMessage.getSeenCount() != 0) {
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_double_check));
+                } else {
+                    holder.binding.imageViewSeen.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_chat_single_check));
+                }
+                holder.binding.coordinatorPlayVoice.setOnClickListener(view -> onPlayVoice(chatMessage));
+                holder.itemView.setOnClickListener(view -> showPopupMenu(holder.binding.tvTime, chatMessage, true, false, false, false));
+                break;
+            }
+            case 41211: {
+                final ChatHolder_Voice_ReplyFalse_Other_Private holder = (ChatHolder_Voice_ReplyFalse_Other_Private) viewHolder;
+                if (typeface != null) {
+                    holder.binding.tvTime.setTypeface(typeface);
+                }
+                String normalizedDate = chatMessage.getCreatedAt().replace(".000Z", "").replace("T", " ");
+                DateUtils.DateObject dateObject = dateHelper.getParsedDate(normalizedDate);
+                holder.binding.tvTime.setText(getTime(dateObject));
+                holder.binding.coordinatorPlayVoice.setOnClickListener(view -> onPlayVoice(chatMessage));
+                holder.itemView.setOnClickListener(view -> showPopupMenu(holder.binding.tvTime, chatMessage, true, false, false, false));
+                break;
+            }
+
             case 51111: {
                 final ChatHolder_SecurePicture_ReplyFalse_Me_Private holder = (ChatHolder_SecurePicture_ReplyFalse_Me_Private) viewHolder;
                 if (typeface != null) {
@@ -2172,6 +2231,10 @@ public class AdapterPrivateChatMessages extends RecyclerView.Adapter<RecyclerVie
                 break;
             }
         }
+    }
+
+    protected void onPlayVoice(Message chatMessage) {
+
     }
 
     public int getItemCount() {

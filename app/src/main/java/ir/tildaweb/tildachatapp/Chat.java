@@ -31,6 +31,7 @@ public class Chat extends ChatroomMessagingActivity {
         setMaxEmojiCount(2);
         setMaxNewLineCount(3);
         setMessageTimer(5);
+        showVoiceButton(true);
 //        setFont(ResourcesCompat.getFont(Chat.this , R.font.kalameh));
 //        setDarkMode(Color.parseColor("#292424"), Color.parseColor("#494444"));
 //        setPinMessage("پیام پین شده");
@@ -48,4 +49,9 @@ public class Chat extends ChatroomMessagingActivity {
         super.onShowPurchasableSecurePictureClicked(message);
     }
 
+    @Override
+    protected void onSendVoiceFile(String voiceFilePath) {
+        super.onSendVoiceFile(voiceFilePath);
+        Log.d(TAG, "onSendVoiceFile: VF:" + voiceFilePath);
+    }
 }

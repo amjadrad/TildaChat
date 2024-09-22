@@ -291,7 +291,6 @@
                     app:srcCompat="@drawable/ic_camera"
                     app:tint="@color/colorMutedText" />
 
-
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/etMessage"
                     android:layout_width="0dp"
@@ -315,6 +314,45 @@
                     android:tint="@color/colorMutedText"
                     app:srcCompat="@drawable/ic_smile"
                     app:tint="@color/colorMutedText" />
+
+                <LinearLayout
+                    android:id="@+id/containerVoiceRecord"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:visibility="gone">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvVoiceTimerNote"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_48sdp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="@dimen/_10sdp"
+                        android:text="در حال ضبط صدا ..."
+                        android:textSize="@dimen/_10ssp"
+                        android:textStyle="bold"
+                        android:visibility="visible" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvVoiceTimer"
+                        android:layout_width="@dimen/_48sdp"
+                        android:layout_height="@dimen/_48sdp"
+                        android:gravity="center"
+                        android:padding="@dimen/_10sdp"
+                        android:text="0s"
+                        android:visibility="visible" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/imageViewCancelVoice"
+                        android:layout_width="@dimen/_48sdp"
+                        android:layout_height="@dimen/_48sdp"
+                        android:padding="@dimen/_14sdp"
+                        android:tint="@color/colorMutedText"
+                        app:srcCompat="@drawable/ic_close"
+                        app:tint="@color/colorMutedText" />
+
+                </LinearLayout>
             </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.cardview.widget.CardView>

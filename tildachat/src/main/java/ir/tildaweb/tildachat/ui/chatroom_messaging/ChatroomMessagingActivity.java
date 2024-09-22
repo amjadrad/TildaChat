@@ -2,14 +2,19 @@ package ir.tildaweb.tildachat.ui.chatroom_messaging;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.media.AudioFormat;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -28,9 +33,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.aghajari.emojiview.view.AXEmojiPopup;
 import com.aghajari.emojiview.view.AXEmojiView;
 import com.bumptech.glide.Glide;
+import com.maple.recorder.recording.AudioChunk;
+import com.maple.recorder.recording.AudioRecordConfig;
+import com.maple.recorder.recording.MsRecorder;
+import com.maple.recorder.recording.PullTransport;
+import com.maple.recorder.recording.Recorder;
 import com.r0adkll.slidr.Slidr;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import ir.tildaweb.tilda_filepicker.TildaFilePicker;
 import ir.tildaweb.tilda_filepicker.enums.FileType;
@@ -112,7 +124,10 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     private Handler handlerUsersAreWriting;
     private Runnable runnableUsersAreWriting;
     private int membersCount = 1;
-
+    private CountDownTimer voiceCountDownTimer;
+    private Recorder voiceRecorder;
+    private String voicePath = null;
+    private boolean isRecordingVoice = false;
 
     //Swipe to finish
 //    private static final int SWIPE_MIN_DISTANCE = 120;
@@ -176,9 +191,16 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
         binding.tvJoinChannel.setOnClickListener(this);
         binding.imageViewSend.setOnClickListener(this);
         binding.imageViewImage.setOnClickListener(this);
+
         binding.imageViewFile.setOnClickListener(this);
         binding.linearUnBlock.setOnClickListener(this);
         binding.btnGoDown.setOnClickListener(this);
+
+        binding.imageViewVoice.setOnLongClickListener(view -> {
+            onRecordVoiceClicked();
+            return false;
+        });
+        binding.imageViewCancelVoice.setOnClickListener(this);
 
         binding.recyclerViewMessages.setLayoutManager(new LinearLayoutManager(this));
         adapterPrivateChatMessages = new AdapterPrivateChatMessages(getApplicationContext(), ChatroomMessagingActivity.this, userId, FILE_URL, binding.recyclerViewMessages, new ArrayList<>(), this, this, typeface);
@@ -853,72 +875,72 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             onBackPressed();
         } else if (id == R.id.imageViewSend) {
             onSendClicked();
-            String message = binding.etMessage.getText().toString().trim();
-            if (message.length() > maxMessageLength) {
-                message = message.substring(0, maxMessageLength);
-            }
-
-            //Contain immoral content
-            if (roomType!=null && roomType.equals("group") && (message.contains("کص")
-                    || message.contains("کیر")
-                    || message.contains("کون")
-                    || message.contains("سکس")
-                    || message.contains("گای"))) {
-                toast("محتوای پیام نامناسب است.");
-                return;
-            }
-
-
-            int countNewLine = message.length() - message.replace("\n", "").length();
-            if (countNewLine > maxNewLineCount) {
-                toast("حداکثر تعداد خط جدید (اینتر زدن) " + maxNewLineCount + " عدد می باشد.");
-                return;
-            }
-            int countEmoji = 0;
-            for (int k = 0; k < message.length(); k++) {
-                if (message.codePointAt(k) > 100000) {
-                    countEmoji++;
+            if (isRecordingVoice) {
+                onSendVoice();
+            } else {
+                String message = binding.etMessage.getText().toString().trim();
+                if (message.length() > maxMessageLength) {
+                    message = message.substring(0, maxMessageLength);
                 }
-            }
-            if (countEmoji > maxEmojiCount) {
-                toast("حداکثر تعداد ایموجی " + maxEmojiCount + " عدد می باشد.");
-                return;
-            }
 
+                //Contain immoral content
+//                if (roomType != null && roomType.equals("group") && (message.contains("کص")
+//                        || message.contains("کیر")
+//                        || message.contains("کون")
+//                        || message.contains("سکس")
+//                        || message.contains("گای"))) {
+//                    toast("محتوای پیام نامناسب است.");
+//                    return;
+//                }
 
-            emojiPopup.dismiss();
-            if (message.length() > 0) {
-                if (isUpdate) {
-                    EmitMessageUpdate emitMessageUpdate = new EmitMessageUpdate();
-                    emitMessageUpdate.setMessage(message);
-                    emitMessageUpdate.setUpdate(isUpdate);
-                    emitMessageUpdate.setRoomId(roomId);
-                    emitMessageUpdate.setMessageId(updateMessageId);
-                    Log.d(TAG, "onClick: " + DataParser.toJson(emitMessageUpdate));
-                    TildaChatApp.getSocketRequestController().emitter().emitMessageUpdate(emitMessageUpdate);
-                    //Reset state
-                    resetUpdate();
-                } else {
-                    EmitMessageStore emitMessageStore = new EmitMessageStore();
-                    emitMessageStore.setType(MessageType.TEXT);
-                    emitMessageStore.setMessage(message);
-                    emitMessageStore.setReplyMessageId(replyMessageId);
-                    emitMessageStore.setUpdate(isUpdate);
-                    emitMessageStore.setChatroomId(chatroomId);
-                    if (roomId != null) {
-                        emitMessageStore.setRoomId(roomId);
-                    } else {
-                        emitMessageStore.setSecondUserId(secondUserId);
+                int countNewLine = message.length() - message.replace("\n", "").length();
+                if (countNewLine > maxNewLineCount) {
+                    toast("حداکثر تعداد خط جدید (اینتر زدن) " + maxNewLineCount + " عدد می باشد.");
+                    return;
+                }
+                int countEmoji = 0;
+                for (int k = 0; k < message.length(); k++) {
+                    if (message.codePointAt(k) > 100000) {
+                        countEmoji++;
                     }
-                    Log.d(TAG, "onClick: " + DataParser.toJson(emitMessageStore));
-                    TildaChatApp.getSocketRequestController().emitter().emitMessageStore(emitMessageStore);
-                    //Reset state
-                    binding.etMessage.setText("");
-                    resetReply();
                 }
+                if (countEmoji > maxEmojiCount) {
+                    toast("حداکثر تعداد ایموجی " + maxEmojiCount + " عدد می باشد.");
+                    return;
+                }
+                emojiPopup.dismiss();
+                if (!message.isEmpty()) {
+                    if (isUpdate) {
+                        EmitMessageUpdate emitMessageUpdate = new EmitMessageUpdate();
+                        emitMessageUpdate.setMessage(message);
+                        emitMessageUpdate.setUpdate(isUpdate);
+                        emitMessageUpdate.setRoomId(roomId);
+                        emitMessageUpdate.setMessageId(updateMessageId);
+                        Log.d(TAG, "onClick: " + DataParser.toJson(emitMessageUpdate));
+                        TildaChatApp.getSocketRequestController().emitter().emitMessageUpdate(emitMessageUpdate);
+                        //Reset state
+                        resetUpdate();
+                    } else {
+                        EmitMessageStore emitMessageStore = new EmitMessageStore();
+                        emitMessageStore.setType(MessageType.TEXT);
+                        emitMessageStore.setMessage(message);
+                        emitMessageStore.setReplyMessageId(replyMessageId);
+                        emitMessageStore.setUpdate(isUpdate);
+                        emitMessageStore.setChatroomId(chatroomId);
+                        if (roomId != null) {
+                            emitMessageStore.setRoomId(roomId);
+                        } else {
+                            emitMessageStore.setSecondUserId(secondUserId);
+                        }
+                        Log.d(TAG, "onClick: " + DataParser.toJson(emitMessageStore));
+                        TildaChatApp.getSocketRequestController().emitter().emitMessageStore(emitMessageStore);
+                        //Reset state
+                        binding.etMessage.setText("");
+                        resetReply();
+                    }
+                }
+                startMessageTimer();
             }
-
-            startMessageTimer();
         } else if (id == R.id.imageViewReplyClose) {
             resetReply();
         } else if (id == R.id.imageViewUpdateClose) {
@@ -930,8 +952,8 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             onSelectPictureClicked();
         } else if (id == R.id.imageViewFile) {
             onSelectFileClicked();
-        } else if (id == R.id.imageViewVoice) {
-            onRecordVoiceClicked();
+        } else if (id == R.id.imageViewCancelVoice) {
+            onCancelVoice();
         } else if (id == R.id.linearChatroomDetails) {
             if (roomType != null && roomType.equals("private")) {
                 if (receiveChatroomCheck != null && receiveChatroomCheck.getAmIBlocked() != null && !receiveChatroomCheck.getAmIBlocked()) {
@@ -940,8 +962,6 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
             } else {
                 onChatDetailsClicked();
             }
-
-
 //            Intent intent = new Intent(ChatroomMessagingActivity.this, ChatroomDetailsActivity.class);
 //            intent.putExtra("room_id", chatroomId);
 //            intent.putExtra("room_name", roomId);
@@ -1040,7 +1060,151 @@ public class ChatroomMessagingActivity extends AppCompatActivity implements View
     }
 
     protected void onRecordVoiceClicked() {
+        Log.d(TAG, "onRecordVoiceClicked: Record voice");
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            v.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            //deprecated in API 26
+            v.vibrate(50);
+        }
 
+        isRecordingVoice = true;
+        binding.containerVoiceRecord.setVisibility(View.VISIBLE);
+        binding.imageViewSend.setVisibility(View.VISIBLE);
+        binding.imageViewVoice.setVisibility(View.GONE);
+        binding.imageViewFile.setVisibility(View.GONE);
+        binding.imageViewEmoji.setVisibility(View.GONE);
+        binding.etMessage.setVisibility(View.GONE);
+        binding.imageViewImage.setVisibility(View.GONE);
+
+        voiceCountDownTimer = new CountDownTimer(60000, 1000) {
+            @Override
+            public void onTick(long l) {
+                binding.tvVoiceTimer.setText(String.format("%s%s", (60000 - l) / 1000, "s"));
+            }
+
+            @Override
+            public void onFinish() {
+                binding.tvVoiceTimer.setText(String.format("%s%s", 60, "s"));
+                binding.tvVoiceTimerNote.setText("حداکثر 60 ثانیه به پایان رسید.");
+//                isMessageTimerOn = false;
+//                binding.tvMessageTimer.setVisibility(View.GONE);
+//                binding.tvMessageTimer.setText(String.format("%s%s", messageTimer, "s"));
+//                binding.imageViewSend.setVisibility(View.VISIBLE);
+            }
+        }.start();
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        voicePath = getVoicePath();
+        voiceRecorder = MsRecorder.wav(
+                new File(voicePath),
+                // new AudioRecordConfig(), // 使用默认配置
+                new AudioRecordConfig(
+                        MediaRecorder.AudioSource.MIC, // 音频源
+                        44100, // 采样率，44100、22050、16000、11025 Hz
+                        AudioFormat.CHANNEL_IN_MONO, // 单声道、双声道/立体声
+                        AudioFormat.ENCODING_PCM_16BIT // 8/16 bit
+                ),
+                new PullTransport.Default()
+                        .setOnAudioChunkPulledListener(audioChunk -> Log.d("数据监听", "最大值: " + audioChunk.maxAmplitude()))
+        );
+
+        voiceRecorder.startRecording(); // 开始
+//        recorder.pauseRecording(); // 暂停
+//        recorder.resumeRecording(); // 重新开始
+
+    }
+
+    protected void onSendVoice() {
+        isRecordingVoice = false;
+        voiceCountDownTimer.cancel();
+        voiceRecorder.stopRecording(); // 结束
+        binding.tvVoiceTimer.setText("0s");
+        binding.containerVoiceRecord.setVisibility(View.GONE);
+        binding.imageViewSend.setVisibility(View.GONE);
+        binding.imageViewEmoji.setVisibility(View.VISIBLE);
+        binding.etMessage.setVisibility(View.VISIBLE);
+        if (isShowFile)
+            binding.imageViewFile.setVisibility(View.VISIBLE);
+        if (isShowVoice)
+            binding.imageViewVoice.setVisibility(View.VISIBLE);
+        if (isShowPicture)
+            binding.imageViewImage.setVisibility(View.VISIBLE);
+
+        //Here we send voice
+        onSendVoiceFile(voicePath);
+//        onActionAfterSendVoice();
+    }
+
+    protected void onSendVoiceFile(String voiceFilePath) {
+
+    }
+
+    protected void onActionAfterSendVoice(String uploadedPath){
+        EmitMessageStore emitMessageStore = new EmitMessageStore();
+        emitMessageStore.setType(MessageType.VOICE);
+        emitMessageStore.setMessage(uploadedPath);
+        emitMessageStore.setReplyMessageId(replyMessageId);
+        emitMessageStore.setUpdate(isUpdate);
+        emitMessageStore.setChatroomId(chatroomId);
+        if (roomId != null) {
+            emitMessageStore.setRoomId(roomId);
+        } else {
+            emitMessageStore.setSecondUserId(secondUserId);
+        }
+        Log.d(TAG, "onClick: " + DataParser.toJson(emitMessageStore));
+        TildaChatApp.getSocketRequestController().emitter().emitMessageStore(emitMessageStore);
+        //Reset state
+        binding.etMessage.setText("");
+        resetReply();
+    }
+
+    private String getVoicePath() {
+        String name = "wav_" + Calendar.getInstance().getTimeInMillis();
+        File saveFile = getApplicationContext().getExternalFilesDir("voices");
+        if (!saveFile.exists()) {
+            saveFile.mkdirs();
+        }
+        String filePath = saveFile.getAbsolutePath() + "/" + name + ".wav";
+        Log.d(TAG, "getVoicePath: " + filePath);
+        return filePath;
+    }
+
+    protected void onCancelVoice() {
+        isRecordingVoice = false;
+        voiceCountDownTimer.cancel();
+        voiceRecorder.stopRecording(); // 结束
+        if (voicePath != null) {
+            try {
+                File fdelete = new File(voicePath);
+                if (fdelete.exists()) {
+                    fdelete.delete();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        binding.tvVoiceTimer.setText("0s");
+        binding.containerVoiceRecord.setVisibility(View.GONE);
+        binding.imageViewSend.setVisibility(View.GONE);
+        binding.imageViewEmoji.setVisibility(View.VISIBLE);
+        binding.etMessage.setVisibility(View.VISIBLE);
+        if (isShowFile)
+            binding.imageViewFile.setVisibility(View.VISIBLE);
+        if (isShowVoice)
+            binding.imageViewVoice.setVisibility(View.VISIBLE);
+        if (isShowPicture)
+            binding.imageViewImage.setVisibility(View.VISIBLE);
     }
 
     protected void onShowPurchasableSecurePictureClicked(Message message) {

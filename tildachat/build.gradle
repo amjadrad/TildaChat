@@ -33,8 +33,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     namespace 'ir.tildaweb.tildachat'
 }
@@ -76,6 +76,8 @@ dependencies {
     implementation 'me.saket:better-link-movement-method:2.2.0'
     //Blur
     implementation 'com.github.Dimezis:BlurView:version-2.0.3'
+    //Voice recorder
+    implementation 'com.github.shaoshuai904:RecordWav:1.2.2'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
