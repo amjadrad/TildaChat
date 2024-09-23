@@ -1,19 +1,13 @@
 package ir.tildaweb.tildachatapp;
 
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.core.content.res.ResourcesCompat;
-
-import ir.tildaweb.tildachat.app.DataParser;
-import ir.tildaweb.tildachat.dialogs.DialogShowPicture;
 import ir.tildaweb.tildachat.models.base_models.Message;
 import ir.tildaweb.tildachat.ui.chatroom_messaging.ChatroomMessagingActivity;
-import tildachatapp.R;
 
-public class Chat extends ChatroomMessagingActivity {
+public class Chat extends
+        ChatroomMessagingActivity {
 
     private final String TAG = this.getClass().getName();
 

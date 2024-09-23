@@ -3,7 +3,7 @@ package ir.tildaweb.tildachatapp;
 import android.app.Application;
 
 import ir.tildaweb.tildachat.app.TildaChatApp;
-import tildachatapp.BuildConfig;
+
 
 public class App extends Application {
 

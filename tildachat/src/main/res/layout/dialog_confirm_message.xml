@@ -83,7 +83,7 @@
                             android:textSize="@dimen/_12ssp"
                             android:textStyle="bold" />
 
-                        <Space
+                        <androidx.legacy.widget.Space
                             android:layout_width="@dimen/_10sdp"
                             android:layout_height="wrap_content" />
 

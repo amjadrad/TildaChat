@@ -29,7 +29,7 @@
                 android:layout_gravity="center"
                 android:orientation="vertical">
 
-                <com.google.android.exoplayer2.ui.PlayerView
+                <androidx.media3.ui.PlayerView
                     android:id="@+id/playerView"
                     android:layout_width="@dimen/_80sdp"
                     android:layout_height="@dimen/_80sdp"
@@ -55,8 +55,8 @@
                         android:src="@drawable/ic_chat_single_check"
                         android:tint="@color/colorWhite" />
 
-                    <Space
-                        android:layout_width="@dimen/_8sdp"
+                    <androidx.legacy.widget.Space
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
 

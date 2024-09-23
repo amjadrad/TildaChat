@@ -19,7 +19,7 @@ import java.io.FileNotFoundException;
 import ir.tildaweb.tildachat.app.request.SocketRequestController;
 import ir.tildaweb.tildachat.models.connection_models.emits.EmitUserChatrooms;
 import ir.tildaweb.tildachat.utils.FileDownloaderNew;
-import tildachatapp.databinding.ActivityMainBinding;
+import ir.tildaweb.tildachatapp.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getName();
