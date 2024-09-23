@@ -6,7 +6,6 @@ plugins {
 
 android {
     compileSdkVersion 34
-    namespace 'tildachatapp'
     namespace "ir.tildaweb.tildachatapp"
 
     defaultConfig {
@@ -14,7 +13,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 34
         versionCode 1
-        versionName "1.3.2"
+        versionName "1.3.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
