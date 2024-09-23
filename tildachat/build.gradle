@@ -4,22 +4,10 @@
 plugins {
     id 'com.android.library'
     id 'maven-publish'
+//    id 'com.github.dcendents.android-maven'
 //    id 'com.google.gms.google-services'
 }
 //group = 'com.github.amjadrad'
-
-afterEvaluate {
-    publishing {
-        publications {
-// Creates a Maven publication called "release".
-            release(MavenPublication) {
-                groupId = 'com.github.amjadrad'
-                artifactId = 'TildaChatApp'
-                version = '1.3.5'
-            }
-        }
-    }
-}
 
 def emojiViewVersion = "1.5.2"
 def emojiViewProvider = "AppleProvider"
@@ -113,4 +101,16 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+}
+
+
+afterEvaluate {
+    android.libraryVariants.each { variant ->
+        publishing.publications.create(variant.name, MavenPublication) {
+            from components.findByName(variant.name)
+            groupId = 'com.github.amjadrad'
+            artifactId = 'tildachat'
+            version = '1.3.5'
+        }
+    }
 }
