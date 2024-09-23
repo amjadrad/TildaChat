@@ -110,7 +110,7 @@ afterEvaluate {
             from components.findByName(variant.name)
             groupId = 'com.github.amjadrad'
             artifactId = 'tildachat'
-            version = '1.3.5'
+            version = '1.3.6'
         }
     }
 }
